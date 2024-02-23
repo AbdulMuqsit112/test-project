@@ -1,28 +1,67 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="layout">
+      <header class="header">
+        <HeaderComponent/>
+      </header>
+      <div class="graph-section"><GraphComponent/></div>
+      <aside class="r-banner"><SideBar/></aside>
+      <footer class="footer"><FooterComponent/></footer>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import HeaderComponent from './components/HeaderComponent.vue';
+import GraphComponent from './components/GraphComponent.vue';
+import SideBar from './components/SideBar.vue';
+import FooterComponent from './components/FooterComponent.vue';
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    GraphComponent,
+    SideBar,
+    FooterComponent,
+    HeaderComponent
   }
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped>
+#app{
+  box-sizing: border-box;
 }
+.layout {
+    display: grid;
+    grid-template-areas:
+      'header header header header'
+      'graph-section graph-section r-banner r-banner'
+      'graph-section graph-section r-banner r-banner'
+      'graph-section graph-section r-banner r-banner'
+      'graph-section graph-section r-banner r-banner'
+      'footer footer r-banner r-banner'
+      'footer footer r-banner r-banner';
+    gap: 0.2rem;
+    height: 100vh;
+  }
+
+  .header {
+    grid-area: header;
+  }
+
+  .graph-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    grid-area: graph-section;
+  }
+
+  .r-banner {
+    grid-area: r-banner;
+  }
+
+  .footer {
+    grid-area: footer;
+  }
 </style>

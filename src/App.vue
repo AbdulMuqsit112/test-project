@@ -35,9 +35,14 @@ export default {
 
 
 <style>
+#app{
+  width: 100vw;
+  height: 100vh;
+}
 body {
   box-sizing: border-box;
-  background-color: #131722;
+  background-color: #3d4353;
   color: #fff !important;
+  margin: 0;
 }
 </style>

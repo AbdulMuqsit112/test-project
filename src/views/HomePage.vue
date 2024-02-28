@@ -4,6 +4,9 @@
       <header class="header">
         <HeaderComponent />
       </header>
+      <div class="left-bar">
+        <leftBar />
+      </div>
       <div class="graph-section">
         <GraphComponent />
       </div>
@@ -19,6 +22,7 @@
   
 <script>
 import HeaderComponent from '../components/HeaderComponent.vue';
+import leftBar from '@/components/leftBar.vue';
 import GraphComponent from '../components/GraphComponent.vue';
 import SideBar from '../components/SideBar.vue';
 import FooterComponent from '../components/FooterComponent.vue';
@@ -28,24 +32,23 @@ export default {
     GraphComponent,
     SideBar,
     FooterComponent,
-    HeaderComponent
+    HeaderComponent,
+    leftBar
   }
 }
 </script>
   
 <style scoped>
-
 .layout {
   display: grid;
   grid-template-areas:
-    'header header header header'
-    'graph-section graph-section r-banner r-banner'
-    'graph-section graph-section r-banner r-banner'
-    'graph-section graph-section r-banner r-banner'
-    'graph-section graph-section r-banner r-banner'
-    'footer footer r-banner r-banner'
-    'footer footer r-banner r-banner';
-  gap: 0.2rem;
+    'header header header header header'
+    'l-bar graph-section graph-section r-banner r-banner'
+    'l-bar graph-section graph-section r-banner r-banner'
+    'l-bar graph-section graph-section r-banner r-banner'
+    'l-bar graph-section graph-section r-banner r-banner'
+    'l-bar footer footer r-banner r-banner'
+    'l-bar footer footer r-banner r-banner';
   height: 100vh;
 }
 
@@ -57,8 +60,11 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px;
   grid-area: graph-section;
+}
+
+.left-bar {
+  grid-area: l-bar;
 }
 
 .r-banner {
@@ -67,4 +73,5 @@ export default {
 
 .footer {
   grid-area: footer;
-}</style>
+}
+</style>

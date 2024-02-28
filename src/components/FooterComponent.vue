@@ -92,12 +92,11 @@ td {
 }
 
 th {
-	background-color: #f2f2f2;
+	background-color: #22252e;
+	color: #ccc;
 }
 
-tbody tr:nth-child(even) {
-	background-color: #f2f2f2;
-}
+
 
 tbody tr:hover {
 	background-color: #e0e0e0;

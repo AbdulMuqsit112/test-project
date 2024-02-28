@@ -95,7 +95,7 @@ export default {
 
 <style scoped>
 .symbol-table {
-  width: 320px;
+  width: 350px;
   border-collapse: collapse;
   font-size: small;
   background-color: #131722;
@@ -113,7 +113,7 @@ export default {
 .symbol-table th {
   background-color: #22252e;
   font-weight: 700;
-  color: #5f6578;
+  color: #c1c4cd;;
 }
 
 .symbol-table td {

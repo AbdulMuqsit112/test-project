@@ -1,14 +1,63 @@
 <template>
   <div class="header">
-    <div class="profile">
-      <img class="avatar" src="../assets/man.png" alt="User Avatar">
-      <div class="info">
-        <h2 class="name">name</h2>
-        <p class="email">email@email.com}</p>
+    <div class="margin-block">
+      <div class="margin-group">
+        <span class="upper">Balance:</span>
+        <span class="lower">0.00</span>
+      </div>
+      <div class="margin-group">
+        <span class="upper">Credit:</span>
+        <span class="lower">250.00</span>
+      </div>
+      <div class="margin-group">
+        <span class="upper">Equity:</span>
+        <span class="lower">250.00</span>
+      </div>
+      <div class="free-margin">
+        <div class="mrg-group">
+          <span class="upper">Margin:</span>
+          <span class="upper">Free margin:</span>
+        </div>
+        <span class="line"></span>
+        <div class="mrg-group">
+          <span class="lower">0.00</span>
+          <span class="lower">250.00</span>
+        </div>
+      </div>
+      <div class="margin-group">
+        <span class="upper">Margin level:</span>
+        <span class="lower">0.00%</span>
       </div>
     </div>
-    <div class="settings">
-      <img class="settings-icon" src="../assets/settings.svg" alt="Settings Icon">
+    <div class="amount">
+      P/L: € {{ pl }}
+    </div>
+    <div class="user-details">
+      <img src="../assets/man.png" alt="avatar">
+      {{ name }}
+    </div>
+    <div class="dropdown" @click="toggleMenu">
+      ☰
+      <div class="dropdown-content" v-show="showMenu" @click.stop>
+        <ul class="menu-list">
+          <li class="menu-item">
+            <img src="../assets/trade.png" class="menu-icon" alt="menu icon">
+            Trading
+          </li>
+          <li class="menu-item">
+            <img src="../assets/account.png" class="menu-icon" alt="menu icon">
+            My account
+          </li>
+          <li class="menu-item">
+            <img src="../assets/settings.png" class="menu-icon" alt="menu icon">
+            Settings
+          </li>
+          <li class="menu-item line2" @click="siginOut">
+            <img src="../assets/sign-out.png" class="menu-icon" alt="menu icon">
+            Sign out
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -16,53 +65,139 @@
 <script>
 export default {
   name: 'HeaderComponent',
-  
+  data() {
+    return {
+      name: "USERNAME - 00001233",
+      pl: "0.00",
+      showMenu: false
+    };
+  },
+  methods: {
+    toggleMenu() {
+      this.showMenu = !this.showMenu;
+    },
+    siginOut(){
+      localStorage.removeItem('token');
+      this.$router.push('/login');
+    }
+  }
 }
 </script>
   
 <style scoped>
+.dropdown {
+  position: relative;
+  cursor: pointer;
+  font-size: large;
+}
+
+.dropdown-content {
+  margin-top: 11px;
+  position: absolute;
+  right: -11px;
+  z-index: 1000;
+  background-color: #22252e;
+  border: 1px ridge #2d313d;
+  color: #c4c9c9;
+  padding: 21px;
+  width: 178px;
+  font-size: smaller;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+.menu-icon{
+  width: 14px;
+  height: 14px;
+}
+.menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px;
+  cursor: pointer;
+  color: #d7d8d6;
+}
+
+.menu-item:hover {
+  background-color: #1f6f6c;
+}
 .header {
-  background-color: #f0f0f0;
+  background-color: #131722;
   padding-inline: 10px;
   padding-block: 5px;
   display: flex;
-  gap: 2px;
+  gap: 12px;
+  justify-content: right;
   align-items: center;
-  justify-content: space-between;
+  color: #d7d8d6;
+  border: 1px solid;
 }
 
-.profile {
+.margin-block {
   display: flex;
-  align-items: center;
-}
-
-.avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+  gap: 10px;
+  font-size: x-small;
   margin-right: 10px;
 }
 
-.info {
+.free-margin {
   display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.mrg-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.line {
+  border: 0.2px ridge #d7d8d6;
+}
+.line2 {
+  border-top: 0.1px ridge #c4c9c9;
+}
+
+.margin-group {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
   flex-direction: column;
 }
 
-.name {
-  margin: 0;
-  font-size: medium;
+.lower {
+  color: #1595b5;
+}
+
+.amount {
   font-weight: bold;
-}
-
-.email {
   font-size: small;
-  margin: 0;
-  color: #666;
 }
 
-.settings-icon {
-  width: 20px;
-  height: 20px;
+.user-details {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  border: 1px solid #1f6f6c;
+  padding: 5px 10px;
+  font-size: small;
 }
+
+.user-details img {
+  height: 20px;
+  width: 20px;
+}
+
 </style>
-  

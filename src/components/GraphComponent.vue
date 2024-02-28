@@ -1,6 +1,6 @@
 <template>
   <div class="graph-container">
-    <trading-vue :width="1040" :data="chart" :color-back="colors.colorBack"
+    <trading-vue :width="1010" :data="chart" :color-back="colors.colorBack"
     :color-grid="colors.colorGrid" :color-text="colors.colorText">
   </trading-vue>
 </div>

@@ -74,26 +74,29 @@ export default {
 .searchbar {
 	margin-left: 4px;
 	padding: 4px;
-	border: 1px solid #ccc;
 	border-radius: 4px;
 }
 
 table {
-	width: 100%;
+	width: 1010px;
 	border-collapse: collapse;
-	font-size: 14px;
 }
 
 th,
 td {
-	border-bottom: 1px solid #dddddd;
+	background-color: #131722;
+	border-bottom: 0.1px ridge #d7d8d6;
 	text-align: left;
 	padding: 8px;
+	color: #d7d8d6;
+	font-size: x-small;
 }
 
 th {
 	background-color: #22252e;
-	color: #ccc;
+	color: #c1c4cd;
+	font-size: smaller;
+
 }
 
 
@@ -110,6 +113,6 @@ td {
 
 th:last-child,
 td:last-child {
-	border-right: 1px solid #dddddd;
+	border-right: 0.1px ridge #d7d8d6;
 }
 </style>

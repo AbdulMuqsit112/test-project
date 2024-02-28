@@ -94,13 +94,12 @@ export default {
 .dropdown-content {
   margin-top: 11px;
   position: absolute;
-  right: -11px;
+  right: -9px;
   z-index: 1000;
   background-color: #22252e;
-  border: 1px ridge #2d313d;
   color: #c4c9c9;
   padding: 21px;
-  width: 178px;
+  width: 175px;
   font-size: smaller;
 }
 

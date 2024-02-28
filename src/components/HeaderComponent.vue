@@ -141,7 +141,7 @@ export default {
   justify-content: right;
   align-items: center;
   color: #d7d8d6;
-  border: 1px solid;
+  border-radius: 4px;
 }
 
 .margin-block {

@@ -1,0 +1,14 @@
+{
+  "Futures": [
+    { "symbol": "Gold", "last": 100, "chg": 5, "chgPercent": "+2.5%" , "symbolIcon": "gold.png"},
+    { "symbol": "Silver", "last": 100, "chg": 5, "chgPercent": "+2.5%" , "symbolIcon": "silver.png"}
+  ],
+  "Forex": [
+    { "symbol": "EUR/USD", "last": 1.18, "chg": 0.01, "chgPercent": "+0.8%" , "symbolIcon": "banknote.png"},
+    { "symbol": "GBP/USD", "last": 1.38, "chg": 0.02, "chgPercent": "+1.5%" , "symbolIcon": "banknote.png"}
+  ],
+  "Crypto": [
+    { "symbol": "BTC/USD", "last": 50000, "chg": 1000, "chgPercent": "+2.0%" , "symbolIcon": "bitcoin.png"},
+    { "symbol": "ETH/USD", "last": 4000, "chg": 200, "chgPercent": "+5.0%" , "symbolIcon": "silver.png"}
+  ]
+}

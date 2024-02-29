@@ -179,12 +179,12 @@ export default {
 }
 @media screen and (max-width: 1500px) {
   .symbol-table {
-    width: 300px;
+    width: 350px;
   }
 }
 @media screen and (max-width: 1400px) {
   .symbol-table {
-    width: 300px;
+    width: 330px;
   }
 }
 @media screen and (max-width: 1000px) {

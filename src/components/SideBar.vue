@@ -167,4 +167,36 @@ export default {
   width: 12px;
   height: 12px;
 }
+@media screen and (max-width: 2000px) {
+  .symbol-table {
+    width: 410px;
+  }
+}
+@media screen and (max-width: 1600px) {
+  .symbol-table {
+    width: 345px;
+  }
+}
+@media screen and (max-width: 1500px) {
+  .symbol-table {
+    width: 300px;
+  }
+}
+@media screen and (max-width: 1400px) {
+  .symbol-table {
+    width: 300px;
+  }
+}
+@media screen and (max-width: 1000px) {
+  .symbol-table {
+    margin-top: 10px;
+    width: 840px;
+  }
+}
+@media screen and (max-width: 900px) {
+  .symbol-table {
+    margin-top: 10px;
+    width: 750px;
+  }
+}
 </style>

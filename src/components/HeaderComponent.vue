@@ -198,5 +198,9 @@ export default {
   height: 20px;
   width: 20px;
 }
-
+@media screen and (max-width: 1000px) {
+  .header {
+    width: 98vw;
+  }
+}
 </style>

@@ -66,4 +66,9 @@ export default {
 .m-2{
     margin-top: 8px;
 }
+@media screen and (max-width: 1000px) {
+    .left-wrapper{
+        display: none;
+    }
+}
 </style>

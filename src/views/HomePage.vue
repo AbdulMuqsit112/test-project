@@ -74,4 +74,14 @@ export default {
 .footer {
   grid-area: footer;
 }
+
+@media screen and (max-width: 1000px) {
+  .layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    height: 100vh;
+  }
+}
 </style>

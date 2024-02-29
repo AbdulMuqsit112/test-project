@@ -94,8 +94,8 @@ export default {
       stocks: []
     };
   },
-  created(){
-    if (this.runSocket){
+  created() {
+    if (this.runSocket) {
       this.$on('stocksDataUpdated', this.handleDataUpdated('stocks'));
       this.$on('historyDataUpdated', this.handleDataUpdated('history'));
     } else {
@@ -108,8 +108,8 @@ export default {
     }
   },
   methods: {
-    handleDataUpdated(data, type){
-      if (type == 'history'){
+    handleDataUpdated(data, type) {
+      if (type == 'history') {
         this.histData = data;
       } else {
         this.stocks = data;
@@ -179,6 +179,7 @@ th:last-child,
 td:last-child {
   border-right: 0.1px ridge #d7d8d6;
 }
+
 .tab-buttons {
   margin-bottom: 10px;
 }
@@ -204,4 +205,42 @@ td:last-child {
 .tab-buttons button.active {
   background-color: #131722;
 }
-</style>
+
+
+@media screen and (max-width: 2000px) {
+  table {
+    width: 1425px;
+  }
+}
+
+@media screen and (max-width: 1600px) {
+  table {
+    width: 1010px;
+  }
+}
+@media screen and (max-width: 1300px) {
+  table {
+    width: 860px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  table {
+    width: 840px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  table {
+    width: 750px;
+  }
+
+  th {
+    font-size: small;
+  }
+
+  td {
+    padding: 6px;
+    font-size: xx-small;
+  }
+}</style>

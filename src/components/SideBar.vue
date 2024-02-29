@@ -36,10 +36,10 @@
 </template>
 
 <script>
-import io from 'socket.io-client';
 import symblRow from '../assets/symbolRow.json'; // Import JSON file
-
+import socketMixin from '../mixins/socketMixin';
 export default {
+  mixins: [socketMixin],
   data() {
     return {
       symbolRows: {},
@@ -50,15 +50,7 @@ export default {
   },
   created() {
     if (this.runSocket){
-      const socket = io('http://localhost:3000'); // Connect to server
-      socket.on('connect', () => {
-        console.log('Connected to server');
-      });
-      socket.on('dataUpdate', (data) => {
-        this.symbolRows = data; // Update data when received from server
-      });
-      // Initially try connecting to server
-      socket.connect();
+      this.$on('symbolDataUpdated', this.handleDataUpdated);
     } else {
       this.loadDataFromJson();
     }
@@ -75,6 +67,10 @@ export default {
     }
   },
   methods: {
+    handleDataUpdated(data){
+      this.symbolRows = data;
+    },
+
     async loadDataFromJson() {
       try {
         // Fetch data from JSON file

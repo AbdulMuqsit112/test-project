@@ -1,0 +1,59 @@
+[
+  {
+    "ticker": "AAPL",
+    "price": 150.55,
+    "chg": 2.35,
+    "chgPercent": "+1.5%",
+    "technicalRating": "Strong Buy",
+    "vol": 1000000,
+    "volumePrice": 20000000,
+    "mktCap": 2000000000,
+    "pe": 30,
+    "eps": 5.6,
+    "employees": 10000,
+    "sector": "Technology"
+  },
+  {
+    "ticker": "GOOGL",
+    "price": 2800.5,
+    "chg": -15.75,
+    "chgPercent": "-0.6%",
+    "technicalRating": "Buy",
+    "vol": 750000,
+    "volumePrice": 15000000,
+    "mktCap": 1800000000,
+    "pe": 35,
+    "eps": 10.2,
+    "employees": 50000,
+    "sector": "Technology"
+  },
+  {
+    "ticker": "MSFT",
+    "price": 330.75,
+    "chg": 1.2,
+    "chgPercent": "+0.4%",
+    "technicalRating": "Strong Buy",
+    "vol": 1200000,
+    "volumePrice": 25000000,
+    "mktCap": 2200000000,
+    "pe": 32,
+    "eps": 6.8,
+    "employees": 80000,
+    "sector": "Technology"
+  },
+  {
+    "ticker": "AMZN",
+    "price": 3400.0,
+    "chg": 30.0,
+
+    "chgPercent": "+0.9%",
+    "technicalRating": "Strong Buy",
+    "vol": 900000,
+    "volumePrice": 18000000,
+    "mktCap": 1600000000,
+    "pe": 40,
+    "eps": 12.5,
+    "employees": 60000,
+    "sector": "Technology"
+  }
+]

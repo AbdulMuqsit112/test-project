@@ -1,0 +1,54 @@
+[
+  {
+    "positions": "Position 1",
+    "openDate": "2024-02-29",
+    "type": "Buy",
+    "volume": 500,
+    "slPrice": 50,
+    "tpPrice": 70,
+    "openPrice": 55,
+    "marketPrice": 60,
+    "commission": 5,
+    "swaps": 2,
+    "grossProfit": 200
+  },
+  {
+    "positions": "Position 2",
+    "openDate": "2024-02-29",
+    "type": "Sell",
+    "volume": 700,
+    "slPrice": 45,
+    "tpPrice": 65,
+    "openPrice": 40,
+    "marketPrice": 42,
+    "commission": 7,
+    "swaps": 3,
+    "grossProfit": 150
+  },
+  {
+    "positions": "Position 3",
+    "openDate": "2024-02-29",
+    "type": "Buy",
+    "volume": 300,
+    "slPrice": 60,
+    "tpPrice": 80,
+    "openPrice": 65,
+    "marketPrice": 70,
+    "commission": 6,
+    "swaps": 4,
+    "grossProfit": 300
+  },
+  {
+    "positions": "Position 4",
+    "openDate": "2024-02-29",
+    "type": "Sell",
+    "volume": 1000,
+    "slPrice": 55,
+    "tpPrice": 75,
+    "openPrice": 50,
+    "marketPrice": 52,
+    "commission": 8,
+    "swaps": 1,
+    "grossProfit": 250
+  }
+]

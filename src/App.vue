@@ -41,7 +41,7 @@ export default {
 }
 body {
   box-sizing: border-box;
-  background-color: #3d4353;
+  background-color: #3d4353 !important;
   color: #fff !important;
   margin: 0;
 }

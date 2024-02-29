@@ -13,8 +13,6 @@
         <tr :key="category" class="category-row">
           <td colspan="4" class="category-header" @click="toggleCategory(category)">
             {{ category }}
-            <span v-if="categoryExpanded[category]"><img src="../assets/arrow-down.png" class="arrow" alt=""></span>
-            <span v-else><img src="../assets/right-arrow.png" class="arrow" alt="arrow"></span>
           </td>
         </tr>
         <template v-if="categoryExpanded[category]">

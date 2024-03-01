@@ -36,22 +36,80 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item, idx) in section.data" :key="idx">
-                  <div class="symGroup d-flex gap-2 align-items-center">
-                    <img
-                      class="symIcon"
-                      :src="
-                        item.symbolIcon
-                          ? require(`../assets/${item.symbolIcon}`)
-                          : ''
-                      "
-                      alt="icon"
-                    />
-                    <td class="text-white fw-semibold">{{ item.symbol }}</td>
-                  </div>
-                  <td class="text-end">{{ item.last }}</td>
-                  <td class="text-end">{{ item.chg }}</td>
-                  <td class="text-end">{{ item.chgPercent }}</td>
+                <tr v-for="(item, idx) in section.data" :key="idx" @click="toggleRowContent(index, idx)">
+                  <td :colspan="4" v-if="selectedRow === `${index}-${idx}`">
+                    <div class="buySell d-flex flex-column">
+                      <div
+                        class="text-white fw-semibold d-flex justify-content-between"
+                      >
+                        <div class="symGroup d-flex gap-2 align-items-center">
+                          <img
+                            class="symIcon"
+                            :src="
+                              item.symbolIcon
+                                ? require(`../assets/${item.symbolIcon}`)
+                                : ''
+                            "
+                            alt="icon"
+                          />
+                          {{ item.symbol }}
+                        </div>
+                        <div class="icon-group">
+                          <img src="" alt="i" />
+                          <img src="" alt="i" />
+                          <img src="" alt="i" />
+                          <img src="" alt="i" />
+                        </div>
+                      </div>
+                      <div class="d-flex text-white">
+                        <div class="bg-danger d-flex flex-column gap-2 w-100 p-2">
+                          <div class="d-flex justify-content-between">
+                            Sell
+                            <img
+                              src="../assets/down.png"
+                              class="arrowIcon"
+                              alt="icon"
+                            />
+                          </div>
+                          <span class="bg-danger">178.95</span>
+                        </div>
+                        <div
+                          class="bg-success d-flex justify-content-between w-100"
+                        >
+                          Buy
+                          <img
+                            src="../assets/up.png"
+                            class="arrowIcon"
+                            alt="icon"
+                          />
+                        </div>
+                      </div>
+                      <div class="d-flex justify-content-between">
+                        <button class="text-danger buySellBtn">Low 173.20</button>
+                        <button class="text-success buySellBtn">
+                          High 179.74
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                  <td v-if="!toggleBoolean" class="text-white fw-semibold">
+                    <div class="symGroup d-flex gap-2 align-items-center">
+                      <img
+                        class="symIcon"
+                        :src="
+                          item.symbolIcon
+                            ? require(`../assets/${item.symbolIcon}`)
+                            : ''
+                        "
+                        alt="icon"
+                      />
+                      {{ item.symbol }}
+                    </div>
+                  </td>
+                  <td v-if="!toggleBoolean" class="text-end">{{ item.last }}</td>
+                  <td v-if="!toggleBoolean" class="text-end">{{ item.chg }}</td>
+                  <td v-if="!toggleBoolean" class="text-end">{{ item.chgPercent }}</td>
+                  
                 </tr>
               </tbody>
             </table>
@@ -72,6 +130,8 @@ export default {
     return {
       symbolRows: [],
       runSocket: false,
+      selectedRow: null,
+      toggleBoolean: false
     };
   },
   created() {
@@ -82,6 +142,14 @@ export default {
     }
   },
   methods: {
+    toggleRowContent(sectionIndex, itemIndex) {
+      this.toggleBoolean = !this.toggleBoolean;
+      if (this.selectedRow === `${sectionIndex}-${itemIndex}`) {
+        this.selectedRow = null;
+      } else {
+        this.selectedRow = `${sectionIndex}-${itemIndex}`;
+      }
+    },
     handleDataUpdated(data) {
       this.symbolRows = data;
     },
@@ -100,6 +168,19 @@ export default {
 </script>
 
 <style scoped>
+.buySell {
+  background-color: #191c24;
+}
+.buySellBtn {
+  background-color: #191c24;
+  border: 1px solid;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.arrowIcon {
+  width: 20px;
+  height: 20px;
+}
 .text-white {
   color: #fff;
 }

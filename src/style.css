@@ -1,0 +1,28 @@
+.s-card {
+    border-radius: 0.25rem;
+}
+.s-card {
+    width: fit-content;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #191c24;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+}
+.s-card .card-body {
+    padding: 1.75rem 1.5625rem;
+    
+}
+.s-card .card-title {
+    color: #ffffff;
+    margin-bottom: 1.125rem;
+    text-transform: capitalize;
+}
+.s-card .card-description {
+    color: #bfbfbf;
+    font-weight: 500;
+}

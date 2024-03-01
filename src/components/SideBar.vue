@@ -1,202 +1,228 @@
 <template>
-  <table class="symbol-table">
-    <thead>
-      <tr>
-        <th>SYMBOL</th>
-        <th>BID</th>
-        <th>ASK</th>
-        <th>SPREAD</th>
-      </tr>
-    </thead>
-    <tbody>
-      <template v-for="(symbolGroup, category) in symbolRows">
-        <tr :key="category" class="category-row">
-          <td colspan="4" class="category-header" @click="toggleCategory(category)">
-            {{ category }}
-            <span v-if="categoryExpanded[category]"><img src="../assets/arrow-down.png" class="arrow" alt=""></span>
-            <span v-else><img src="../assets/right-arrow.png" class="arrow" alt="arrow"></span>
-          </td>
-        </tr>
-        <template v-if="categoryExpanded[category]">
-          <tr v-for="(symbol, index) in symbolGroup" :key="index" class="category-row">
-            <td @click="toggleExpand(symbol)" :class="{ 'expanded': symbolExpanded[symbol.symbol] }">
-              <div class="sym-group">
-                <img class="symIcon" :src="symbol.symbolIcon ? require(`../assets/${symbol.symbolIcon}`) : ''" alt="icon">
-                <span>{{ symbol.symbol }}</span>
-              </div>
-            </td>
-            <td>{{ symbol.last }}</td>
-            <td>{{ symbol.chg }}</td>
-            <td>{{ symbol.chgPercent }}</td>
-          </tr>
-        </template>
-      </template>
-    </tbody>
-  </table>
+  <div class="col-lg-4">
+    <div class="accordion" id="accordionExample">
+      <div class="accordion-item" v-for="(section, index) in symbolRows" :key="index">
+        <h2 class="accordion-header" :id="'heading' + index">
+          <button class="accordion-button" type="button" :data-bs-toggle="'collapse'"
+            :data-bs-target="'#collapse' + index" :aria-expanded="index === 0" :aria-controls="'collapse' + index">
+            {{ section.title }}
+          </button>
+        </h2>
+        <div :id="'collapse' + index" class="accordion-collapse collapse" :class="{ 'show': index === 0 }"
+          :aria-labelledby="'heading' + index" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th class="text-white fw-semibold">Symbol</th>
+                  <th class="text-end">Last</th>
+                  <th class="text-end">Change</th>
+                  <th class="text-end">Change Percent</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, idx) in section.data" :key="idx">
+                  <div class="symGroup d-flex gap-2 align-items-center">
+                    <img class="symIcon" :src="item.symbolIcon ? require(`../assets/${item.symbolIcon}`) : ''" alt="icon">
+                    <td class="text-white fw-semibold">{{ item.symbol }}</td>
+
+                  </div>
+                  <td class="text-end">{{ item.last }}</td>
+                  <td class="text-end">{{ item.chg }}</td>
+                  <td class="text-end">{{ item.chgPercent }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import symblRow from '../assets/symbolRow.json'; // Import JSON file
+import symblRow from '../assets/symbolRow.json';
 import socketMixin from '../mixins/socketMixin';
+
 export default {
   mixins: [socketMixin],
   data() {
     return {
-      symbolRows: {},
-      categoryExpanded: {},
-      symbolExpanded: {},
+      symbolRows: [],
       runSocket: false
     };
   },
   created() {
-    if (this.runSocket){
+    if (this.runSocket) {
       this.$on('symbolDataUpdated', this.handleDataUpdated);
     } else {
       this.loadDataFromJson();
     }
   },
-  computed: {
-    filteredSymbolRows() {
-      const filteredRows = {};
-      for (const category in this.symbolRows) {
-        if (this.categoryExpanded[category]) {
-          filteredRows[category] = this.symbolRows[category];
-        }
-      }
-      return filteredRows;
-    }
-  },
   methods: {
-    handleDataUpdated(data){
+    handleDataUpdated(data) {
       this.symbolRows = data;
     },
-
     async loadDataFromJson() {
       try {
-        // Fetch data from JSON file
-        this.symbolRows = symblRow; // Assign the imported JSON data
+        this.symbolRows = Object.entries(symblRow).map(([title, data]) => ({
+          title,
+          data,
+        }));
       } catch (error) {
         console.error('Error loading data from JSON file:', error);
       }
     },
-    toggleCategory(category) {
-      this.$set(this.categoryExpanded, category, !this.categoryExpanded[category]);
-    },
-    toggleExpand(symbol) {
-      this.$set(this.symbolExpanded, symbol.symbol, !this.symbolExpanded[symbol.symbol]);
-    }
-  }
+  },
 };
 </script>
 
 <style scoped>
-.symbol-table {
-  width: 350px;
-  border-collapse: collapse;
-  font-size: small;
-  background-color: #131722;
+.text-white {
+  color: #fff;
+}
+
+.table {
+  margin-bottom: 0;
+  color: #6c7293;
+}
+
+.table thead th {
+  border-top: 0;
+  border-bottom-width: 1px;
+  font-weight: 500;
+  color: #6c7293;
+  background-color: #191C24;
+}
+
+.table tbody td {
+  background-color: #191C24;
+  color: #6c7293;
+  font-weight: 300;
+}
+
+.table thead th {
+  vertical-align: middle;
+  border-bottom: 2px solid #2c2e33;
+}
+
+.table tr {
+  border-color: #39404b;
+}
+
+.table tr:hover {
+  background-color: #212529;
+}
+
+.table th {
+  vertical-align: middle;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.table td {
+  vertical-align: middle;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 
-.symbol-table th,
-.symbol-table td {
-  padding: 12px;
-  border: 1px solid #eae9e9dd;
-  text-align: left;
-  border: none;
+.accordion-button {
+  background-color: #191C24;
+  color: #6c7293;
 }
 
-.symbol-table th {
-  background-color: #22252e;
-  font-weight: 700;
-  color: #c1c4cd;;
+.accordion-button:focus {
+  z-index: 3;
+  outline: 0;
+  box-shadow: none;
 }
 
-.symbol-table td {
-  font-size: smaller;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  border-bottom: 0.5px solid #5f6578;
+.accordion-button:not(.collapsed) {
+  background-color: #191c24;
+  color: #fff;
 }
 
-.symbol-table td:hover {
-  background-color: #1f6f6c;
+.accordion-body {
+  background-color: #191c24;
+  color: #6c7293;
 }
 
-.symbol-table th:nth-child(1) {
-  width: 60%;
+.accordion-item {
+  border-color: #39404b;
 }
 
-.category-row {
-  background-color: #131722;
-  color: #d7d8d6;
+.symGroup {
+  background-color: #191C24;
+}
+
+.symIcon {
+  width: 8px;
+  height: 8px;
+}
+
+@media screen and (max-width: 3000px) {
+  .accordion {
+    width: 540px;
+  }
+
+  .accordion-button {
+    height: 40px;
+    font-size: x-small;
+  }
+
+  .table {
+    height: 100px;
+
+  }
+
+  .table th {
+    font-size: small;
+  }
+  .table td {
+    font-size: small;
+  }
 
 }
 
-.category-header {
-  font-size: small;
-  cursor: pointer;
-  padding: 12px;
-  font-weight: 200;
-  background-color: #131722;
-  color: #5f6578;
-}
-
-.category-header:hover {
-  background-color: #e0e0e0;
-}
-
-.expanded {
-  font-weight: bold;
-}
-
-.symbol-table td span {
-  margin-left: 4px;
-}
-
-.arrow {
-  width: 6px;
-  height: 6px;
-}
-.sym-group{
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-.symIcon{
-  width: 12px;
-  height: 12px;
-}
 @media screen and (max-width: 2000px) {
-  .symbol-table {
-    width: 410px;
+  .accordion {
+    width: 510px;
   }
 }
-@media screen and (max-width: 1600px) {
-  .symbol-table {
-    width: 345px;
-  }
-}
+
 @media screen and (max-width: 1500px) {
-  .symbol-table {
+  .accordion {
     width: 350px;
   }
-}
-@media screen and (max-width: 1400px) {
-  .symbol-table {
-    width: 330px;
+  .accordion-button {
+    height: 40px;
+    font-size: x-small;
+  }
+
+  .table {
+    height: 80px;
+
+  }
+
+  .table th {
+    font-size: x-small;
+  }
+  .table td {
+    font-size: x-small;
   }
 }
+
 @media screen and (max-width: 1000px) {
-  .symbol-table {
+  .accordion {
     margin-top: 10px;
-    width: 840px;
+    width: 865px;
   }
 }
+
 @media screen and (max-width: 900px) {
-  .symbol-table {
+  .accordion {
     margin-top: 10px;
-    width: 750px;
+    width: 820px;
   }
-}
-</style>
+}</style>

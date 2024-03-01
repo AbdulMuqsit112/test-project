@@ -198,6 +198,26 @@ export default {
   height: 20px;
   width: 20px;
 }
+@media screen and (max-width: 3000px) {
+    .header{
+      height: 100px;
+    }
+}
+@media screen and (max-width: 2000px) {
+    .header{
+      height: 80px;
+    }
+}
+@media screen and (max-width: 1500px) {
+    .header{
+      height: 60px;
+    }
+}
+@media screen and (max-width: 1300px) {
+    .header{
+      height: 50px;
+    }
+}
 @media screen and (max-width: 1000px) {
   .header {
     width: 98vw;

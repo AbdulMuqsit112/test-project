@@ -24,7 +24,7 @@
 import HeaderComponent from '../components/HeaderComponent.vue';
 import leftBar from '@/components/leftBar.vue';
 import GraphComponent from '../components/GraphComponent.vue';
-import SideBar from '../components/SideBar.vue';
+import SideBar from '@/components/SideBar.vue';
 import FooterComponent from '../components/FooterComponent.vue';
 export default {
   name: 'HomePage',
@@ -42,14 +42,13 @@ export default {
 .layout {
   display: grid;
   grid-template-areas:
-    'header header header header header'
-    'l-bar graph-section graph-section r-banner r-banner'
-    'l-bar graph-section graph-section r-banner r-banner'
-    'l-bar graph-section graph-section r-banner r-banner'
-    'l-bar graph-section graph-section r-banner r-banner'
-    'l-bar footer footer r-banner r-banner'
-    'l-bar footer footer r-banner r-banner';
+    'header header header header header header'
+    'l-bar graph-section graph-section graph-section r-banner r-banner'
+    'l-bar graph-section graph-section graph-section r-banner r-banner'
+    'l-bar footer footer footer r-banner r-banner'
+    'l-bar footer footer footer r-banner r-banner';
   height: 100vh;
+  grid-gap: 0;
 }
 
 .header {
@@ -57,9 +56,6 @@ export default {
 }
 
 .graph-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   grid-area: graph-section;
 }
 

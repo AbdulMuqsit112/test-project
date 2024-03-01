@@ -131,10 +131,9 @@ export default {
 </script>
   
 <style scoped>
-.footer {
-  padding: 10px;
+.footer{
+  margin-left: 4px;
 }
-
 .searchbar {
   margin-left: 4px;
   padding: 4px;
@@ -205,23 +204,28 @@ td:last-child {
 .tab-buttons button.active {
   background-color: #131722;
 }
-
-
+@media screen and (max-width: 3000px) {
+    table {
+        width: 1900px;
+        height: 350px;
+    }
+}
 @media screen and (max-width: 2000px) {
   table {
-    width: 1425px;
-  }
+        width: 1300px;
+        height: 220px;
+    }
 }
-
-@media screen and (max-width: 1600px) {
-  table {
-    width: 1010px;
-  }
+@media screen and (max-width: 1500px) {
+    table {
+        width: 1010px;
+        height: 140px;
+    }
 }
 @media screen and (max-width: 1300px) {
-  table {
-    width: 860px;
-  }
+    table {
+        width: 840px;
+    }
 }
 
 @media screen and (max-width: 1000px) {

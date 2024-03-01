@@ -1,15 +1,30 @@
 <template>
   <div class="col-lg-4">
     <div class="accordion" id="accordionExample">
-      <div class="accordion-item" v-for="(section, index) in symbolRows" :key="index">
+      <div
+        class="accordion-item"
+        v-for="(section, index) in symbolRows"
+        :key="index"
+      >
         <h2 class="accordion-header" :id="'heading' + index">
-          <button class="accordion-button" type="button" :data-bs-toggle="'collapse'"
-            :data-bs-target="'#collapse' + index" :aria-expanded="index === 0" :aria-controls="'collapse' + index">
+          <button
+            class="accordion-button"
+            type="button"
+            :data-bs-toggle="'collapse'"
+            :data-bs-target="'#collapse' + index"
+            :aria-expanded="index === 0"
+            :aria-controls="'collapse' + index"
+          >
             {{ section.title }}
           </button>
         </h2>
-        <div :id="'collapse' + index" class="accordion-collapse collapse" :class="{ 'show': index === 0 }"
-          :aria-labelledby="'heading' + index" data-bs-parent="#accordionExample">
+        <div
+          :id="'collapse' + index"
+          class="accordion-collapse collapse"
+          :class="{ show: index === 0 }"
+          :aria-labelledby="'heading' + index"
+          data-bs-parent="#accordionExample"
+        >
           <div class="accordion-body">
             <table class="table table-hover">
               <thead>
@@ -23,9 +38,16 @@
               <tbody>
                 <tr v-for="(item, idx) in section.data" :key="idx">
                   <div class="symGroup d-flex gap-2 align-items-center">
-                    <img class="symIcon" :src="item.symbolIcon ? require(`../assets/${item.symbolIcon}`) : ''" alt="icon">
+                    <img
+                      class="symIcon"
+                      :src="
+                        item.symbolIcon
+                          ? require(`../assets/${item.symbolIcon}`)
+                          : ''
+                      "
+                      alt="icon"
+                    />
                     <td class="text-white fw-semibold">{{ item.symbol }}</td>
-
                   </div>
                   <td class="text-end">{{ item.last }}</td>
                   <td class="text-end">{{ item.chg }}</td>
@@ -41,20 +63,20 @@
 </template>
 
 <script>
-import symblRow from '../assets/symbolRow.json';
-import socketMixin from '../mixins/socketMixin';
+import symblRow from "../assets/symbolRow.json";
+import socketMixin from "../mixins/socketMixin";
 
 export default {
   mixins: [socketMixin],
   data() {
     return {
       symbolRows: [],
-      runSocket: false
+      runSocket: false,
     };
   },
   created() {
     if (this.runSocket) {
-      this.$on('symbolDataUpdated', this.handleDataUpdated);
+      this.$on("symbolDataUpdated", this.handleDataUpdated);
     } else {
       this.loadDataFromJson();
     }
@@ -70,7 +92,7 @@ export default {
           data,
         }));
       } catch (error) {
-        console.error('Error loading data from JSON file:', error);
+        console.error("Error loading data from JSON file:", error);
       }
     },
   },
@@ -92,11 +114,11 @@ export default {
   border-bottom-width: 1px;
   font-weight: 500;
   color: #6c7293;
-  background-color: #191C24;
+  background-color: #191c24;
 }
 
 .table tbody td {
-  background-color: #191C24;
+  background-color: #191c24;
   color: #6c7293;
   font-weight: 300;
 }
@@ -126,9 +148,8 @@ export default {
   white-space: nowrap;
 }
 
-
 .accordion-button {
-  background-color: #191C24;
+  background-color: #191c24;
   color: #6c7293;
 }
 
@@ -153,7 +174,7 @@ export default {
 }
 
 .symGroup {
-  background-color: #191C24;
+  background-color: #191c24;
 }
 
 .symIcon {
@@ -163,17 +184,16 @@ export default {
 
 @media screen and (max-width: 3000px) {
   .accordion {
-    width: 540px;
+    width: 780px;
   }
 
   .accordion-button {
-    height: 40px;
-    font-size: x-small;
+    height: 60px;
+    font-size: small;
   }
 
   .table {
-    height: 100px;
-
+    height: 130px;
   }
 
   .table th {
@@ -182,18 +202,17 @@ export default {
   .table td {
     font-size: small;
   }
-
 }
 
 @media screen and (max-width: 2000px) {
   .accordion {
-    width: 510px;
+    width: 570px;
   }
 }
 
 @media screen and (max-width: 1500px) {
   .accordion {
-    width: 350px;
+    width: 420px;
   }
   .accordion-button {
     height: 40px;
@@ -202,7 +221,26 @@ export default {
 
   .table {
     height: 80px;
+  }
 
+  .table th {
+    font-size: x-small;
+  }
+  .table td {
+    font-size: x-small;
+  }
+}
+@media screen and (max-width: 1300px) {
+  .accordion {
+    width: 360px;
+  }
+  .accordion-button {
+    height: 40px;
+    font-size: x-small;
+  }
+
+  .table {
+    height: 80px;
   }
 
   .table th {
@@ -225,4 +263,5 @@ export default {
     margin-top: 10px;
     width: 820px;
   }
-}</style>
+}
+</style>

@@ -35,13 +35,14 @@ export default {
 
 
 <style>
+@import url('./style.css');
 #app{
   width: 100vw;
   height: 100vh;
 }
 body {
   box-sizing: border-box;
-  background-color: #3d4353 !important;
+  background-color: #000000 !important;
   color: #fff !important;
   margin: 0;
 }

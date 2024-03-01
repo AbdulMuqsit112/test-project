@@ -1,81 +1,84 @@
 <template>
-  <div class="footer">
-    <div class="tab-buttons">
-      <button @click="activeTab = 'stocks'">Stocks</button>
-      <button @click="activeTab = 'history'">History</button>
-    </div>
-    <div v-show="activeTab === 'stocks'">
-      <table>
-        <thead>
-          <tr>
-            <th>
-              Ticker
-              <input class="searchbar" type="text" v-model="searchTerm" placeholder="Search Ticker" @input="filterStocks">
-            </th>
-            <th>Price</th>
-            <th>Chg</th>
-            <th>Chg%</th>
-            <th>Technical Rating</th>
-            <th>Vol</th>
-            <th>Volume Price</th>
-            <th>Mkt Cap</th>
-            <th>P/E</th>
-            <th>EPS (TTM)</th>
-            <th>Employees</th>
-            <th>Sector</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="stock in filteredStocks" :key="stock.ticker">
-            <td>{{ stock.ticker }}</td>
-            <td>{{ stock.price }}</td>
-            <td>{{ stock.chg }}</td>
-            <td>{{ stock.chgPercent }}</td>
-            <td>{{ stock.technicalRating }}</td>
-            <td>{{ stock.vol }}</td>
-            <td>{{ stock.volumePrice }}</td>
-            <td>{{ stock.mktCap }}</td>
-            <td>{{ stock.pe }}</td>
-            <td>{{ stock.eps }}</td>
-            <td>{{ stock.employees }}</td>
-            <td>{{ stock.sector }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div v-show="activeTab === 'history'">
-      <table>
-        <thead>
-          <tr>
-            <th>Positions</th>
-            <th>Open Date</th>
-            <th>Type</th>
-            <th>Volume</th>
-            <th>SL Price</th>
-            <th>TP Price</th>
-            <th>Open Price</th>
-            <th>Market Price</th>
-            <th>Commission</th>
-            <th>Swaps</th>
-            <th>Gross Profit</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, index) in histData" :key="index">
-            <td>{{ item.positions }}</td>
-            <td>{{ item.openDate }}</td>
-            <td>{{ item.type }}</td>
-            <td>{{ item.volume }}</td>
-            <td>{{ item.slPrice }}</td>
-            <td>{{ item.tpPrice }}</td>
-            <td>{{ item.openPrice }}</td>
-            <td>{{ item.marketPrice }}</td>
-            <td>{{ item.commission }}</td>
-            <td>{{ item.swaps }}</td>
-            <td>{{ item.grossProfit }}</td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="s-card">
+    <div class="card-body">
+      <div class="tab-buttons">
+        <button @click="activeTab = 'stocks'">Stocks</button>
+        <button @click="activeTab = 'history'">History</button>
+      </div>
+      <div v-show="activeTab === 'stocks'">
+        <table>
+          <thead>
+            <tr>
+              <th>
+                Ticker
+                <input class="searchbar" type="text" v-model="searchTerm" placeholder="Search Ticker"
+                  @input="filterStocks">
+              </th>
+              <th>Price</th>
+              <th>Chg</th>
+              <th>Chg%</th>
+              <th>Technical Rating</th>
+              <th>Vol</th>
+              <th>Volume Price</th>
+              <th>Mkt Cap</th>
+              <th>P/E</th>
+              <th>EPS (TTM)</th>
+              <th>Employees</th>
+              <th>Sector</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="stock in filteredStocks" :key="stock.ticker">
+              <td>{{ stock.ticker }}</td>
+              <td>{{ stock.price }}</td>
+              <td>{{ stock.chg }}</td>
+              <td>{{ stock.chgPercent }}</td>
+              <td>{{ stock.technicalRating }}</td>
+              <td>{{ stock.vol }}</td>
+              <td>{{ stock.volumePrice }}</td>
+              <td>{{ stock.mktCap }}</td>
+              <td>{{ stock.pe }}</td>
+              <td>{{ stock.eps }}</td>
+              <td>{{ stock.employees }}</td>
+              <td>{{ stock.sector }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div v-show="activeTab === 'history'">
+        <table>
+          <thead>
+            <tr>
+              <th>Positions</th>
+              <th>Open Date</th>
+              <th>Type</th>
+              <th>Volume</th>
+              <th>SL Price</th>
+              <th>TP Price</th>
+              <th>Open Price</th>
+              <th>Market Price</th>
+              <th>Commission</th>
+              <th>Swaps</th>
+              <th>Gross Profit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in histData" :key="index">
+              <td>{{ item.positions }}</td>
+              <td>{{ item.openDate }}</td>
+              <td>{{ item.type }}</td>
+              <td>{{ item.volume }}</td>
+              <td>{{ item.slPrice }}</td>
+              <td>{{ item.tpPrice }}</td>
+              <td>{{ item.openPrice }}</td>
+              <td>{{ item.marketPrice }}</td>
+              <td>{{ item.commission }}</td>
+              <td>{{ item.swaps }}</td>
+              <td>{{ item.grossProfit }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -131,9 +134,13 @@ export default {
 </script>
   
 <style scoped>
-.footer{
-  margin-left: 4px;
+input {
+  background-color: #191c24;
+  color: #6c7293;
+  border: 0.2px solid #39404b;
+  border-radius: 0.5rem;
 }
+
 .searchbar {
   margin-left: 4px;
   padding: 4px;
@@ -143,30 +150,33 @@ export default {
 table {
   width: 1010px;
   border-collapse: collapse;
+  color: #6c7293;
+  overflow-y: auto;
 }
 
 th,
 td {
-  background-color: #131722;
-  border-bottom: 0.1px ridge #d7d8d6;
+  border-bottom: 0.1px ridge;
+  border-color: #39404b;
   text-align: left;
   padding: 8px;
-  color: #d7d8d6;
+  color: #6c7293;
   font-size: x-small;
 }
 
+tr:hover {
+  background-color: #212529;
+}
+
 th {
-  background-color: #22252e;
-  color: #c1c4cd;
+  vertical-align: middle;
+  border-bottom: 2px solid #2c2e33 !important;
+  color: #6c7293;
   font-size: smaller;
-
+  border-bottom-width: 1px;
 }
 
 
-
-tbody tr:hover {
-  background-color: #e0e0e0;
-}
 
 th,
 td {
@@ -174,10 +184,6 @@ td {
   border-right: none;
 }
 
-th:last-child,
-td:last-child {
-  border-right: 0.1px ridge #d7d8d6;
-}
 
 .tab-buttons {
   margin-bottom: 10px;
@@ -204,28 +210,40 @@ td:last-child {
 .tab-buttons button.active {
   background-color: #131722;
 }
+
 @media screen and (max-width: 3000px) {
-    table {
-        width: 1900px;
-        height: 350px;
-    }
+  table {
+    width: 1600px;
+    height: 200px;
+  }
 }
+
 @media screen and (max-width: 2000px) {
   table {
-        width: 1300px;
-        height: 220px;
-    }
+    width: 1200px;
+    height: 180px;
+  }
 }
+
 @media screen and (max-width: 1500px) {
-    table {
-        width: 1010px;
-        height: 140px;
-    }
+  table {
+    width: 900px;
+    height: 10px;
+  }
 }
+
 @media screen and (max-width: 1300px) {
-    table {
-        width: 840px;
-    }
+  table {
+    width: 800px;
+  }
+
+  th {
+    font-size: x-small;
+  }
+
+  td {
+    font-size: xx-small;
+  }
 }
 
 @media screen and (max-width: 1000px) {

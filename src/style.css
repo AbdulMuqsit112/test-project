@@ -2,10 +2,10 @@
     border-radius: 0.25rem;
 }
 .s-card {
-    width: fit-content;
     position: relative;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     min-width: 0;
     word-wrap: break-word;
     background-color: #191c24;

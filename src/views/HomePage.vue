@@ -1,83 +1,68 @@
 <template>
-  <div>
-    <div class="layout">
-      <header class="header">
-        <HeaderComponent />
-      </header>
-      <div class="left-bar">
+  <div class="w-100">
+    <header class="header">
+      <HeaderComponent />
+    </header>
+    <div class="row wrapper">
+      <div class="col-lg-1 custom-width">
         <leftBar />
       </div>
-      <div class="graph-section">
+      <div class="col-lg-8 col-sm-12 mt-2">
         <GraphComponent />
       </div>
-      <aside class="r-banner">
+      <div class="col-lg-3 mt-2 col-sm-12 sidebar">
         <SideBar />
-      </aside>
-      <footer class="footer">
+      </div>
+      <div class="col-lg-1 custom-width"></div>
+      <footer class="footer col-lg-8 col-sm-12">
         <FooterComponent />
       </footer>
     </div>
   </div>
 </template>
-  
+
 <script>
 import HeaderComponent from '../components/HeaderComponent.vue';
 import leftBar from '@/components/leftBar.vue';
 import GraphComponent from '../components/GraphComponent.vue';
 import SideBar from '@/components/SideBar.vue';
 import FooterComponent from '../components/FooterComponent.vue';
+
 export default {
   name: 'HomePage',
   components: {
+    HeaderComponent,
+    leftBar,
     GraphComponent,
     SideBar,
     FooterComponent,
-    HeaderComponent,
-    leftBar
+  },
+};
+</script>
+<style scoped>
+
+.custom-width{
+  width: 5%;
+  background-color: #131722;
+}
+@media screen and (max-width: 1000px) {
+  .custom-width{
+    display: none;
+  }
+  .header{
+    width: 100%;
+  }
+  .wrapper{
+    margin: 2px;
   }
 }
-</script>
-  
-<style scoped>
-.layout {
-  display: grid;
-  grid-template-areas:
-    'header header header header header header'
-    'l-bar graph-section graph-section graph-section r-banner r-banner'
-    'l-bar graph-section graph-section graph-section r-banner r-banner'
-    'l-bar footer footer footer r-banner r-banner'
-    'l-bar footer footer footer r-banner r-banner';
-  height: 100vh;
-  grid-gap: 0;
-}
 
-.header {
-  grid-area: header;
-}
-
-.graph-section {
-  grid-area: graph-section;
-}
-
-.left-bar {
-  grid-area: l-bar;
-}
-
-.r-banner {
-  grid-area: r-banner;
-}
-
-.footer {
-  grid-area: footer;
-}
-
-@media screen and (max-width: 1000px) {
-  .layout {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    height: 100vh;
+@media screen and (min-width: 1000px) {
+  .gutter-width{
+    --bs-gutter-x: 0rem;
+  }
+  .sidebar{
+    width: 28%;
   }
 }
 </style>

@@ -1,5 +1,4 @@
 <template>
-  <div class="col-lg-4">
     <div class="accordion" id="accordionExample">
       <div
         class="accordion-item"
@@ -36,9 +35,22 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item, idx) in section.data" :key="idx" @click="toggleRowContent(index, idx)">
+                <tr
+                  v-for="(item, idx) in section.data"
+                  :key="idx"
+                  @click="toggleRowContent(index, idx)"
+                >
                   <td :colspan="4" v-if="selectedRow === `${index}-${idx}`">
                     <div class="buySell d-flex flex-column">
+                      <div class="inpbox" @click="stopPropagation">
+                        <button @click="handleDecrement">-</button>
+                        <input
+                          type="text"
+                          @input="handleInput"
+                          v-model="sellVal"
+                        />
+                        <button @click="handleIncrement">+</button>
+                      </div>
                       <div
                         class="text-white fw-semibold d-flex justify-content-between"
                       >
@@ -61,8 +73,10 @@
                           <img src="" alt="i" />
                         </div>
                       </div>
-                      <div class="d-flex text-white">
-                        <div class="bg-danger d-flex flex-column gap-2 w-100 p-2">
+                      <div class="d-flex text-white" @click="stopPropagation">
+                        <div
+                          class="bg-danger d-flex flex-column gap-2 w-100 p-2"
+                        >
                           <div class="d-flex justify-content-between">
                             Sell
                             <img
@@ -71,28 +85,38 @@
                               alt="icon"
                             />
                           </div>
-                          <span class="bg-danger">178.95</span>
+                          <span class="buySellSpan">178.95</span>
                         </div>
                         <div
-                          class="bg-success d-flex justify-content-between w-100"
+                          class="bg-success d-flex flex-column gap-2 w-100 p-2"
                         >
-                          Buy
-                          <img
-                            src="../assets/up.png"
-                            class="arrowIcon"
-                            alt="icon"
-                          />
+                          <div class="d-flex justify-content-between">
+                            <img
+                              src="../assets/up.png"
+                              class="arrowIcon"
+                              alt="icon"
+                            />
+                            Buy
+                          </div>
+                          <span class="buySellSpan d-flex justify-content-end"
+                            >179.01</span
+                          >
                         </div>
                       </div>
                       <div class="d-flex justify-content-between">
-                        <button class="text-danger buySellBtn">Low 173.20</button>
+                        <button class="text-danger buySellBtn">
+                          Low 173.20
+                        </button>
                         <button class="text-success buySellBtn">
                           High 179.74
                         </button>
                       </div>
                     </div>
                   </td>
-                  <td v-if="!toggleBoolean" class="text-white fw-semibold">
+                  <td
+                    v-if="selectedRow != `${index}-${idx}`"
+                    class="text-white fw-semibold"
+                  >
                     <div class="symGroup d-flex gap-2 align-items-center">
                       <img
                         class="symIcon"
@@ -106,10 +130,15 @@
                       {{ item.symbol }}
                     </div>
                   </td>
-                  <td v-if="!toggleBoolean" class="text-end">{{ item.last }}</td>
-                  <td v-if="!toggleBoolean" class="text-end">{{ item.chg }}</td>
-                  <td v-if="!toggleBoolean" class="text-end">{{ item.chgPercent }}</td>
-                  
+                  <td v-if="selectedRow != `${index}-${idx}`" class="text-end">
+                    {{ item.last }}
+                  </td>
+                  <td v-if="selectedRow != `${index}-${idx}`" class="text-end">
+                    {{ item.chg }}
+                  </td>
+                  <td v-if="selectedRow != `${index}-${idx}`" class="text-end">
+                    {{ item.chgPercent }}
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -117,7 +146,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -131,7 +159,7 @@ export default {
       symbolRows: [],
       runSocket: false,
       selectedRow: null,
-      toggleBoolean: false
+      sellVal: 0,
     };
   },
   created() {
@@ -143,7 +171,6 @@ export default {
   },
   methods: {
     toggleRowContent(sectionIndex, itemIndex) {
-      this.toggleBoolean = !this.toggleBoolean;
       if (this.selectedRow === `${sectionIndex}-${itemIndex}`) {
         this.selectedRow = null;
       } else {
@@ -163,6 +190,21 @@ export default {
         console.error("Error loading data from JSON file:", error);
       }
     },
+    stopPropagation(event) {
+      event.stopPropagation();
+    },
+    handleInput(event) {
+      let value = event.target.value;
+      value = value.replace(/\D/g, "");
+      event.target.value = value;
+      this.sellVal = value;
+    },
+    handleIncrement() {
+      this.sellVal = (parseFloat(this.sellVal) + 0.01).toFixed(2);
+    },
+    handleDecrement() {
+      this.sellVal = (parseFloat(this.sellVal) - 0.01).toFixed(2);
+    },
   },
 };
 </script>
@@ -170,6 +212,13 @@ export default {
 <style scoped>
 .buySell {
   background-color: #191c24;
+  padding-block: 8px;
+  font-size: small;
+  font-weight: 800;
+}
+.buySellSpan {
+  font-size: x-small;
+  font-weight: 400;
 }
 .buySellBtn {
   background-color: #191c24;
@@ -177,9 +226,18 @@ export default {
   padding: 4px 8px;
   border-radius: 4px;
 }
+.inpbox {
+  position: relative;
+  top: 65px;
+  display: flex;
+  justify-content: center;
+}
+input {
+  width: 10%;
+}
 .arrowIcon {
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
 }
 .text-white {
   color: #fff;
@@ -263,10 +321,10 @@ export default {
   height: 8px;
 }
 
+.accordion {
+  width: 100%;
+}
 @media screen and (max-width: 3000px) {
-  .accordion {
-    width: 780px;
-  }
 
   .accordion-button {
     height: 60px;
@@ -285,16 +343,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 2000px) {
-  .accordion {
-    width: 570px;
-  }
-}
-
 @media screen and (max-width: 1500px) {
-  .accordion {
-    width: 420px;
-  }
   .accordion-button {
     height: 40px;
     font-size: x-small;
@@ -312,9 +361,6 @@ export default {
   }
 }
 @media screen and (max-width: 1300px) {
-  .accordion {
-    width: 360px;
-  }
   .accordion-button {
     height: 40px;
     font-size: x-small;
@@ -334,15 +380,16 @@ export default {
 
 @media screen and (max-width: 1000px) {
   .accordion {
-    margin-top: 10px;
-    width: 865px;
+    margin-bottom: 10px;
+    /* width: 865px; */
   }
 }
 
 @media screen and (max-width: 900px) {
   .accordion {
     margin-top: 10px;
-    width: 820px;
+    /* width: 880px; */
+    
   }
 }
 </style>

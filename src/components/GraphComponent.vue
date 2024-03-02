@@ -34,9 +34,8 @@ export default {
   methods: {
     handleWidthChange() {
       let windowWidth = window.innerWidth;
-      console.log(this.width);
       if (windowWidth >= 2500) {
-        this.width = 1600;
+        this.width = 1550;
         this.height = 900;
       } else if (windowWidth >= 1900) {
         this.width = 1200;
@@ -54,7 +53,7 @@ export default {
         this.width = 850;
         this.height = 490;
       } else if (windowWidth >= 700) {
-        this.width = 810;
+        this.width = 710;
         this.height = 490;
       } else {
         this.width = 600;

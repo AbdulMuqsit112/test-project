@@ -148,10 +148,10 @@ input {
 }
 
 table {
-  width: 1010px;
   border-collapse: collapse;
   color: #6c7293;
   overflow-y: auto;
+  width: 100%;
 }
 
 th,
@@ -211,31 +211,7 @@ td {
   background-color: #131722;
 }
 
-@media screen and (max-width: 3000px) {
-  table {
-    width: 1600px;
-    height: 200px;
-  }
-}
-
-@media screen and (max-width: 2000px) {
-  table {
-    width: 1200px;
-    height: 180px;
-  }
-}
-
-@media screen and (max-width: 1500px) {
-  table {
-    width: 900px;
-    height: 10px;
-  }
-}
-
 @media screen and (max-width: 1300px) {
-  table {
-    width: 800px;
-  }
 
   th {
     font-size: x-small;
@@ -246,23 +222,15 @@ td {
   }
 }
 
-@media screen and (max-width: 1000px) {
-  table {
-    width: 840px;
-  }
-}
 
-@media screen and (max-width: 900px) {
-  table {
-    width: 750px;
-  }
-
+@media screen and (max-width: 800px) {
   th {
-    font-size: small;
+    font-size: x-small;
   }
 
   td {
-    padding: 6px;
+    padding: 2px;
     font-size: xx-small;
   }
-}</style>
+}
+</style>

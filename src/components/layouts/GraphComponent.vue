@@ -16,10 +16,12 @@
 <script>
 import TradingVue from "../../TradingVue.vue";
 import Data from "../../../data/data.json";
+import updatedData from "../../../data/updatedData.json";
 import DataCube from "../../helpers/datacube.js";
 export default {
   name: "GraphComponent",
   components: { TradingVue },
+  props: ['dataChanged'],
   data() {
     return {
       colors: {
@@ -39,7 +41,6 @@ export default {
   methods: {
     handleWidthChange() {
       let windowWidth = window.innerWidth;
-      console.log(windowWidth);
       if (windowWidth >= 2500) {
         this.width = 1550;
         this.height = 965;
@@ -73,6 +74,15 @@ export default {
   beforeDestroy() {
     window.removeEventListener("resize", this.handleWidthChange);
   },
+  watch: {
+    dataChanged(newValue, oldValue) {
+      if (newValue == true){
+        this.chart = new DataCube(updatedData);
+      } else {
+        this.chart = new DataCube(Data);
+      }
+    }
+  }
 };
 </script>
 

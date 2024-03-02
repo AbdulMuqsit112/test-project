@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="wrapper">
     <div class="login-container">
       <header>
         <h2>User Login</h2>
@@ -50,7 +50,8 @@ export default {
 
 
 <style scoped>
-.container {
+
+.wrapper {
   height: 95vh;
   width: 100vw;
   display: flex;
@@ -70,7 +71,7 @@ header {
   display: flex;
   gap: 30px;
   flex-direction: column;
-  width: 300px;
+  width: 350px;
   height: 420px;
   margin: 0 auto;
   padding: 25px;

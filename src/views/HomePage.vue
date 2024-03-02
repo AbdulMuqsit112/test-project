@@ -13,20 +13,19 @@
       <div class="col-lg-3 mt-2 col-sm-12 sidebar">
         <SideBar />
       </div>
-      <div class="col-lg-1 custom-width"></div>
+      <div class="col-lg-1 custom-width" />
       <footer class="footer col-lg-8 col-sm-12">
         <FooterComponent />
       </footer>
     </div>
   </div>
 </template>
-
 <script>
-import HeaderComponent from '../components/HeaderComponent.vue';
-import leftBar from '@/components/leftBar.vue';
-import GraphComponent from '../components/GraphComponent.vue';
-import SideBar from '@/components/SideBar.vue';
-import FooterComponent from '../components/FooterComponent.vue';
+import HeaderComponent from '../components/layouts/HeaderComponent.vue';
+import leftBar from '../components/layouts/leftBar.vue';
+import GraphComponent from '../components/layouts/GraphComponent.vue';
+import SideBar from '../components/layouts/SideBar.vue';
+import FooterComponent from '../components/layouts/FooterComponent.vue';
 
 export default {
   name: 'HomePage',

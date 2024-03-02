@@ -35,6 +35,7 @@ export default {
 
 
 <style>
+@import url('../style.css');
 #app{
   width: 100vw;
   height: 100vh;

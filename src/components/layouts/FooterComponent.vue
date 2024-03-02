@@ -223,14 +223,26 @@ td {
 }
 
 
-@media screen and (max-width: 800px) {
-  th {
-    font-size: x-small;
+@media screen and (max-width: 1024px) {
+  .s-card{
+    width: 100%;
   }
+  table{
 
+  }
+  th {
+    font-size: xx-small;
+  }
+  
   td {
     padding: 2px;
     font-size: xx-small;
   }
+  .searchbar {
+    margin-left: 2px;
+    padding: 2px;
+    border-radius: 2px;
+    width: 100%;
+}
 }
 </style>

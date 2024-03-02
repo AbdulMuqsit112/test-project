@@ -39,26 +39,30 @@ export default {
   methods: {
     handleWidthChange() {
       let windowWidth = window.innerWidth;
+      console.log(windowWidth);
       if (windowWidth >= 2500) {
         this.width = 1550;
-        this.height = 900;
+        this.height = 965;
       } else if (windowWidth >= 1900) {
         this.width = 1200;
-        this.height = 600;
+        this.height = 630;
       } else if (windowWidth >= 1400) {
         this.width = 900;
         this.height = 440;
       } else if (windowWidth >= 1200) {
         this.width = 800;
-        this.height = 400;
-      } else if (windowWidth >= 1000) {
-        this.width = 900;
-        this.height = 490;
+        this.height = 598;
+      } else if (windowWidth >= 1024) {
+        this.width = 620;
+        this.height = 396;
       } else if (windowWidth >= 900) {
         this.width = 850;
         this.height = 490;
+      } else if (windowWidth >= 800) {
+        this.width = 810;
+        this.height = 490;
       } else if (windowWidth >= 700) {
-        this.width = 710;
+        this.width = 690;
         this.height = 490;
       } else {
         this.width = 600;

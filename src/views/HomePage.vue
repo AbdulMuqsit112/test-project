@@ -7,13 +7,13 @@
       <div class="col-lg-1 custom-width">
         <leftBar />
       </div>
-      <div class="col-lg-8 col-sm-12 mt-2">
+      <div class="col-lg-8 col-md-6 col-sm-12 mt-2">
         <GraphComponent />
       </div>
       <div class="col-lg-3 mt-2 col-sm-12 sidebar">
         <SideBar />
       </div>
-      <div class="col-lg-1 custom-width" />
+      <div class="col-lg-1 custom-width c-width" />
       <footer class="footer col-lg-8 col-sm-12">
         <FooterComponent />
       </footer>
@@ -44,7 +44,26 @@ export default {
   width: 5%;
   background-color: #131722;
 }
+
+@media screen and (max-width: 1600px) {
+  .c-width{
+    width: 5.65%;
+  }
+}
+@media screen and (max-width: 1500px) {
+  .c-width {
+    width: 5%;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .c-width {
+    padding-inline: 1.9rem;
+  }
+}
 @media screen and (max-width: 1000px) {
+  .c-width {
+    display: none;
+  }
   .custom-width{
     display: none;
   }

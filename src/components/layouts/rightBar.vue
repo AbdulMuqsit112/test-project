@@ -94,7 +94,7 @@
             type="button"
             :data-bs-toggle="'collapse'"
             :data-bs-target="'#collapse' + index"
-            :aria-expanded="index === 0"
+            :aria-expanded="true"
             :aria-controls="'collapse' + index"
           >
             {{ section.title }}
@@ -102,7 +102,7 @@
         </h2>
         <div
           :id="'collapse' + index"
-          class="accordion-collapse collapse"
+          class="accordion-collapse collapse show"
           :class="{ show: index === 0 }"
           :aria-labelledby="'heading' + index"
           data-bs-parent="#accordionExample"

@@ -1,6 +1,6 @@
 <template>
-  <div class="wrapper">
-    <div class="login-container">
+  <div class="wrapper w-100 h-100 d-flex justify-content-center align-items-center text-white">
+    <div class="login-container d-flex flex-column p-4 gap-4 rounded-3">
       <header>
         <h2>User Login</h2>
       </header>
@@ -52,13 +52,7 @@ export default {
 <style scoped>
 
 .wrapper {
-  height: 95vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #333;
-  color: #fff;
+  background-color: #3d3c3c;
 }
 
 header {
@@ -68,17 +62,10 @@ header {
 }
 
 .login-container {
-  display: flex;
-  gap: 30px;
-  flex-direction: column;
   width: 350px;
   height: 420px;
-  margin: 0 auto;
-  padding: 25px;
-  border-radius: 15px;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2); 
   background-color: rgba(50, 49, 49, 0.8);
-  color: #fff;
   border: 1px solid #09407a; 
 }
 
@@ -116,7 +103,7 @@ button {
   background-color: #09407a;
   color: #fff;
   border: none;
-  width: 312px; 
+  width: 100%; 
   padding: 10px 0;
   border-radius: 5px;
   cursor: pointer;

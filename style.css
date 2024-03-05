@@ -1,32 +1,46 @@
+#app {
+  width: 100vw;
+  height: 100vh;
+}
+.vue-grid-item>.vue-resizable-handle {
+  background-color: aqua !important;
+}
+body {
+  box-sizing: border-box;
+  background-color: #415159 !important;
+  color: #fff !important;
+  margin: 0;
+  /* overflow: hidden; */
+}
+
 .s-card {
-    border-radius: 0.25rem;
+  border-radius: 0.25rem;
 }
 .s-card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    word-wrap: break-word;
-    background-color: #191c24;
-    background-clip: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.125);
-    border-radius: 0.25rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  word-wrap: break-word;
+  background-color: #191c24;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
 }
-.s-card .card-body {
-    padding: 1.75rem 1.5625rem;
-    
+.card-body {
+  padding: 1.75rem 1.5625rem;
 }
 .s-card .card-title {
-    color: #ffffff;
-    margin-bottom: 1.125rem;
-    text-transform: capitalize;
+  color: #ffffff;
+  /* margin-bottom: 1.125rem; */
+  text-transform: capitalize;
 }
 .s-card .card-description {
-    color: #bfbfbf;
-    font-weight: 500;
+  color: #bfbfbf;
+  font-weight: 500;
 }
 @media screen and (max-width: 1000px) {
-    .s-card{
-        width: max-content;
-    }
+  .s-card {
+    width: max-content;
+  }
 }

@@ -105,7 +105,6 @@
           class="accordion-collapse collapse show"
           :class="{ show: index === 0 }"
           :aria-labelledby="'heading' + index"
-          data-bs-parent="#accordionExample"
         >
           <div class="accordion-body">
             <table class="table table-hover">

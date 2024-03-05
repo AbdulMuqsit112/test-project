@@ -11,7 +11,7 @@
             <tr>
               <th>
                 Ticker
-                <input class="searchbar" type="text" v-model="searchTerm" placeholder="Search Ticker"
+                <input class="p-1 ml-1 rounded" type="text" v-model="searchTerm" placeholder="Search Ticker"
                   @input="filterStocks">
               </th>
               <th>Price</th>
@@ -134,23 +134,17 @@ export default {
 </script>
   
 <style scoped>
+
 input {
   background-color: #191c24;
   color: #6c7293;
   border: 0.2px solid #39404b;
-  border-radius: 0.5rem;
-}
-
-.searchbar {
-  margin-left: 4px;
-  padding: 4px;
-  border-radius: 4px;
 }
 
 table {
   border-collapse: collapse;
   color: #6c7293;
-  overflow-y: auto;
+  overflow-y: scroll;
   width: 100%;
 }
 
@@ -162,6 +156,8 @@ td {
   padding: 8px;
   color: #6c7293;
   font-size: x-small;
+  border-left: none;
+  border-right: none;
 }
 
 tr:hover {
@@ -177,18 +173,6 @@ th {
 }
 
 
-
-th,
-td {
-  border-left: none;
-  border-right: none;
-}
-
-
-.tab-buttons {
-  margin-bottom: 10px;
-}
-
 .tab-buttons button {
   background-color: #22252e;
   color: #c1c4cd;
@@ -196,6 +180,7 @@ td {
   border-radius: 4px 4px 0 0;
   cursor: pointer;
   padding: 8px 16px;
+  font-size: small;
   transition: background-color 0.3s ease;
 }
 
@@ -207,7 +192,7 @@ td {
   outline: none;
 }
 
-.tab-buttons button.active {
+.tab-buttons button:active {
   background-color: #131722;
 }
 
@@ -227,9 +212,6 @@ td {
   .s-card{
     width: 100%;
   }
-  table{
-
-  }
   th {
     font-size: xx-small;
   }
@@ -238,11 +220,11 @@ td {
     padding: 2px;
     font-size: xx-small;
   }
-  .searchbar {
-    margin-left: 2px;
-    padding: 2px;
-    border-radius: 2px;
-    width: 100%;
+  input{
+    margin-left: 2px !important;
+    padding: 2px !important;
+    border-radius: 2px !important;
+    width: 100% !important;
 }
 }
 </style>

@@ -78,6 +78,7 @@
     "moment": "^2.29.1",
     "socket.io-client": "^4.7.4",
     "vue": "^2.6.12",
+    "vue-grid-layout": "^2.4.0",
     "vue-router": "^3.6.5"
   }
 }

@@ -291,7 +291,6 @@ export default {
   },
   methods: {
     toggleRowContent(sectionIndex, itemIndex, item) {
-      debugger;
       if (this.selectedRow === `${sectionIndex}-${itemIndex}`) {
         this.$emit("graph-data-change", false);
         this.selectedRow = null;
@@ -366,15 +365,15 @@ export default {
   },
   computed: {
     containerWidth() {
-      const contWidth = window.screen.width;
+      const contWidth = document.body.clientWidth;
       let calculatedWidth = (contWidth * 11) / 12;
       calculatedWidth = (calculatedWidth * this.cWidth) / 12;
-      return (calculatedWidth * 95) / 100;
+      return (calculatedWidth * 94) / 100;
     },
     containerHeight() {
-      const contHeight = window.screen.height;
+      const contHeight = document.body.clientHeight;
       let calculatedHeight = (contHeight * this.cHeight) / 12;
-      return (calculatedHeight * 58) / 100;
+      return (calculatedHeight * 75) / 100;
     },
     accordionWidth() {
       const contWidth = this.containerWidth;

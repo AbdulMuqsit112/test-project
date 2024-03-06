@@ -8,7 +8,7 @@
         <button @click="activeTab = 'history'">History</button>
       </div>
       <div v-show="activeTab === 'stocks'"  :style="{ height: tableContainerHeight }" class="overflow-auto" >
-        <table>
+        <table class="w-100 custom-width">
           <thead class="sticky-top">
             <tr :style="{ fontSize: thFontSize }">
               <th>
@@ -57,9 +57,9 @@
         </table>
       </div>
       <div v-show="activeTab === 'history'" :style="{ height: tableContainerHeight }" class="overflow-auto">
-        <table>
+        <table class="w-100">
           <thead class="sticky-top">
-            <tr :style="{ fontSize: thFontSize }" class="">
+            <tr :style="{ fontSize: thFontSize }">
               <th class="px-3">Positions</th>
               <th class="px-3">Open Date</th>
               <th class="px-3">Type</th>
@@ -74,7 +74,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in histData" :key="index" :style="{ fontSize: tdFontSize }" class="">
+            <tr v-for="(item, index) in histData" :key="index" :style="{ fontSize: tdFontSize }">
               <td class="px-3">{{ item.positions }}</td>
               <td class="px-3">{{ item.openDate }}</td>
               <td class="px-3">{{ item.type }}</td>
@@ -98,7 +98,7 @@
 import stocksData from "../../assets/stocks.json";
 import historyData from "../../assets/history.json";
 export default {
-  name: "FooterComponent",
+  name: "HistoryStockComponent",
   props: ["cWidth", "cHeight"],
   data() {
     return {
@@ -144,15 +144,19 @@ export default {
       );
     },
     containerWidth() {
-      const contWidth = window.screen.width;
+      const contWidth = document.body.clientWidth;
       let calculatedWidth = (contWidth * 11) / 12;
       calculatedWidth = (calculatedWidth * this.cWidth) / 12;
-      return ((calculatedWidth * 95) / 100).toString() + 'px';;
+      return ((calculatedWidth * 20) / 100).toString() + 'px';
     },
     containerHeight() {
-      const contHeight = window.screen.height;
+      const contHeight = document.body.clientHeight;
       let calculatedHeight = (contHeight * this.cHeight) / 12;
-      return ((calculatedHeight * 58) / 100);
+      return ((calculatedHeight * 70) / 100);
+    },
+    tableContainerWidth(){
+      const contWidth = this.containerWidth;
+      return ((accWidth * 90) / 100).toString() + "px";
     },
     tableContainerHeight(){
       const contHeight = this.containerHeight;
@@ -162,9 +166,9 @@ export default {
       const contWidth = this.containerWidth;
       let fontWidth = 0;
       if (this.activeTab === 'stocks'){
-        fontWidth = Math.ceil(contWidth + (contWidth * 30) / 100);
+        fontWidth = Math.ceil(contWidth + (contWidth * 60) / 100);
       } else {
-        fontWidth = Math.ceil(contWidth + (contWidth * 35) / 100);
+        fontWidth = Math.ceil(contWidth + (contWidth * 65) / 100);
       }
       fontWidth = ((fontWidth / window.screen.width) * 100).toString() + "%";
       return fontWidth;
@@ -240,30 +244,22 @@ th {
   background-color: #131722;
 }
 
-@media screen and (max-width: 1300px) {
-  th {
-    /* font-size: x-small; */
-  }
-
-  td {
-    /* font-size: xx-small; */
-  }
-}
-
 @media screen and (max-width: 1024px) {
-  th {
-    /* font-size: xx-small; */
-  }
-
   td {
     padding: 2px;
-    /* font-size: xx-small; */
   }
   input {
     margin-left: 2px !important;
     padding: 2px !important;
     border-radius: 2px !important;
-    /* width: 100% !important; */
+  }
+}
+@media screen and (max-width: 1000px) {
+  .s-card{
+    width: 100%;
+  }
+  .card-body{
+    width: 100%
   }
 }
 </style>

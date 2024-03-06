@@ -33,13 +33,22 @@ export default {
   },
   methods: {
     setChartDimensions() {
-      const containerWidth = window.screen.width;
+      const containerWidth = document.body.clientWidth;
       const calculatedWidth = containerWidth * 11/ 12
-      const containerHeight = window.screen.height;
+      const containerHeight = document.body.clientHeight;
       this.width = calculatedWidth * this.cWidth / 12;
       this.width = this.width * 95/100;
       this.height = containerHeight * this.cHeight / 12;
-      this.height = this.height * 58/100
+      if (containerWidth < 1285){
+        this.height = this.height * 75/100
+      }
+      else if (containerWidth < 1300){
+        this.height = this.height * 77/100
+      } else if (containerWidth < 1500){
+        this.height = this.height * 75/100
+      } else {
+        this.height = this.height * 80/100
+      }
     },
     handleWidthChange() {
       let windowWidth = window.innerWidth;

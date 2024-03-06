@@ -1,19 +1,36 @@
 <template>
   <div class="wrapper">
-    <div class="modal-wrapper" v-if="isModalOpen">
-      <div class="modal-content gap-4">
+    <div
+      class="modal-wrapper"
+      v-if="isModalOpen"
+      :style="{ height: accordionHeight, width: accordionWidth }"
+    >
+      <div
+        class="modal-content gap-4"
+        :style="{ height: accordionHeight, width: modalWidth }"
+      >
         <div class="modal-header d-flex justify-content-between">
-          <h5 class="modal-title">Trade Pannel</h5>
+          <span class="modal-title" :style="{ fontSize: modalTitleFont }"
+            >Trade Pannel</span
+          >
           <button
             type="button"
             class="btn"
             @click="closeModal"
             aria-label="Close"
+            :style="{ fontSize: modalTitleFont }"
           >
             X
           </button>
         </div>
-        <div class="modal-body d-flex flex-column gap-5">
+        <div
+          class="modal-body d-flex flex-column"
+          :style="{
+            fontSize: modalBodyFont,
+            height: modalHeight,
+            gap: innerGap,
+          }"
+        >
           <div class="d-flex flex-column gap-2">
             <div class="d-flex justify-content-between">
               <span>Bid: 178</span>
@@ -70,19 +87,24 @@
         <div class="modal-footer">
           <button
             type="button"
-            class="btn p-0 w-100 fs-6"
+            class="btn p-0"
             :class="`${btnClass}`"
             @click="closeModal"
+            :style="{ width: modalWidth }"
           >
             {{ btnVal }}
             <br />
             178.8
           </button>
-          <!-- Additional buttons or actions -->
         </div>
       </div>
     </div>
-    <div class="accordion" id="accordionExample" v-else>
+    <div
+      class="accordion"
+      id="accordionExample"
+      v-else
+      :style="{ width: accordionWidth, height: accordionHeight }"
+    >
       <div
         class="accordion-item"
         v-for="(section, index) in symbolRows"
@@ -90,12 +112,16 @@
       >
         <h2 class="accordion-header" :id="'heading' + index">
           <button
-            class="accordion-button"
+            class="accordion-button rounded-0"
             type="button"
             :data-bs-toggle="'collapse'"
             :data-bs-target="'#collapse' + index"
             :aria-expanded="true"
             :aria-controls="'collapse' + index"
+            :style="{
+              fontSize: accordianButtonFont,
+              height: accordionButtonHeight,
+            }"
           >
             {{ section.title }}
           </button>
@@ -105,12 +131,14 @@
           class="accordion-collapse collapse show"
           :class="{ show: index === 0 }"
           :aria-labelledby="'heading' + index"
-          data-bs-parent="#accordionExample"
         >
-          <div class="accordion-body">
+          <div
+            class="accordion-body p-2 overflow-auto"
+            :style="{ width: accordianItemWidth, height: accordianItemHeight }"
+          >
             <table class="table table-hover">
-              <thead>
-                <tr>
+              <thead class="sticky-top">
+                <tr :style="{ fontSize: accordianThFont }">
                   <th class="text-white fw-semibold">Symbol</th>
                   <th class="text-end">Last</th>
                   <th class="text-end">Change</th>
@@ -122,43 +150,21 @@
                   v-for="(item, idx) in section.data"
                   :key="idx"
                   @click="toggleRowContent(index, idx, item)"
+                  :style="{
+                    fontSize: accordianTableFont,
+                    height: tableRowHeight,
+                  }"
                 >
-                  <td :colspan="4" v-if="selectedRow === `${index}-${idx}`">
-                    <div class="buySell d-flex flex-column">
-                      <div class="inpbox">
-                        <button
-                          @click="handleDecrement('sellVal')"
-                          class="inc-dec-btn rounded-start-1"
-                        >
-                          -
-                        </button>
-                        <input
-                          class="sell-val"
-                          type="text"
-                          @input="handleInput('sellVal')"
-                          @blur="handleBlur('sellVal')"
-                          v-model="sellVal"
-                        />
-                        <button
-                          @click="handleIncrement('sellVal')"
-                          class="inc-dec-btn rounded-end-1"
-                        >
-                          +
-                        </button>
-                      </div>
+                  <td
+                    :colspan="4"
+                    v-if="selectedRow === `${index}-${idx}`"
+                    :style="{ height: buySellHeight }"
+                  >
+                    <div class="buySell">
                       <div
                         class="text-white fw-semibold d-flex justify-content-between"
                       >
-                        <div class="symGroup d-flex gap-2 align-items-center">
-                          <!-- <img
-                              class="symIcon"
-                              :src="
-                                item.symbolIcon
-                                  ? require(`src/assets/${item.symbolIcon}`)
-                                  : ''
-                              "
-                              alt="icon"
-                            /> -->
+                        <div class="symGroup">
                           {{ item.symbol }}
                         </div>
                         <div class="icon-group">
@@ -170,7 +176,7 @@
                       </div>
                       <div class="d-flex text-white">
                         <div
-                          class="bg-danger d-flex flex-column gap-4 w-100 p-2"
+                          class="bg-danger d-flex flex-column gap-2 w-100 px-2 pt-1"
                           @click="sellItem(item)"
                         >
                           <div class="d-flex justify-content-between">
@@ -184,7 +190,7 @@
                           <span class="buySellSpan">178.95</span>
                         </div>
                         <div
-                          class="bg-success d-flex flex-column gap-2 w-100 p-2"
+                          class="bg-success d-flex flex-column gap-2 w-100 px-2 pt-1"
                           @click="buyItem(item)"
                         >
                           <div class="d-flex justify-content-between">
@@ -208,22 +214,34 @@
                           High 179.74
                         </button>
                       </div>
+                      <div class="inpbox">
+                        <button
+                          @click="handleDecrement('sellVal')"
+                          class="inc-dec-btn rounded-start-1"
+                        >
+                          -
+                        </button>
+                        <input
+                          class="sell-val"
+                          type="text"
+                          @input="handleInput('sellVal')"
+                          @blur="handleBlur('sellVal')"
+                          v-model="sellVal"
+                        />
+                        <button
+                          @click="handleIncrement('sellVal')"
+                          class="inc-dec-btn rounded-end-1"
+                        >
+                          +
+                        </button>
+                      </div>
                     </div>
                   </td>
                   <td
                     v-if="selectedRow != `${index}-${idx}`"
                     class="text-white fw-semibold"
                   >
-                    <div class="symGroup d-flex gap-2 align-items-center">
-                      <!-- <img
-                          class="symIcon"
-                          :src="
-                            item.symbolIcon
-                              ? require(`src/assets/${item.symbolIcon}`)
-                              : ''
-                          "
-                          alt="icon"
-                        /> -->
+                    <div class="symGroup">
                       {{ item.symbol }}
                     </div>
                   </td>
@@ -251,6 +269,7 @@ import symblRow from "../../assets/symbolRow.json";
 import socketMixin from "../../mixins/socketMixin";
 export default {
   mixins: [socketMixin],
+  props: ["cWidth", "cHeight"],
   data() {
     return {
       symbolRows: [],
@@ -273,11 +292,11 @@ export default {
   methods: {
     toggleRowContent(sectionIndex, itemIndex, item) {
       if (this.selectedRow === `${sectionIndex}-${itemIndex}`) {
-        this.$emit('graph-data-change',false);
+        this.$emit("graph-data-change", false);
         this.selectedRow = null;
       } else {
         this.selectedRow = `${sectionIndex}-${itemIndex}`;
-        this.$emit('graph-data-change',true);
+        this.$emit("graph-data-change", true);
       }
     },
     handleDataUpdated(data) {
@@ -339,19 +358,111 @@ export default {
       this.btnVal = "Sell";
     },
     closeModal() {
-      this.$emit('graph-data-change',false);
+      this.$emit("graph-data-change", false);
       this.selectedRow = null;
       this.isModalOpen = !this.isModalOpen;
+    },
+  },
+  computed: {
+    containerWidth() {
+      const contWidth = document.body.clientWidth;
+      let calculatedWidth = (contWidth * 11) / 12;
+      calculatedWidth = (calculatedWidth * this.cWidth) / 12;
+      return (calculatedWidth * 94) / 100;
+    },
+    containerHeight() {
+      const contHeight = document.body.clientHeight;
+      let calculatedHeight = (contHeight * this.cHeight) / 12;
+      return (calculatedHeight * 75) / 100;
+    },
+    accordionWidth() {
+      const contWidth = this.containerWidth;
+      return ((contWidth * 108) / 100).toString() + "px";
+    },
+    accordionHeight() {
+      const contHeight = this.containerHeight;
+      return ((contHeight * 52) / 100).toString() + "px";
+    },
+    accordianItemWidth() {
+      let accWidth = this.containerWidth;
+      return ((accWidth * 109) / 100).toString() + "px";
+    },
+    accordianItemHeight() {
+      let accHeight = this.containerHeight;
+      return ((accHeight * 30) / 100).toString() + "px";
+    },
+    tableRowHeight() {
+      let accHeight = this.containerHeight;
+      return ((accHeight * 8) / 100).toString() + "px";
+    },
+    accordionButtonHeight() {
+      const contHeight = this.containerHeight;
+      return ((contHeight * 12) / 100).toString() + "px";
+    },
+    buySellHeight() {
+      const contHeight = this.containerHeight;
+      return ((contHeight * 3) / 100).toString() + "px";
+    },
+    accordianButtonFont() {
+      const contWidth = this.containerWidth;
+      let fontWidth = Math.ceil(contWidth + (contWidth * 15) / 100);
+      fontWidth = ((fontWidth / window.screen.width) * 100).toString() + "%";
+      return fontWidth;
+    },
+    accordianThFont() {
+      const contWidth = this.containerWidth;
+      let fontWidth = Math.ceil(contWidth + (contWidth * 19) / 100);
+      fontWidth = ((fontWidth / window.screen.width) * 100).toString() + "%";
+      return fontWidth;
+    },
+    accordianTableFont() {
+      const contWidth = this.containerWidth;
+      let fontWidth = Math.ceil(contWidth);
+      fontWidth = ((fontWidth / window.screen.width) * 10).toString() + "%";
+      return fontWidth;
+    },
+    modalWidth() {
+      const contWidth = this.containerWidth;
+      return ((contWidth * 100) / 100).toString() + "px";
+    },
+    modalHeight() {
+      const contHeight = this.containerHeight;
+      return ((contHeight * 78) / 100).toString() + "px";
+    },
+    modalTitleFont() {
+      const contWidth = this.containerWidth;
+      let fontWidth = Math.ceil(contWidth + (contWidth * 320) / 100);
+      fontWidth = ((fontWidth / window.screen.width) * 100).toString() + "%";
+      return fontWidth;
+    },
+    modalBodyFont() {
+      const contWidth = this.containerWidth;
+      let fontWidth = Math.ceil(contWidth + (contWidth * 180) / 100);
+      fontWidth = ((fontWidth / window.screen.width) * 100).toString() + "%";
+      return fontWidth;
+    },
+    innerGap() {
+      const maxGapRem = 1.25;
+      const gapRatio = 0.05;
+      let gapSize = this.containerHeight * gapRatio;
+      gapSize = Math.min(
+        gapSize,
+        maxGapRem *
+          parseFloat(getComputedStyle(document.documentElement).fontSize)
+      );
+      return gapSize + "px";
     },
   },
 };
 </script>
 
 <style scoped>
+.wrapper {
+  font-size: medium;
+}
 .buySell {
   background-color: #191c24;
-  padding-block: 8px;
-  font-size: small;
+  font-size: smaller;
   font-weight: 800;
 }
 
@@ -369,7 +480,7 @@ export default {
 
 .inpbox {
   position: relative;
-  top: 81px;
+  top: -32px;
   display: flex;
   justify-content: center;
 }
@@ -393,14 +504,13 @@ export default {
 .inc-dec-btn {
   background-color: #3d4353;
   border-color: transparent;
-
   color: #c5c3c1;
-  padding: 6px 10px;
+  padding: 3px 5px;
 }
 
 .arrowIcon {
-  width: 15px;
-  height: 15px;
+  width: 9px;
+  height: 10px;
 }
 
 .text-white {
@@ -487,14 +597,8 @@ export default {
   height: 8px;
 }
 
-.accordion {
-  width: 100%;
-}
-
 .modal-wrapper {
   padding: 15px;
-  border: 1px solid;
-  border-color: #39404b;
   background-color: #191c24;
 }
 
@@ -508,10 +612,6 @@ export default {
   border: none;
 }
 
-.modal-body {
-  font-size: small;
-}
-
 .modal-footer {
   justify-content: center;
   border: none;
@@ -521,66 +621,4 @@ export default {
   color: #6c7293;
 }
 
-@media screen and (max-width: 3000px) {
-  .accordion-button {
-    height: 60px;
-    font-size: small;
-  }
-
-  .table {
-    height: 130px;
-  }
-
-  .table th {
-    font-size: small;
-  }
-
-  .table td {
-    font-size: small;
-  }
-}
-
-@media screen and (max-width: 1500px) {
-  .accordion-button {
-    height: 40px;
-    font-size: x-small;
-  }
-
-  .table {
-    height: 80px;
-  }
-
-  .table th {
-    font-size: x-small;
-  }
-
-  .table td {
-    font-size: x-small;
-  }
-}
-
-@media screen and (max-width: 1300px) {
-  .accordion-button {
-    height: 40px;
-    font-size: x-small;
-  }
-
-  .table {
-    height: 80px;
-  }
-
-  .table th {
-    font-size: x-small;
-  }
-
-  .table td {
-    font-size: x-small;
-  }
-}
-
-@media screen and (max-width: 1000px) {
-  .accordion {
-    margin-bottom: 10px;
-  }
-}
 </style>

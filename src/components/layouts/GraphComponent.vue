@@ -1,13 +1,7 @@
 <template>
-  <div class="s-card mb-4">
+  <div class="s-card">
     <div class="card-body">
-      <trading-vue
-        :width="width"
-        :height="height"
-        :data="chart"
-        :toolbar="true"
-      >
-        <!-- to change colours use these props :color-back="colors.colorBack" :color-grid="colors.colorGrid" :color-text="colors.colorText" -->
+      <trading-vue :width="width" :height="height" :data="chart" :toolbar="true">
       </trading-vue>
     </div>
   </div>
@@ -21,7 +15,7 @@ import DataCube from "../../helpers/datacube.js";
 export default {
   name: "GraphComponent",
   components: { TradingVue },
-  props: ['dataChanged'],
+  props: ['dataChanged', 'cWidth', 'cHeight'],
   data() {
     return {
       colors: {
@@ -34,11 +28,28 @@ export default {
       height: 0,
     };
   },
-  mounted() {
-    this.handleWidthChange();
-    window.addEventListener("resize", this.handleWidthChange);
+  mounted(){
+    this.setChartDimensions();
   },
   methods: {
+    setChartDimensions() {
+      const containerWidth = document.body.clientWidth;
+      const calculatedWidth = containerWidth * 11/ 12
+      const containerHeight = document.body.clientHeight;
+      this.width = calculatedWidth * this.cWidth / 12;
+      this.width = this.width * 95/100;
+      this.height = containerHeight * this.cHeight / 12;
+      if (containerWidth < 1285){
+        this.height = this.height * 75/100
+      }
+      else if (containerWidth < 1300){
+        this.height = this.height * 77/100
+      } else if (containerWidth < 1500){
+        this.height = this.height * 75/100
+      } else {
+        this.height = this.height * 80/100
+      }
+    },
     handleWidthChange() {
       let windowWidth = window.innerWidth;
       if (windowWidth >= 2500) {
@@ -48,8 +59,8 @@ export default {
         this.width = 1200;
         this.height = 630;
       } else if (windowWidth >= 1400) {
-        this.width = 900;
-        this.height = 440;
+        this.width = 400;
+        this.height = 240;
       } else if (windowWidth >= 1200) {
         this.width = 800;
         this.height = 598;
@@ -71,19 +82,27 @@ export default {
       }
     },
   },
-  beforeDestroy() {
-    window.removeEventListener("resize", this.handleWidthChange);
-  },
   watch: {
     dataChanged(newValue, oldValue) {
-      if (newValue == true){
+      if (newValue == true) {
         this.chart = new DataCube(updatedData);
       } else {
         this.chart = new DataCube(Data);
       }
+    },
+    cWidth() {
+      this.setChartDimensions();
+    },
+    cHeight() {
+      this.setChartDimensions();
     }
   }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.s-card{
+  width: fit-content;
+  height: fit-content;
+}
+</style>

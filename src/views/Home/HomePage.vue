@@ -3,7 +3,7 @@
     <header class="header">
       <HeaderComponent />
     </header>
-    <div class="row w-100 p-0">
+    <div class="row p-0">
       <div class="col-md-1 custom-width">
         <leftBar/>
       </div>
@@ -21,7 +21,7 @@
           :use-css-transforms="true"
           :responsive="false"
 
-          :margin="[3,3]"
+          :margin="[1,3]"
         >
           <grid-item
             v-for="item in layout"
@@ -31,8 +31,9 @@
             :h="item.h"
             :i="item.i"
             :key="item.i"
+            :min-w="item.minW"
+            :min-h="item.minH"
             drag-allow-from=".vue-draggable-handle"
-            
             class="grid-item"
           >
             <component
@@ -58,7 +59,7 @@ import HeaderComponent from "../../components/layouts/HeaderComponent.vue";
 import leftBar from "../../components/layouts/leftBar.vue";
 import GraphComponent from "../../components/layouts/GraphComponent.vue";
 import rightBar from "../../components/layouts/rightBar.vue";
-import FooterComponent from "../../components/layouts/FooterComponent.vue";
+import HistoryStockComponent from "../../components/layouts/HistoryStockComponent.vue";
 
 export default {
   name: "HomePage",
@@ -69,7 +70,7 @@ export default {
     leftBar,
     GraphComponent,
     rightBar,
-    FooterComponent,
+    HistoryStockComponent,
   },
   data() {
     return {
@@ -83,6 +84,8 @@ export default {
           i: "b",
           component: "GraphComponent",
           static: false,
+          minW: 5,
+          minH: 3
         },
         {
           x: 0,
@@ -90,17 +93,21 @@ export default {
           w: 9,
           h: 6,
           i: "d",
-          component: "FooterComponent",
+          component: "HistoryStockComponent",
           static: false,
+          minW: 6,
+          minH: 4
         },
         {
           x: 9,
           y: 0,
           w: 3,
-          h: 6,
+          h: 8,
           i: "c",
           component: "rightBar",
           static: false,
+          minW: 1,
+          minH: 6
         },
         
       ],
@@ -123,12 +130,14 @@ export default {
 
 <style scoped>
 .custom-width{
-  width: fit-content;
+  width: 5%;
   padding: 0;
   padding-left: 10px;
+  padding-right: 2px;
+  margin: 0;
 }
 .grid-width{
-  width: 95%;
+  width: 94%;
 }
 .grid-item {
   background-color: #131722;
@@ -193,4 +202,4 @@ export default {
     width: 27.5%;
   }
 }
-</style>
+</style>../../components/layouts/HistoryStockComponent.vue

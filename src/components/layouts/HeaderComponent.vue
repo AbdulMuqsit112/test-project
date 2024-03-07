@@ -198,14 +198,15 @@ export default {
   height: 20px;
   width: 20px;
 }
-@media screen and (max-width: 3000px) {
+
+ /* @media screen and (max-width: 3000px) {
     .header{
       height: 100px;
     }
-}
+} 
 @media screen and (max-width: 2000px) {
     .header{
-      height: 80px;
+      height: 100%;
     }
 }
 @media screen and (max-width: 1500px) {
@@ -222,5 +223,5 @@ export default {
   .header {
     width: 98vw;
   }
-}
+} */
 </style>

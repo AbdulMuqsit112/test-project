@@ -3,8 +3,8 @@
     <header class="header">
       <HeaderComponent />
     </header>
-    <div class="row p-0 main-grid">
-      <div class="col-md-1 custom-width no-display">
+    <div class="row main-grid">
+      <div class="col custom-width no-display">
         <leftBar />
       </div>
       <div class="col-md-11 p-0 grid-width">
@@ -85,23 +85,23 @@ export default {
       isGraphDataChanged: false,
       allLayouts: {
         lg: [
-          { x: 0, y: 0, w: 9, h: 5, i: "b", component: "GraphComponent", static: false, minW: 5, minH: 3},
-          { x: 0, y: 6, w: 9, h: 6, i: "d", component: "HistoryStockComponent", static: false, minW: 6, minH: 4},
+          { x: 0, y: 0, w: 9, h: 6, i: "b", component: "GraphComponent", static: false, minW: 5, minH: 3},
+          { x: 0, y: 7, w: 9, h: 4, i: "d", component: "HistoryStockComponent", static: false, minW: 6, minH: 4},
           { x: 9, y: 0, w: 3, h: 8, i: "c", component: "rightBar", static: false, minW: 1, minH: 6}
         ],
         md: [
-          { x: 0, y: 0, w: 9, h: 5, i: "b", component: "GraphComponent", static: false, minW: 5, minH: 3},
-          { x: 0, y: 6, w: 9, h: 6, i: "d", component: "HistoryStockComponent", static: false, minW: 6, minH: 4},
+          { x: 0, y: 0, w: 9, h: 6, i: "b", component: "GraphComponent", static: false, minW: 5, minH: 3},
+          { x: 0, y: 7, w: 9, h: 4, i: "d", component: "HistoryStockComponent", static: false, minW: 6, minH: 4},
           { x: 9, y: 0, w: 3, h: 8, i: "c", component: "rightBar", static: false, minW: 1, minH: 6}
         ],
         sm: [
-          { x: 0, y: 0, w: 9, h: 5, i: "b", component: "GraphComponent", static: false, minW: 5, minH: 3},
-          { x: 0, y: 6, w: 9, h: 6, i: "d", component: "HistoryStockComponent", static: false, minW: 6, minH: 4},
+          { x: 0, y: 0, w: 9, h: 6, i: "b", component: "GraphComponent", static: false, minW: 5, minH: 3},
+          { x: 0, y: 7, w: 9, h: 4, i: "d", component: "HistoryStockComponent", static: false, minW: 6, minH: 4},
           { x: 9, y: 0, w: 3, h: 8, i: "c", component: "rightBar", static: false, minW: 1, minH: 6}
         ],
         xs: [
-          { x: 0, y: 0, w: 9, h: 5, i: "b", component: "GraphComponent", static: false, minW: 5, minH: 3},
-          { x: 0, y: 6, w: 9, h: 6, i: "d", component: "HistoryStockComponent", static: false, minW: 6, minH: 4},
+          { x: 0, y: 0, w: 9, h: 6, i: "b", component: "GraphComponent", static: false, minW: 5, minH: 3},
+          { x: 0, y: 7, w: 9, h: 4, i: "d", component: "HistoryStockComponent", static: false, minW: 6, minH: 4},
           { x: 9, y: 0, w: 3, h: 8, i: "c", component: "rightBar", static: false, minW: 1, minH: 6}
         ],
         xxs: [
@@ -129,24 +129,28 @@ export default {
     rowHeight() {
       const screenHeight = document.body.clientHeight;
       const screenWidth = document.body.clientWidth;
-      if (screenWidth < 1500) return screenHeight /13;
-      return screenHeight / 12.8;
+      if (screenWidth > 4000) return screenHeight /10.58;
+      if (screenWidth > 2500) return screenHeight /10.91;
+      if (screenWidth > 2000) return screenHeight /11.25;
+      if (screenWidth > 1600) return screenHeight /11.42;
+      if (screenWidth > 1500) return screenHeight /11.726;
+      if (screenWidth > 1400) return screenHeight /11.92;
+      if (screenWidth > 1300) return screenHeight /12.89;
+      if (screenWidth > 1100) return screenHeight /13.89;
+      if (screenWidth > 900) return screenHeight /16.5;
+      return screenHeight / 10.92;
     },
   },
 };
 </script>
 
 <style scoped>
+
 .custom-width {
-  width: 5%;
   padding: 0;
   padding-left: 10px;
   padding-right: 2px;
   margin: 0;
-}
-
-.grid-width {
-  width: 94%;
 }
 
 .grid-item {
@@ -168,24 +172,119 @@ export default {
   cursor: pointer;
 }
 
-@media screen and (max-width: 2000px) {
+@media screen and (max-width: 4500px) {
+  
   .main-grid {
-  height: 88%;
+  height: 95.5%;
+  }
+  .grid-width{
+    width: 97.6%
+  }
+  .custom-width{
+    width: 2%;
+  }
 }
+@media screen and (max-width: 3000px) {
+  
+  .main-grid {
+  height: 93.2%;
+  }
+  .grid-width{
+    width: 96.8%
+  }
+  .custom-width{
+    width: 2.7%;
+  }
+}
+@media screen and (max-width: 2400px) {
+  
+  .main-grid {
+  height: 91%;
+  }
+  .grid-width{
+    width: 96%
+  }
+  .custom-width{
+    width: 3.7%;
+  }
+}
+@media screen and (max-width: 2000px) {
+  
+  .main-grid {
+  height: 90%;
+  }
+  .grid-width{
+    width: 95%
+  }
+  .custom-width{
+    width: 4.2%;
+  }
+}
+@media screen and (max-width: 1700px) {
+  
+  .main-grid {
+  height: 87.9%;
+  }
+  .grid-width{
+    width: 94.2%
+  }
+  .custom-width{
+    width: 5%;
+  }
+}
+@media screen and (max-width: 1500px) {
+  
+  .main-grid {
+    height: 87%;
+  }
+  .grid-width{
+    width: 94.5%
+  }
+  .custom-width {
+    width: 4%;
+  }
+}
+@media screen and (max-width: 1400px) {
+  
+  .main-grid {
+  height: 85%;
+  }
+  .grid-width{
+    width: 93.6%
+  }
+  .custom-width{
+    width: 6%;
+  }
+}
+@media screen and (max-width: 1200px) {  
+  .main-grid {
+  height: 84%;
+  }
+  .grid-width{
+    width: 94%
+  }
+  .custom-width{
+    width: 5.4%;
+  }
 }
 
 
 @media screen and (max-width: 1024px) {
-  .grid-width {
-    width: 93.5%;
+  .main-grid {
+    height: 81%;
+  }
+  .grid-width{
+    width: 93%
+  }
+  .custom-width{
+    width: 6.8%;
   }
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 900px) {
   .main-grid {
     justify-content: center;
   }
-
   .no-display {
     display: none;
   }
@@ -199,9 +298,4 @@ export default {
   }
 }
 
-@media screen and (min-width: 1000px) {
-  .gutter-width {
-    --bs-gutter-x: 0rem;
-  }
-}
 </style>

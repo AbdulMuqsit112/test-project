@@ -7,7 +7,7 @@
       <div class="col custom-width no-display">
         <leftBar />
       </div>
-      <div class="col-md-11 p-0 grid-width">
+      <div class="col-sm-11 p-0 grid-width">
         <grid-layout
           :layout.sync="layout"
           :col-num="12"
@@ -96,13 +96,13 @@ export default {
         ],
         sm: [
           { x: 0, y: 0, w: 9, h: 6, i: "b", component: "GraphComponent", static: false, minW: 5, minH: 3},
-          { x: 0, y: 7, w: 9, h: 4, i: "d", component: "HistoryStockComponent", static: false, minW: 6, minH: 4},
+          { x: 0, y: 7, w: 9, h: 5, i: "d", component: "HistoryStockComponent", static: false, minW: 6, minH: 4},
           { x: 9, y: 0, w: 3, h: 8, i: "c", component: "rightBar", static: false, minW: 1, minH: 6}
         ],
         xs: [
-          { x: 0, y: 0, w: 9, h: 6, i: "b", component: "GraphComponent", static: false, minW: 5, minH: 3},
-          { x: 0, y: 7, w: 9, h: 4, i: "d", component: "HistoryStockComponent", static: false, minW: 6, minH: 4},
-          { x: 9, y: 0, w: 3, h: 8, i: "c", component: "rightBar", static: false, minW: 1, minH: 6}
+          { x: 0, y: 0, w: 12, h: 3, i: "b", component: "GraphComponent", static: false, minW: 5, minH: 3},
+          { x: 0, y: 3, w: 12, h: 3, i: "d", component: "HistoryStockComponent", static: false, minW: 6, minH: 4},
+          { x: 9, y: 6, w: 12, h: 6, i: "c", component: "rightBar", static: false, minW: 1, minH: 6}
         ],
         xxs: [
           { x: 0, y: 0, w: 12, h: 4, i: "b", component: "GraphComponent", static: false, minW: 5, minH: 3},
@@ -116,11 +116,6 @@ export default {
     };
   },
   methods: {
-    breakpointChangedEvent: function(newBreakpoint, newLayout){
-      this.rowHeight;
-      console.clear()
-      console.log("BREAKPOINT CHANGED breakpoint=", newBreakpoint, ", layout: ", newLayout );
-    },
     handleGraphData(val) {
       this.isGraphDataChanged = val;
     },
@@ -135,7 +130,7 @@ export default {
       if (screenWidth > 1600) return screenHeight /11.42;
       if (screenWidth > 1500) return screenHeight /11.726;
       if (screenWidth > 1400) return screenHeight /11.92;
-      if (screenWidth > 1300) return screenHeight /12.89;
+      if (screenWidth > 1300) return screenHeight /13.5;
       if (screenWidth > 1100) return screenHeight /13.89;
       if (screenWidth > 900) return screenHeight /16.5;
       return screenHeight / 10.92;
@@ -178,6 +173,7 @@ export default {
   height: 95.5%;
   }
   .grid-width{
+    margin-right: 8px;
     width: 97.6%
   }
   .custom-width{
@@ -281,7 +277,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 960px) {
   .main-grid {
     justify-content: center;
   }

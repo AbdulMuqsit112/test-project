@@ -3,7 +3,7 @@
     class="s-card"
   >
     <div class="card-body">
-      <div class="tab-buttons">
+      <div class="tab-buttons" :style="{fontSize: btnFontSize}">
         <button @click="activeTab = 'stocks'">Stocks</button>
         <button @click="activeTab = 'history'">History</button>
       </div>
@@ -147,20 +147,25 @@ export default {
       const contWidth = document.body.clientWidth;
       let calculatedWidth = (contWidth * 11) / 12;
       calculatedWidth = (calculatedWidth * this.cWidth) / 12;
-      return ((calculatedWidth * 20) / 100).toString() + 'px';
+      return ((calculatedWidth * 90) / 100);
     },
     containerHeight() {
       const contHeight = document.body.clientHeight;
       let calculatedHeight = (contHeight * this.cHeight) / 12;
       return ((calculatedHeight * 70) / 100);
     },
-    tableContainerWidth(){
-      const contWidth = this.containerWidth;
-      return ((accWidth * 90) / 100).toString() + "px";
-    },
     tableContainerHeight(){
       const contHeight = this.containerHeight;
-      return (contHeight *  90 /100).toString() + 'px';
+      const contWidth = this.containerWidth;
+      debugger;
+      if (contWidth > 2500) return (contHeight *  130 /100).toString() + 'px';
+      if (contWidth > 1500) return (contHeight *  120 /100).toString() + 'px';
+      if (contWidth > 1300) return (contHeight *  115 /100).toString() + 'px';
+      if (contWidth > 1100) return contHeight.toString() + 'px';
+      if (contWidth > 900) return (contHeight *  95 /100).toString() + 'px';
+      if (contWidth > 800) return (contHeight *  77 /100).toString() + 'px';
+      if (contWidth > 700) return (contHeight *  60 /100).toString() + 'px';
+      return (contHeight *  70 /100).toString() + 'px';
     },
     thFontSize() {
       const contWidth = this.containerWidth;
@@ -179,6 +184,12 @@ export default {
       fontWidth = ((fontWidth / window.screen.width) * 100).toString() + "%";
       return fontWidth;
     },
+    btnFontSize() {
+      const contWidth = this.containerWidth;
+      let fontWidth = Math.ceil(contWidth + (contWidth * 40) / 100);
+      fontWidth = ((fontWidth / window.screen.width) * 100).toString() + "%";
+      return fontWidth;
+    },
   },
 };
 </script>
@@ -188,7 +199,7 @@ export default {
   font-size: small;
 }
 input {
-  background-color: #191c24;
+  background-color: #0b0d0e;
   color: #6c7293;
   border: 0.2px solid #39404b;
 }
@@ -219,8 +230,8 @@ th {
   border-bottom: 2px solid #2c2e33 !important;
   color: #6c7293;
   border-bottom-width: 1px;
+  background-color: #0b0d0e;
 }
-
 .tab-buttons button {
   background-color: #22252e;
   color: #c1c4cd;
@@ -228,7 +239,6 @@ th {
   border-radius: 4px 4px 0 0;
   cursor: pointer;
   padding: 8px 16px;
-  font-size: small;
   transition: background-color 0.3s ease;
 }
 

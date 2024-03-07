@@ -56,7 +56,7 @@ export default {
       } else if(containerWidth > 1400){
         this.height = this.height * 86/100
       } else if(containerWidth > 1200){
-        this.height = this.height * 75/100
+        this.height = this.height * 73/100
         this.width = this.width * 98/100;
       } else if(containerWidth > 1000){
         this.height = this.height * 67/100
@@ -67,46 +67,6 @@ export default {
       } else {
         this.height = this.height * 80/100
         this.width = this.width * 93/100;
-      }
-      // if (containerWidth < 1285){
-      //   this.height = this.height * 75/100
-      // } else if (containerWidth < 1300){
-      //   this.height = this.height * 77/100
-      // } else if (containerWidth < 1500){
-      //   this.height = this.height * 75/100
-      // } else {
-      //   this.height = this.height * 80/100
-      // }
-    },
-    handleWidthChange() {
-      let windowWidth = window.innerWidth;
-      if (windowWidth >= 2500) {
-        this.width = 1550;
-        this.height = 965;
-      } else if (windowWidth >= 1900) {
-        this.width = 1200;
-        this.height = 630;
-      } else if (windowWidth >= 1400) {
-        this.width = 400;
-        this.height = 240;
-      } else if (windowWidth >= 1200) {
-        this.width = 800;
-        this.height = 598;
-      } else if (windowWidth >= 1024) {
-        this.width = 620;
-        this.height = 396;
-      } else if (windowWidth >= 900) {
-        this.width = 850;
-        this.height = 490;
-      } else if (windowWidth >= 800) {
-        this.width = 810;
-        this.height = 490;
-      } else if (windowWidth >= 700) {
-        this.width = 690;
-        this.height = 490;
-      } else {
-        this.width = 600;
-        this.height = 490;
       }
     },
   },

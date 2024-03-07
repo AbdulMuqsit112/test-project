@@ -6,7 +6,7 @@
     </div>
     <div class="side-bar" :class="{ 'selected': selected === 'account' }" @click="selectItem('account')">
       <img src="src/assets/account.png" alt="icon">
-      My Account
+      <router-link  to="/profile">My Account</router-link>
     </div>
     <div class="side-bar" :class="{ 'selected': selected === 'settings' }" @click="selectItem('settings')">
       <img src="src/assets/settings.png" alt="icon">

@@ -13,7 +13,6 @@ body {
   margin: 0;
   overflow-x: hidden;
   font-family: 'Roboto', 'Ubuntu', sans-serif !important;
-  /* overflow: hidden; */
 }
 
 .s-card {
@@ -25,7 +24,7 @@ body {
   flex-direction: column;
   justify-content: center;
   word-wrap: break-word;
-  background-color: #191c24;
+  background-color: #131722;
   background-clip: border-box;
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
@@ -35,16 +34,15 @@ body {
 }
 .s-card .card-title {
   color: #ffffff;
-  /* margin-bottom: 1.125rem; */
   text-transform: capitalize;
 }
 .s-card .card-description {
   color: #bfbfbf;
   font-weight: 500;
 }
-@media screen and (max-width: 3000px) {
+@media screen and (min-width: 1000px) {
   body{
-    /* overflow-y: hidden; */
+    overflow-y: hidden;
   }
 }
 

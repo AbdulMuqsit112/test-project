@@ -1,13 +1,12 @@
 <template>
-  <div class="left-wrapper">
-    <span class="m-2"></span>
+  <div class="left-wrapper h-100 d-flex flex-column items-center gap-3">
     <div class="side-bar" :class="{ 'selected': selected === 'trade' }" @click="selectItem('trade')">
       <img src="src/assets/trade.png" alt="icon">
       Trading
     </div>
     <div class="side-bar" :class="{ 'selected': selected === 'account' }" @click="selectItem('account')">
       <img src="src/assets/account.png" alt="icon">
-      My Account
+      <router-link  to="/profile">My Account</router-link>
     </div>
     <div class="side-bar" :class="{ 'selected': selected === 'settings' }" @click="selectItem('settings')">
       <img src="src/assets/settings.png" alt="icon">
@@ -33,13 +32,9 @@ export default {
 
 <style scoped>
 .left-wrapper {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 60px;
   background-color: #131722;
   z-index: 1000;
+  border-top: 2px solid #415159;
 }
 
 .side-bar {
@@ -48,10 +43,11 @@ export default {
   flex-direction: column;
   gap: 3px;
   align-items: center;
-  padding: 5px;
+  margin-top: 1px; 
+  padding-block: 8px;
   transition: background-color 0.2s;
   cursor: pointer;
-  width: 50px;
+  border-bottom: 1px solid #415159;
 }
 
 .side-bar:hover {
@@ -63,56 +59,15 @@ export default {
 }
 
 .side-bar img {
-  width: 30px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
 }
 
-.m-2 {
-  margin-top: 8px;
-}
-
-@media screen and (max-width: 3000px) {
-  .left-wrapper {
-    height: 100%;
-    width: 100px;
-    gap: 60px;
-  }
-
-  .side-bar {
-    width: 90px;
+@media screen and (max-width: 2500px) {
+  .side-bar{
+    font-size: 10px;
   }
 }
-
-@media screen and (max-width: 2000px) {
-  .left-wrapper {
-    width: 80px;
-    gap: 50px;
-  }
-  .side-bar {
-    width: 70px;
-  }
-}
-
-@media screen and (max-width: 1500px) {
-  .left-wrapper {
-    width: 60px;
-    gap: 40px;
-  }
-  .side-bar {
-    width: 50px;
-  }
-}
-
-@media screen and (max-width: 1300px) {
-  .left-wrapper {
-    width: 50px;
-    gap: 40px;
-  }
-  .side-bar {
-    width: 40px;
-  }
-}
-
 @media screen and (max-width: 1000px) {
   .left-wrapper {
     display: none;

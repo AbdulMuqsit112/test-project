@@ -42,7 +42,7 @@ export default {
 <style scoped>
 .footer {
   background-color: #131722;
-  height: 42px;
+  padding-block: 4px;
 }
 .date-time{
   color: #c1c4cd !important;
@@ -60,9 +60,5 @@ export default {
   border-right: none;
 }
 
-@media screen and (max-width: 1000px) {
-  .footer {
-    display: none !important;
-  }
-}
+
 </style>

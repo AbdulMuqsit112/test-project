@@ -368,28 +368,36 @@ export default {
       const contWidth = document.body.clientWidth;
       let calculatedWidth = (contWidth * 11) / 12;
       calculatedWidth = (calculatedWidth * this.cWidth) / 12;
-      return (calculatedWidth * 94) / 100;
+      return (calculatedWidth * 97) / 100;
     },
     containerHeight() {
       const contHeight = document.body.clientHeight;
       let calculatedHeight = (contHeight * this.cHeight) / 12;
-      return (calculatedHeight * 75) / 100;
+      return (calculatedHeight * 90) / 100;
     },
     accordionWidth() {
       const contWidth = this.containerWidth;
-      return ((contWidth * 108) / 100).toString() + "px";
+      debugger;
+      if (contWidth > 800 ) return ((contWidth * 110.5) / 100).toString() + "px";
+      if (contWidth > 600 ) return ((contWidth * 109) / 100).toString() + "px";
     },
     accordionHeight() {
       const contHeight = this.containerHeight;
-      return ((contHeight * 52) / 100).toString() + "px";
+      return ((contHeight * 53) / 100).toString() + "px";
     },
     accordianItemWidth() {
       let accWidth = this.containerWidth;
-      return ((accWidth * 109) / 100).toString() + "px";
+      if (accWidth > 800 ) return ((accWidth * 110.2) / 100).toString() + "px";
+      if (accWidth > 600 ) return ((accWidth * 109) / 100).toString() + "px";
     },
     accordianItemHeight() {
       let accHeight = this.containerHeight;
-      return ((accHeight * 30) / 100).toString() + "px";
+      const contWidth = this.containerWidth;
+      if (contWidth > 800 ) return ((accHeight * 30.2) / 100).toString() + "px";
+      if (contWidth > 600 ) return ((accHeight * 29.2) / 100).toString() + "px";
+      if (contWidth > 400 ) return ((accHeight * 27.9) / 100).toString() + "px";
+      if (contWidth > 300 ) return ((accHeight * 26.2) / 100).toString() + "px";
+      if (contWidth > 200 ) return ((accHeight * 22.2) / 100).toString() + "px";
     },
     tableRowHeight() {
       let accHeight = this.containerHeight;
@@ -411,14 +419,14 @@ export default {
     },
     accordianThFont() {
       const contWidth = this.containerWidth;
-      let fontWidth = Math.ceil(contWidth + (contWidth * 19) / 100);
+      let fontWidth = Math.ceil(contWidth + (contWidth * 79) / 100);
       fontWidth = ((fontWidth / window.screen.width) * 100).toString() + "%";
       return fontWidth;
     },
     accordianTableFont() {
       const contWidth = this.containerWidth;
-      let fontWidth = Math.ceil(contWidth);
-      fontWidth = ((fontWidth / window.screen.width) * 10).toString() + "%";
+      let fontWidth = Math.ceil(contWidth + (contWidth * 39) / 100);
+      fontWidth = ((fontWidth / window.screen.width) * 100).toString() + "%";
       return fontWidth;
     },
     modalWidth() {
@@ -564,7 +572,7 @@ export default {
 }
 
 .accordion-button {
-  background-color: #191c24;
+  background-color: #131722;
   color: #6c7293;
 }
 

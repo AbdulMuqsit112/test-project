@@ -9,25 +9,7 @@
             <div class="main__grid">
               <MainGraphic/>
               <MainBottom/>
-              <div
-                class="mainBlock"
-                style="width: 25%; height: 100%; top: 0%; left: 75%"
-              >
-                <div
-                  class="mainBlock__split mainBlock__split_v mainBlock__split_left"
-                ></div>
-                <div class="mainBlock__tabs">
-                  <div class="mainBlock__tabsItem mainBlock__tabsItem_add">
-                    +
-                  </div>
-                </div>
-                <div class="mainBlock__content">
-                  <div class="mainBlock__tabsEmpty">
-                    <h3>Area is empty.</h3>
-                    <p>Please add a module by pressing "+".</p>
-                  </div>
-                </div>
-              </div>
+              <MainRight/>
             </div>
           </main>
         </section>
@@ -50,6 +32,7 @@ import leftBar from "../../components/layouts/leftBar.vue";
 import HeaderComponent from "../../components/layouts/HeaderComponent.vue";
 import MainGraphic from "../../components/layouts/MainGraphic.vue";
 import MainBottom from "../../components/layouts/MainBottom.vue";
+import MainRight from "../../components/layouts/MainRight.vue";
 export default {
   name: "HomePage2",
   components: {
@@ -57,7 +40,8 @@ export default {
     leftBar,
     HeaderComponent,
     MainGraphic,
-    MainBottom
+    MainBottom,
+    MainRight
   },
   data() {
     return {

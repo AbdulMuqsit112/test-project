@@ -1,10 +1,11 @@
 <template>
-  <div class="wrapper d-flex justify-content-center h-100 w-100 align-items-center">
-    <div class="s-card p-4">
-      <div class="card-header">
-        <h3>User Profile</h3>
-      </div>
-      <div class="card-body">
+  <div class="wrapper  h-100 w-100 p-4 d-flex flex-column gap-4">
+    <div class="card-header text-center mt-4">
+      <h3>User Profile</h3>
+      <img src="" alt="avatar">
+    </div>
+    <div class="d-flex gap-4 justify-content-center mt-4">
+      <div class="d-flex flex-column gap-4">
         <div class="form-group row">
           <label class="col-sm-3 col-form-label">Username</label>
           <div class="col-sm-9">
@@ -34,6 +35,6 @@ export default {
 </script>
 <style>
 .wrapper{
-  background-color: #3d3c3c;
+  background-color: #131722;
 }
 </style>

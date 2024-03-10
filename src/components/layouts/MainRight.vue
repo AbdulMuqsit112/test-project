@@ -1,5 +1,5 @@
 <template>
-  <div class="mainBlock" style="width: 25%; height: 100%; top: 0%; left: 75%">
+  <div class="mainBlock" :style="getMainBlockStyle">
     <div
       class="mainBlock__split mainBlock__split_v mainBlock__split_left"
     ></div>
@@ -7,8 +7,8 @@
       <div class="mainBlock__tabsItem mainBlock__tabsItem_add">+</div>
     </div>
     <div class="mainBlock__content">
-      <div class="mainBlock__tabsEmpty p-0">
-        <div class="modal-wrapper w-100 h-100" v-if="isModalOpen">
+      <div class="mainBlock__tabsEmpty p-0" ref="Modal">
+        <div class="modal-wrapper" v-if="isModalOpen" :style="modalDimensions">
           <div class="modal-content gap-4">
             <div class="modal-header d-flex">
               <h5 class="modal-title varaible-font d-flex justify-content-start">Trade Pannel</h5>
@@ -263,6 +263,7 @@
         </div>
       </div>
     </div>
+    <div v-if="layout == 2" class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"></div>
   </div>
 </template>
 
@@ -327,7 +328,6 @@ export default {
         this.sellVal = value;
       }
     },
-
     handleBlur(val) {
       if (val == "vol") {
         if (!this.volume.trim()) {
@@ -339,7 +339,6 @@ export default {
         }
       }
     },
-
     handleIncrement() {
       this.sellVal = (parseFloat(this.sellVal) + 0.01).toFixed(2);
     },
@@ -363,6 +362,44 @@ export default {
       this.selectedRow = null;
       this.isModalOpen = !this.isModalOpen;
     },
+  },
+  computed: {
+    layout(){
+      return this.$store.state.layoutType;
+    },
+    getMainBlockStyle() {
+      let layoutType = this.layout;
+      if (layoutType === 2) {
+        return {
+          width: '25%',
+          height: '50%',
+          top: '50%',
+          left: '75%',
+        };
+      }else if (layoutType === 3){
+        return {
+          width: '54.3968%',
+          height: '50%',
+          top: '50%',
+          left: '45.6032%',
+        };} 
+      else {
+        return {
+          width: '25%',
+          height: '100%',
+          top: '0%',
+          left: '75%',
+        };
+      }
+    },
+    modalDimensions(){
+      const Modal = this.$refs.Modal;
+      const dimensions = Modal.getBoundingClientRect();
+      return {
+        width: `${dimensions.width}px`,
+        maxHeight: `${dimensions.height}px`,
+      };
+    }
   },
 };
 </script>
@@ -508,6 +545,7 @@ export default {
 }
 
 .modal-wrapper {
+  overflow-y: auto;
   padding: 15px;
   border: 1px solid;
   border-color: #39404b;

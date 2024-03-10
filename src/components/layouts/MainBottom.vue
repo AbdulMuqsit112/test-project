@@ -1,5 +1,5 @@
 <template>
-  <div class="mainBlock" style="width: 75%; height: 35%; top: 65%; left: 0%">
+  <div class="mainBlock" :style="getMainBlockStyle">
     <div class="mainBlock__tabs">
       <div class="mainBlock__tabsItem mainBlock__tabsItem_add">+</div>
         <button class="tab-buttons" @click="activeTab = 'stocks'">Stocks</button>
@@ -90,6 +90,7 @@
         </div>
       </div>
     </div>
+    <div v-if="layout !=1" class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"></div>
   </div>
 </template>
 
@@ -140,6 +141,35 @@ export default {
       return this.stocks.filter((stock) =>
         stock.ticker.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
+    },
+    layout(){
+      return this.$store.state.layoutType;
+    },
+    getMainBlockStyle() {
+      let layoutType = this.layout;
+      if (layoutType === 2) {
+        return {
+          width: '75%',
+          height: '50%',
+          top: '0%',
+          left: '25%',
+        };
+      } else if (layoutType === 3){
+        return {
+          width: '54.4532%',
+          height: '50%',
+          top: '0%',
+          left: '45.5468%',
+        };
+      }
+      else {
+        return {
+          width: '75%',
+          height: '35%',
+          top: '65%',
+          left: '0%',
+        };
+      }
     },
   },
 };

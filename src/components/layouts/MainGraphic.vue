@@ -1,10 +1,10 @@
 <template>
-  <div class="mainBlock" style="width: 75%; height: 65%; top: 0%; left: 0%">
+  <div class="mainBlock" :style="getMainBlockStyle">
     <div class="mainBlock__tabs">
       <div class="mainBlock__tabsItem mainBlock__tabsItem_add">+</div>
     </div>
     <div class="mainBlock__content">
-      <div class="mainBlock__tabsEmpty">
+      <div class="mainBlock__tabsEmpty" ref="Graph">
         <trading-vue
           :width="width"
           :height="height"
@@ -13,9 +13,8 @@
         ></trading-vue>
       </div>
     </div>
-    <div
-      class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"
-    ></div>
+    <div v-if="layout == 1" class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"></div>
+    <div v-else class="mainBlock__split mainBlock__split_v mainBlock__split_right"></div>
   </div>
 </template>
 
@@ -41,66 +40,51 @@ export default {
     };
   },
   mounted() {
-    this.setChartDimensions();
+    this.chartDimension();
     window.addEventListener('resize', this.setChartDimensions);
   },
   destroyed() {
     window.removeEventListener('resize', this.setChartDimensions)
   },
   methods: {
-    setChartDimensions() {
-      const contWidth = this.containerWidth;
-      const containerHeight = this.containerHeight;
-      let baseWidth = contWidth * (11 / 12);
-      let baseHeight = containerHeight * (7.1 / 12);
-      baseWidth = (baseWidth * 9.8) / 12;
-      baseWidth = (baseWidth * 95) / 100;
-
-      if (contWidth > 4000) {
-        baseWidth *= 1.035;
-        baseHeight *= 1.019;
-      } else if (contWidth > 2500) {
-        baseWidth *= 1.025;
-        baseHeight *= 0.977;
-      } else if (contWidth > 2000) {
-        baseWidth *= 1.02;
-        baseHeight *= 0.935;
-      } else if (contWidth > 1800) {
-        baseWidth *= 1.009;
-        baseHeight *= 0.915;
-      } else if (contWidth > 1700) {
-        baseWidth *= 1.017;
-        baseHeight *= 0.902;
-      } else if (contWidth > 1500) {
-        baseWidth *= 1.009;
-        baseHeight *= 0.878;
-      } else if (contWidth > 1400) {
-        baseWidth *= 0.994;
-        baseHeight *= 0.853;
-      } else if (contWidth > 1200) {
-        baseWidth *= 0.987;
-        baseHeight *= 0.829;
-      } else if (contWidth > 1000) {
-        baseWidth *= 0.978;
-        baseHeight *= 0.791;
-      } else if (contWidth > 880) {
-        baseWidth *= 0.964;
-        baseHeight *= 0.732;
-      } else {
-        baseWidth *= 0.948;
-        baseHeight *= 0.802;
-      }
-      this.width = baseWidth;
-      this.height = baseHeight;
+    chartDimension(){
+      const graphContainer = this.$refs.Graph;
+      const dimensions = graphContainer.getBoundingClientRect();
+      this.width = dimensions.width;
+      this.height = dimensions.height;
     },
   },
   computed: {
-    containerWidth(){
-      return document.body.clientWidth;
+    layout(){
+      return this.$store.state.layoutType;
     },
-    containerHeight(){
-      return document.body.clientHeight;
-    }
+    getMainBlockStyle() {
+      let layoutType = this.layout;
+      if (layoutType === 2) {
+        return {
+          width: '75%',
+          height: '50%',
+          top: '50%',
+          left: '0%',
+        };
+      } else if (layoutType === 3){
+        return {
+          width: '45.6032%',
+          height: '50%',
+          top: '50%',
+          left: '0%',
+        };
+
+      } 
+      else {
+        return {
+          width: '75%',
+          height: '65%',
+          top: '0%',
+          left: '0%',
+        };
+      }
+    },
   },
   watch: {
     dataChanged(newValue) {

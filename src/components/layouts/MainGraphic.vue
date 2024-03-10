@@ -5,12 +5,7 @@
     </div>
     <div class="mainBlock__content">
       <div class="mainBlock__tabsEmpty" ref="Graph">
-        <trading-vue
-          :width="width"
-          :height="height"
-          :data="chart"
-          :toolbar="true"
-        ></trading-vue>
+        <trading-vue :width="width" :height="height" :data="chart" :toolbar="true"></trading-vue>
       </div>
     </div>
     <div v-if="layout == 1" class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"></div>
@@ -40,34 +35,36 @@ export default {
     };
   },
   mounted() {
-    this.chartDimension();
+    this.setChartDimensions();
     window.addEventListener('resize', this.setChartDimensions);
   },
   destroyed() {
     window.removeEventListener('resize', this.setChartDimensions)
   },
   methods: {
-    chartDimension(){
-      const graphContainer = this.$refs.Graph;
-      const dimensions = graphContainer.getBoundingClientRect();
-      this.width = dimensions.width;
-      this.height = dimensions.height;
+    setChartDimensions() {
+      this.$nextTick(() => {
+        const graphContainer = this.$refs.Graph;
+        let dimensions = graphContainer.getBoundingClientRect();
+        this.width = dimensions.width;
+        this.height = dimensions.height;
+      });
     },
   },
   computed: {
-    layout(){
+    layout() {
       return this.$store.state.layoutType;
     },
     getMainBlockStyle() {
       let layoutType = this.layout;
-      if (layoutType === 2) {
+      if (layoutType == 2) {
         return {
           width: '75%',
           height: '50%',
           top: '50%',
           left: '0%',
         };
-      } else if (layoutType === 3){
+      } else if (layoutType == 3) {
         return {
           width: '45.6032%',
           height: '50%',
@@ -75,7 +72,7 @@ export default {
           left: '0%',
         };
 
-      } 
+      }
       else {
         return {
           width: '75%',
@@ -93,6 +90,9 @@ export default {
       } else {
         this.chart = new DataCube(Data);
       }
+    },
+    layout(newVal) {
+      this.setChartDimensions();
     },
   },
 };

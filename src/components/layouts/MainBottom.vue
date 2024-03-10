@@ -147,14 +147,14 @@ export default {
     },
     getMainBlockStyle() {
       let layoutType = this.layout;
-      if (layoutType === 2) {
+      if (layoutType == 2) {
         return {
           width: '75%',
           height: '50%',
           top: '0%',
           left: '25%',
         };
-      } else if (layoutType === 3){
+      } else if (layoutType == 3){
         return {
           width: '54.4532%',
           height: '50%',

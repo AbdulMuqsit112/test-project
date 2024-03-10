@@ -87,6 +87,7 @@ export default {
     },
     changeLayout(val){
       this.$store.commit('changeLayout', val);
+      localStorage.setItem('layout', val);
       this.toggleDropdown();
     }
   },

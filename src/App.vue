@@ -16,6 +16,7 @@ export default {
   },
   mounted(){
     this.setUser();
+    this.setLayout();
   },
   methods: {
     setUser() {
@@ -39,6 +40,14 @@ export default {
         }
       }
       this.$router.push("/login");
+    },
+    setLayout(){
+      let layout = localStorage.getItem('layout');
+      if (layout) {
+        this.$store.commit('changeLayout', layout);
+        return;
+      }
+      this.$store.commit('changeLayout', 1);
     },
   },
   watch: {

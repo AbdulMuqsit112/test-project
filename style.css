@@ -1,18 +1,8 @@
-@import './src/assets/css/fonts.css';
-#app {
-  width: 100vw;
-  height: 100vh;
+body {
+  font-family: 'Roboto', 'ubuntu', 'sans-serif';
 }
 .vue-grid-item>.vue-resizable-handle {
   background-color: aqua !important;
-}
-body {
-  box-sizing: border-box;
-  background-color: #415159 !important;
-  color: #fff !important;
-  margin: 0;
-  overflow-x: hidden;
-  font-family: 'Roboto', 'Ubuntu', sans-serif !important;
 }
 
 .s-card {
@@ -39,11 +29,6 @@ body {
 .s-card .card-description {
   color: #bfbfbf;
   font-weight: 500;
-}
-@media screen and (min-width: 1000px) {
-  body{
-    overflow-y: hidden;
-  }
 }
 
 @media screen and (max-width: 1000px) {

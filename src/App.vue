@@ -53,4 +53,7 @@ export default {
 
 <style>
 @import url("../style.css");
+#app{
+  height: 100vh;;
+}
 </style>

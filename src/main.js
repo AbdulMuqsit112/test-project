@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router/index';
-
+import store from './store/store';
 
 if (MOB_DEBUG) {
     console.log = debug
@@ -11,6 +11,7 @@ if (MOB_DEBUG) {
 
 new Vue({
   router,
+  store,
   render: (h) => h(App),
 }).$mount('#app');
 

@@ -1,8 +1,6 @@
 <template>
   <div class="mainBlock" :style="getMainBlockStyle">
-    <div
-      class="mainBlock__split mainBlock__split_v mainBlock__split_left"
-    ></div>
+    <div class="mainBlock__split mainBlock__split_v mainBlock__split_left"></div>
     <div class="mainBlock__tabs">
       <div class="mainBlock__tabsItem mainBlock__tabsItem_add">+</div>
     </div>
@@ -12,12 +10,7 @@
           <div class="modal-content gap-4">
             <div class="modal-header d-flex">
               <h5 class="modal-title varaible-font d-flex justify-content-start">Trade Pannel</h5>
-              <button
-                type="button"
-                class="btn varaible-font"
-                @click="closeModal"
-                aria-label="Close"
-              >
+              <button type="button" class="btn varaible-font" @click="closeModal" aria-label="Close">
                 X
               </button>
             </div>
@@ -29,14 +22,8 @@
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <span>Volume:</span>
-                  <input
-                    type="number"
-                    step="0.01"
-                    @input="handleInput('vol')"
-                    @blur="handleBlur('vol')"
-                    v-model="volume"
-                    class="vol"
-                  />
+                  <input type="number" step="0.01" @input="handleInput('vol')" @blur="handleBlur('vol')"
+                    v-model="volume" class="vol" />
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <span>Stop Loss:</span>
@@ -56,9 +43,7 @@
                   <span>Required margin:</span>
                   <span>0.01 Units</span>
                 </div>
-                <div
-                  class="d-flex justify-content-between align-items-center w-100"
-                >
+                <div class="d-flex justify-content-between align-items-center w-100">
                   <div class="d-flex justify-content-between w-50">
                     <span>Spread:</span>
                     <span>-0.00 EUR</span>
@@ -76,12 +61,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button
-                type="button"
-                class="btn p-0 w-100 footer-font"
-                :class="`${btnClass}`"
-                @click="closeModal"
-              >
+              <button type="button" class="btn p-0 w-100 footer-font" :class="`${btnClass}`" @click="closeModal">
                 {{ btnVal }}
                 <br />
                 178.8
@@ -90,141 +70,30 @@
             </div>
           </div>
         </div>
-        <div class="accordion w-100 h-100" id="accordionExample" v-else>
-          <div
-            class="accordion-item"
-            v-for="(section, index) in symbolRows"
-            :key="index"
-          >
-            <h2 class="accordion-header" :id="'heading' + index">
-              <button
-                class="accordion-button"
-                type="button"
-                :data-bs-toggle="'collapse'"
-                :data-bs-target="'#collapse' + index"
-                :aria-expanded="true"
-                :aria-controls="'collapse' + index"
-              >
-                {{ section.title }}
-              </button>
-            </h2>
-            <div
-              :id="'collapse' + index"
-              class="accordion-collapse collapse show"
-              :class="{ show: index === 0 }"
-              :aria-labelledby="'heading' + index"
-            >
-              <div class="accordion-body overflow-auto">
-                <table class="table table-hover">
-                  <thead class="sticky-top">
-                    <tr>
-                      <th class="text-white fw-semibold">Symbol</th>
-                      <th class="text-end">Last</th>
-                      <th class="text-end">Change</th>
-                      <th class="text-end">Change Percent</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      v-for="(item, idx) in section.data"
-                      :key="idx"
-                      @click="toggleRowContent(index, idx, item)"
-                    >
-                      <td :colspan="4" v-if="selectedRow === `${index}-${idx}`">
-                        <div class="buySell d-flex flex-column">
-                          <div
-                            class="text-white fw-semibold d-flex justify-content-between"
-                          >
-                            <div
-                              class="symGroup d-flex gap-2 align-items-center"
-                            >
-                              <!-- <img
-                              class="symIcon"
-                              :src="
-                                item.symbolIcon
-                                  ? require(`src/assets/${item.symbolIcon}`)
-                                  : ''
-                              "
-                              alt="icon"
-                            /> -->
-                              {{ item.symbol }}
-                            </div>
-                            <div class="icon-group">
-                              <img src="" alt="i" />
-                              <img src="" alt="i" />
-                              <img src="" alt="i" />
-                              <img src="" alt="i" />
-                            </div>
-                          </div>
-                          <div class="d-flex text-white">
-                            <div class="bg-danger d-flex flex-column gap-3 w-100 p-2"
-                              @click="sellItem(item)"
-                            >
-                              <div class="d-flex justify-content-between">
-                                Sell
-                                <img
-                                  src="src/assets/down.png"
-                                  class="arrowIcon"
-                                  alt="icon"
-                                />
-                              </div>
-                              <span class="buySellSpan">178.95</span>
-                            </div>
-                            <div
-                              class="bg-success d-flex flex-column gap-3 w-100 p-2"
-                              @click="buyItem(item)"
-                            >
-                              <div class="d-flex justify-content-between">
-                                <img
-                                  src="src/assets/up.png"
-                                  class="arrowIcon"
-                                  alt="icon"
-                                />
-                                Buy
-                              </div>
-                              <span
-                                class="buySellSpan d-flex justify-content-end"
-                                >179.01</span
-                              >
-                            </div>
-                          </div>
-                          <div class="d-flex justify-content-between">
-                            <button class="text-danger buySellBtn">
-                              Low 173.20
-                            </button>
-                            <button class="text-success buySellBtn">
-                              High 179.74
-                            </button>
-                          </div>
-                          <div class="inpbox">
-                            <button
-                              @click="handleDecrement('sellVal')"
-                              class="inc-dec-btn rounded-start-1"
-                            >
-                              -
-                            </button>
-                            <input
-                              class="sell-val"
-                              type="text"
-                              @input="handleInput('sellVal')"
-                              @blur="handleBlur('sellVal')"
-                              v-model="sellVal"
-                            />
-                            <button
-                              @click="handleIncrement('sellVal')"
-                              class="inc-dec-btn rounded-end-1"
-                            >
-                              +
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                      <td
-                        v-if="selectedRow != `${index}-${idx}`"
-                        class="text-white fw-semibold"
-                      >
-                        <div class="symGroup d-flex gap-2 align-items-center">
-                          <!-- <img
+        <div class="d-flex gap-2 w-100 search-box p-2" v-if="!isModalOpen">
+          <select class="category p-1" v-model="selectedCategory">
+            <option value="all">All</option>
+            <option v-for="category in categories" :value="category">{{ category }}</option>
+          </select>
+          <input type="text" v-model="searchQuery" placeholder="Search...">
+        </div>
+        <div class="w-100 h-100 overflow-auto" v-if="!isModalOpen">
+          <table class="table table-hover">
+            <thead class="sticky-top">
+              <tr>
+                <th class="text-white fw-semibold">Symbol</th>
+                <th class="text-end">Last</th>
+                <th class="text-end">Change</th>
+                <th class="text-end">Change Percent</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(asset, index) in filteredAssets" :key="asset.symbol" @click="toggleRowContent(index, asset)">
+                <td :colspan="4" v-if="selectedRow === index">
+                  <div class="buySell d-flex flex-column">
+                    <div class="text-white fw-semibold d-flex justify-content-between">
+                      <div class="symGroup d-flex gap-2 align-items-center">
+                        <!-- <img
                           class="symIcon"
                           :src="
                             item.symbolIcon
@@ -233,34 +102,79 @@
                           "
                           alt="icon"
                         /> -->
-                          {{ item.symbol }}
+                        {{ asset.symbol }}
+                      </div>
+                      <div class="icon-group">
+                        <img src="" alt="i" />
+                        <img src="" alt="i" />
+                        <img src="" alt="i" />
+                        <img src="" alt="i" />
+                      </div>
+                    </div>
+                    <div class="d-flex text-white">
+                      <div class="bg-danger d-flex flex-column gap-3 w-100 p-2" @click="sellItem(asset)">
+                        <div class="d-flex justify-content-between">
+                          Sell
+                          <img src="src/assets/down.png" class="arrowIcon" alt="icon" />
                         </div>
-                      </td>
-                      <td
-                        v-if="selectedRow != `${index}-${idx}`"
-                        class="text-end"
-                      >
-                        {{ item.last }}
-                      </td>
-                      <td
-                        v-if="selectedRow != `${index}-${idx}`"
-                        class="text-end"
-                      >
-                        {{ item.chg }}
-                      </td>
-                      <td
-                        v-if="selectedRow != `${index}-${idx}`"
-                        class="text-end"
-                      >
-                        {{ item.chgPercent }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+                        <span class="buySellSpan">178.95</span>
+                      </div>
+                      <div class="bg-success d-flex flex-column gap-3 w-100 p-2" @click="buyItem(asset)">
+                        <div class="d-flex justify-content-between">
+                          <img src="src/assets/up.png" class="arrowIcon" alt="icon" />
+                          Buy
+                        </div>
+                        <span class="buySellSpan d-flex justify-content-end">179.01</span>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <button class="text-danger buySellBtn">
+                        Low 173.20
+                      </button>
+                      <button class="text-success buySellBtn">
+                        High 179.74
+                      </button>
+                    </div>
+                    <div class="inpbox">
+                      <button @click="handleDecrement('sellVal')" class="inc-dec-btn rounded-start-1">
+                        -
+                      </button>
+                      <input class="sell-val" type="text" @input="handleInput('sellVal')" @blur="handleBlur('sellVal')"
+                        v-model="sellVal" />
+                      <button @click="handleIncrement('sellVal')" class="inc-dec-btn rounded-end-1">
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td v-if="selectedRow != index" class="text-white fw-semibold">
+                  <div class="symGroup d-flex gap-2 align-items-center">
+                    <!-- <img
+                      class="symIcon"
+                      :src="
+                        item.symbolIcon
+                          ? require(`src/assets/${item.symbolIcon}`)
+                          : ''
+                      "
+                      alt="icon"
+                    /> -->
+                    {{ asset.symbol }}
+                  </div>
+                </td>
+                <td v-if="selectedRow != index" class="text-end">
+                  {{ asset.last }}
+                </td>
+                <td v-if="selectedRow != index" class="text-end">
+                  {{ asset.chg }}
+                </td>
+                <td v-if="selectedRow != index" class="text-end">
+                  {{ asset.chgPercent }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+
       </div>
     </div>
     <div v-if="layout == 2" class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"></div>
@@ -274,7 +188,7 @@ export default {
   mixins: [socketMixin],
   data() {
     return {
-      symbolRows: [],
+      asssetArr: [],
       runSocket: false,
       selectedRow: null,
       sellVal: 0.01,
@@ -282,6 +196,9 @@ export default {
       volume: 0.01,
       btnClass: "",
       btnVal: "",
+      categories: [],
+      selectedCategory: "all",
+      searchQuery: ""
     };
   },
   created() {
@@ -292,24 +209,22 @@ export default {
     }
   },
   methods: {
-    toggleRowContent(sectionIndex, itemIndex, item) {
-      if (this.selectedRow === `${sectionIndex}-${itemIndex}`) {
+    toggleRowContent(index) {
+      if (this.selectedRow === index) {
         this.$emit("graph-data-change", false);
         this.selectedRow = null;
       } else {
-        this.selectedRow = `${sectionIndex}-${itemIndex}`;
+        this.selectedRow = index;
         this.$emit("graph-data-change", true);
       }
     },
     handleDataUpdated(data) {
-      this.symbolRows = data;
+      this.asssetArr = data;
     },
-    async loadDataFromJson() {
+    loadDataFromJson() {
       try {
-        this.symbolRows = Object.entries(symblRow).map(([title, data]) => ({
-          title,
-          data,
-        }));
+        this.assets = symblRow.assets;
+        this.categories = [...new Set(this.assets.map(asset => asset.category))];
       } catch (error) {
         console.error("Error loading data from JSON file:", error);
       }
@@ -364,7 +279,7 @@ export default {
     },
   },
   computed: {
-    layout(){
+    layout() {
       return this.$store.state.layoutType;
     },
     getMainBlockStyle() {
@@ -376,13 +291,14 @@ export default {
           top: '50%',
           left: '75%',
         };
-      }else if (layoutType == 3){
+      } else if (layoutType == 3) {
         return {
           width: '54.3968%',
           height: '50%',
           top: '50%',
           left: '45.6032%',
-        };} 
+        };
+      }
       else {
         return {
           width: '25%',
@@ -392,14 +308,26 @@ export default {
         };
       }
     },
-    modalDimensions(){
+    modalDimensions() {
       const Modal = this.$refs.Modal;
       const dimensions = Modal.getBoundingClientRect();
       return {
         width: `${dimensions.width}px`,
         maxHeight: `${dimensions.height}px`,
       };
-    }
+    },
+    filteredAssets() {
+      const lowerCaseQuery = this.searchQuery.toLowerCase();
+      if (this.selectedCategory === 'all') {
+        return this.assets.filter(asset => {
+          return asset.symbol.toLowerCase().includes(lowerCaseQuery);
+        });
+      } else {
+        return this.assets.filter(asset => {
+          return asset.category === this.selectedCategory && asset.symbol.toLowerCase().includes(lowerCaseQuery);
+        });
+      }
+    },
   },
 };
 </script>
@@ -510,31 +438,6 @@ export default {
   white-space: nowrap;
 }
 
-.accordion-button {
-  background-color: #191c24;
-  color: #6c7293;
-}
-
-.accordion-button:focus {
-  z-index: 3;
-  outline: 0;
-  box-shadow: none;
-}
-
-.accordion-button:not(.collapsed) {
-  background-color: #191c24;
-  color: #fff;
-}
-
-.accordion-body {
-  background-color: #191c24;
-  color: #6c7293;
-}
-
-.accordion-item {
-  border-color: #39404b;
-}
-
 .symGroup {
   background-color: #191c24;
 }
@@ -562,37 +465,42 @@ export default {
   border: none;
 }
 
-
-
 .modal-footer {
   justify-content: center;
   border: none;
 }
+
 .quantity-grp {
   border-block: 2px solid #39404b;
   color: #6c7293;
 }
 
+.search-box {
+  background-color: #0b0d0e;
+}
+
+.category {
+  background-color: #0b0d0e;
+  color: #6c7293;
+  border: 0.2px solid #39404b;
+  border-radius: 4px;
+}
+
 @media screen and (max-width: 4500px) {
-  .accordion-body {
-    max-height: 250px; 
-  }
-  .varaible-font{
+  .varaible-font {
     font-size: xx-large !important;
   }
+
   .modal-body {
     font-size: x-large;
   }
-  .footer-font{
+
+  .footer-font {
     font-size: x-large;
   }
 }
-@media screen and (max-width: 3000px) {
-  .accordion-button {
-    height: 60px;
-    font-size: small;
-  }
 
+@media screen and (max-width: 3000px) {
   .table th {
     font-size: small;
   }
@@ -603,50 +511,44 @@ export default {
 }
 
 @media screen and (max-width: 2500px) {
-  .accordion-body {
-    max-height: 150px; 
-  }
-  .varaible-font{
+  .varaible-font {
     font-size: x-large !important;
   }
+
   .modal-body {
     font-size: larger;
   }
-  .footer-font{
+
+  .footer-font {
     font-size: larger;
   }
 }
+
 @media screen and (max-width: 2000px) {
-  .accordion-body {
-    max-height: 140px; 
-  }
-  .varaible-font{
+  .varaible-font {
     font-size: larger !important;
   }
+
   .modal-body {
     font-size: large;
   }
-  .footer-font{
+
+  .footer-font {
     font-size: large;
   }
 }
 
 @media screen and (max-width: 1500px) {
-  .varaible-font{
+  .varaible-font {
     font-size: medium !important;
   }
+
   .modal-body {
     font-size: small;
   }
-  .footer-font{
-    font-size:small;
-  }
-  .accordion-body {
-    max-height: 130px; 
-  }
-  .accordion-button {
-    height: 40px;
-    font-size: x-small;
+
+  .footer-font {
+    font-size: small;
   }
 
   .table th {
@@ -659,20 +561,15 @@ export default {
 }
 
 @media screen and (max-width: 1300px) {
-  .varaible-font{
+  .varaible-font {
     font-size: small !important;
   }
+
   .modal-body {
     font-size: x-small;
   }
-  .footer-font{
-    font-size: x-small;
-  }
-  .accordion-body {
-    max-height: 100px; 
-  }
-  .accordion-button {
-    height: 40px;
+
+  .footer-font {
     font-size: x-small;
   }
 
@@ -684,5 +581,4 @@ export default {
     font-size: x-small;
   }
 }
-
 </style>

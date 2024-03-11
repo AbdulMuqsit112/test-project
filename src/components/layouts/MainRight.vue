@@ -104,11 +104,40 @@
                         /> -->
                         {{ asset.symbol }}
                       </div>
-                      <div class="icon-group">
-                        <img src="" alt="i" />
-                        <img src="" alt="i" />
-                        <img src="" alt="i" />
-                        <img src="" alt="i" />
+                      <div class="icons-group d-flex gap-2 p-2">
+                        <svg class="info-icon" @click.stop="toggleInfoSection()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 125" fill="none" x="0px"
+                          y="0px">
+                          <path
+                            d="M50 41.6667C52.3012 41.6667 54.1666 43.5321 54.1666 45.8333V66.6667C54.1666 68.9678 52.3012 70.8333 50 70.8333C47.6988 70.8333 45.8333 68.9678 45.8333 66.6667V45.8333C45.8333 43.5321 47.6988 41.6667 50 41.6667Z"
+                            fill="white" />
+                          <path
+                            d="M50 29.1667C52.3012 29.1667 54.1666 31.0321 54.1666 33.3333C54.1666 35.6345 52.3012 37.5 50 37.5C47.6988 37.5 45.8333 35.6345 45.8333 33.3333C45.8333 31.0321 47.6988 29.1667 50 29.1667Z"
+                            fill="white" />
+                          <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M8.33331 50C8.33331 26.9881 26.9881 8.33333 50 8.33333C73.0118 8.33333 91.6666 26.9881 91.6666 50C91.6666 73.0119 73.0118 91.6667 50 91.6667C26.9881 91.6667 8.33331 73.0119 8.33331 50ZM50 16.6667C31.5905 16.6667 16.6666 31.5905 16.6666 50C16.6666 68.4095 31.5905 83.3333 50 83.3333C68.4095 83.3333 83.3333 68.4095 83.3333 50C83.3333 31.5905 68.4095 16.6667 50 16.6667Z"
+                            fill="white" />
+                        </svg>
+                        <svg class="grp-icon" width="36" height="48" viewBox="0 0 36 48" fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M6 21.748C2.54955 20.8599 0 17.7277 0 14C0 10.2723 2.54955 7.14012 6 6.25203L6 2.00139C6 0.896052 6.88773 0 8 0C9.10457 0 10 0.894938 10 2.00139L10 6.25203C13.4505 7.14012 16 10.2723 16 14C16 17.7277 13.4505 20.8599 10 21.748L10 45.9986C10 47.1039 9.11227 48 8 48C6.89543 48 6 47.1051 6 45.9986L6 21.748ZM26 41.748C22.5495 40.8599 20 37.7277 20 34C20 30.2723 22.5495 27.1401 26 26.252L26 2.00139C26 0.896052 26.8877 0 28 0C29.1046 0 30 0.894938 30 2.00139L30 26.252C33.4505 27.1401 36 30.2723 36 34C36 37.7277 33.4505 40.8599 30 41.748V45.9986C30 47.1039 29.1123 48 28 48C26.8954 48 26 47.1051 26 45.9986V41.748ZM32 34C32 31.7909 30.2091 30 28 30C25.7909 30 24 31.7909 24 34C24 36.2091 25.7909 38 28 38C30.2091 38 32 36.2091 32 34ZM12 14C12 11.7909 10.2091 10 8 10C5.79086 10 4 11.7909 4 14C4 16.2091 5.79086 18 8 18C10.2091 18 12 16.2091 12 14Z"
+                            fill="white" />
+                        </svg>
+                        <svg class="star" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                          version="1.1" x="0px" y="0px" viewBox="0 0 100 125" style="enable-background:new 0 0 100 100;"
+                          xml:space="preserve">
+                          <title>61 all</title>
+                          <path
+                            d="M81.8,42.6c-0.4-1.1-1.3-1.8-2.4-2l-18.4-2.8l-8.2-16.7c-0.5-1-1.6-1.7-2.7-1.7l0,0c-1.1,0-2.2,0.6-2.7,1.7l-8.2,16.7  l-18.4,2.7c-1.6,0.2-2.8,1.8-2.5,3.4c0.1,0.7,0.4,1.3,0.9,1.7l13.3,13L29.1,77c-0.3,1.6,0.8,3.2,2.4,3.5c0.7,0.1,1.3,0,1.9-0.3  L50,71.5l16.5,8.7c1.5,0.8,3.3,0.2,4-1.3c0.3-0.6,0.4-1.2,0.3-1.9l-3.1-18.3l13.3-13C81.8,44.9,82.1,43.7,81.8,42.6z M62.4,55.5  c-0.7,0.7-1,1.7-0.9,2.7L63.9,72l-12.5-6.6c-0.9-0.5-1.9-0.5-2.8,0L36.1,72l2.4-13.9c0.2-1-0.2-2-0.9-2.7l-10.1-9.9l14-2  c1-0.1,1.8-0.8,2.3-1.6L50,29.3l6.2,12.7c0.4,0.9,1.3,1.5,2.2,1.6l14,2L62.4,55.5z" />
+                        </svg>
+                        <svg class="add-icon" xmlns="http://www.w3.org/2000/svg"
+                          xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 100 125"
+                          style="enable-background:new 0 0 100 100;" xml:space="preserve">
+                        <g>
+                          <path fill="white" stroke="white" stroke-width="4" d="M83,5H17C10.4,5,5,10.4,5,17v66c0,6.6,5.4,12,12,12h66c6.6,0,12-5.4,12-12V17C95,10.4,89.6,5,83,5z M91,83c0,4.4-3.6,8-8,8   H17c-4.4,0-8-3.6-8-8V17c0-4.4,3.6-8,8-8h66c4.4,0,8,3.6,8,8V83z" />
+                          <polygon fill="white" stroke="white" stroke-width="4" points="52,24 48,24 48,48 24,48 24,52 48,52 48,76 52,76 52,52 76,52 76,48 52,48" />
+                        </g>
+                      </svg>
                       </div>
                     </div>
                     <div class="d-flex text-white">
@@ -144,6 +173,51 @@
                       <button @click="handleIncrement('sellVal')" class="inc-dec-btn rounded-end-1">
                         +
                       </button>
+                    </div>
+                    <div v-if="isInfoSection" class="d-flex flex-column w-100 align-items-start info-block gap-2 px-2 py-4">
+                      <span class="h5">Basic Info:</span>
+                      <div class="d-flex justify-content-between w-100">
+                        <span>
+                          Asset class:
+                        </span>
+                        <span>{{ asset.category }}</span>
+                      </div>
+                      <div class="d-flex justify-content-between w-100">
+                        <span>
+                          Pip Value:
+                        </span>
+                        <span>0.0914</span>
+                      </div>
+                      <div class="d-flex justify-content-between w-100">
+                        <span>
+                          Currency:
+                        </span>
+                        <span>USD</span>
+                      </div>
+                      <div class="d-flex justify-content-between w-100">
+                        <span>
+                          Contract size:
+                        </span>
+                        <span>1000</span>
+                      </div>
+                      <div class="d-flex justify-content-between w-100">
+                        <span>
+                          Min position size:
+                        </span>
+                        <span>0.01</span>
+                      </div>
+                      <div class="d-flex justify-content-between w-100">
+                        <span>
+                          Max position size:
+                        </span>
+                        <span>1000</span>
+                      </div>
+                      <div class="d-flex justify-content-between w-100">
+                        <span>
+                          Daily swap by intrest:
+                        </span>
+                        <span>Long:-0.056%/Short:-0.028%</span>
+                      </div>
                     </div>
                   </div>
                 </td>
@@ -198,7 +272,8 @@ export default {
       btnVal: "",
       categories: [],
       selectedCategory: "all",
-      searchQuery: ""
+      searchQuery: "",
+      isInfoSection: false,
     };
   },
   created() {
@@ -209,6 +284,9 @@ export default {
     }
   },
   methods: {
+    toggleInfoSection(){
+      this.isInfoSection = !this.isInfoSection;
+    },
     toggleRowContent(index) {
       if (this.selectedRow === index) {
         this.$emit("graph-data-change", false);
@@ -217,6 +295,7 @@ export default {
         this.selectedRow = index;
         this.$emit("graph-data-change", true);
       }
+      this.isInfoSection = false;
     },
     handleDataUpdated(data) {
       this.asssetArr = data;
@@ -333,6 +412,29 @@ export default {
 </script>
 
 <style scoped>
+.info-block {
+  border-top: 1px solid;
+  font-weight: 400;
+}
+.star {
+  margin-block: -4.5px;
+  width: 28px;
+  height: 31px;
+}
+
+.info-icon {
+  width: 23px;
+  height: 20px;
+}
+.add-icon{
+  width: 20px;
+  height: 18px
+}
+.grp-icon {
+  width: 20px;
+  height: 16px;
+}
+
 .buySell {
   background-color: #191c24;
   padding-block: 8px;

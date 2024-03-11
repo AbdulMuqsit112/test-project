@@ -133,7 +133,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .wrapper {
   background-color: #131722;
   color: white;

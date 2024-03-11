@@ -1,41 +1,24 @@
 <template>
-  <div id="root">
-    <div class="document">
-      <HeaderComponent />
-      <main class="app-main">
-        <leftBar />
-        <section class="app-section">
-          <main class="main">
-            <div class="main__grid">
-              <div v-if="layout != 1" class="mainBlock" :style="getMainBlockStyle">
-                  <div class="mainBlock__tabs">
-                    <div class="mainBlock__tabsItem mainBlock__tabsItem_add">
-                      +
-                    </div>
-                  </div>
-                  <div class="mainBlock__content">
-                    <div class="mainBlock__tabsEmpty">
-                      <h3>Area is empty.</h3>
-                      <p>Please add a module by pressing "+".</p>
-                    </div>
-                  </div>
-                  <div
-                    class="mainBlock__split mainBlock__split_v mainBlock__split_right"
-                  ></div>
-                  <div
-                    class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"
-                  >
-                </div>
-                </div>
-              <MainGraphic />
-              <MainBottom />
-              <MainRight />
-            </div>
-          </main>
-        </section>
-      </main>
-      <FooterComponent />
+  <div class="main__grid">
+    <div v-if="layout != 1" class="mainBlock" :style="getMainBlockStyle">
+      <div class="mainBlock__tabs">
+        <div class="mainBlock__tabsItem mainBlock__tabsItem_add">
+          +
+        </div>
+      </div>
+      <div class="mainBlock__content">
+        <div class="mainBlock__tabsEmpty">
+          <h3>Area is empty.</h3>
+          <p>Please add a module by pressing "+".</p>
+        </div>
+      </div>
+      <div class="mainBlock__split mainBlock__split_v mainBlock__split_right"></div>
+      <div class="mainBlock__split mainBlock__split_h mainBlock__split_bottom">
+      </div>
     </div>
+    <MainGraphic />
+    <MainBottom />
+    <MainRight />
   </div>
 </template>
 

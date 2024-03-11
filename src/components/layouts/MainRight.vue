@@ -88,7 +88,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(asset, index) in filteredAssets" :key="asset.symbol" @click="toggleRowContent(index, asset)">
+              <tr v-for="(asset, index) in asssetArr" :key="asset.s" @click="toggleRowContent(index, asset)">
                 <td :colspan="4" v-if="selectedRow === index">
                   <div class="buySell d-flex flex-column">
                     <div class="text-white fw-semibold d-flex justify-content-between">
@@ -102,7 +102,7 @@
                           "
                           alt="icon"
                         /> -->
-                        {{ asset.symbol }}
+                        {{ asset.s }}
                       </div>
                       <div class="icons-group d-flex gap-2 p-2">
                         <svg class="info-icon" @click.stop="toggleInfoSection()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 125" fill="none" x="0px"
@@ -232,18 +232,18 @@
                       "
                       alt="icon"
                     /> -->
-                    {{ asset.symbol }}
+                    {{ asset.s }}
                   </div>
                 </td>
                 <td v-if="selectedRow != index" class="text-end">
-                  {{ asset.last }}
+                  {{ asset.p }}
                 </td>
                 <td v-if="selectedRow != index" class="text-end">
-                  {{ asset.chg }}
+                  {{ asset.v }}
                 </td>
-                <td v-if="selectedRow != index" class="text-end">
+                <!-- <td v-if="selectedRow != index" class="text-end">
                   {{ asset.chgPercent }}
-                </td>
+                </td> -->
               </tr>
             </tbody>
           </table>
@@ -263,7 +263,7 @@ export default {
   data() {
     return {
       asssetArr: [],
-      runSocket: false,
+      runSocket: true,
       selectedRow: null,
       sellVal: 0.01,
       isModalOpen: false,
@@ -298,7 +298,7 @@ export default {
       this.isInfoSection = false;
     },
     handleDataUpdated(data) {
-      this.asssetArr = data;
+      this.updateData(JSON.parse(data).data);
     },
     loadDataFromJson() {
       try {
@@ -306,6 +306,16 @@ export default {
         this.categories = [...new Set(this.assets.map(asset => asset.category))];
       } catch (error) {
         console.error("Error loading data from JSON file:", error);
+      }
+    },
+    updateData(receivedData) {
+      for (const item of receivedData) {
+        const index = this.asssetArr.findIndex(d => d.s === item.s);
+        if (index !== -1) {
+          this.$set(this.asssetArr, index, item);
+        } else {
+          this.asssetArr.push(item);
+        }
       }
     },
     handleInput(event, val) {

@@ -1,42 +1,44 @@
-import io from "socket.io-client";
+import { HubConnectionBuilder, LogLevel, HttpTransportType } from '@microsoft/signalr';
 
 export default {
   data() {
     return {
       socket: null,
-      runSocket: false
+      isSocketConnected: false,
     };
   },
   methods: {
-    connectSocket() {
-      this.socket = io("http://localhost:3000");
-
-      this.socket.on("symbolData", (data) => {
+    async startConnection() {
+      try {
+        await this.socket.start();
+        console.log("SignalR Connected.");
+        this.isSocketConnected = true;
+      } catch (err) {
+        console.log("Connection failed: ", err);
+        this.isSocketConnected = false;
+        setTimeout(this.startConnection, 5000);
+      }
+    },
+    createSignalRConnection() {
+      this.socket = new HubConnectionBuilder()
+      .withUrl("http://185.189.27.121:8090/datahub", {
+        skipNegotiation: true,
+        transport: HttpTransportType.WebSockets
+      })
+      .configureLogging(LogLevel.Debug)
+      .build();
+    },
+    setSocketEvents(){
+      this.socket.on("ReceiveMessage", (data) => {
         console.log("Received data update:", data);
         this.$emit("symbolDataUpdated", data);
       });
-
-      this.socket.on("stocksData", (data) => {
-        console.log("Received data update:", data);
-        this.$emit("stocksDataUpdated", data);
-      });
-
-      this.socket.on("historyData", (data) => {
-        console.log("Received data update:", data);
-        this.$emit("historyDataUpdated", data);
-      });
-      
-    },
-    disconnectSocket() {
-      if (this.socket) {
-        this.socket.disconnect();
-      }
+      this.socket.onclose(() => this.startConnection());
     },
   },
-  created() {
-    if(this.runSocket) this.connectSocket();
-  },
-  destroyed() {
-    this.disconnectSocket();
+  async created() {
+    await this.createSignalRConnection();
+    await this.startConnection();
+    if(this.isSocketConnected) await this.setSocketEvents();
   },
 };

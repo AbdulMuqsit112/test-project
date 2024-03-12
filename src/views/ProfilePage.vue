@@ -4,7 +4,13 @@
       <div class="mainBlock__content">
         <div class="p-3 d-flex flex-column gap-4 align-items-start">
           <div class="card-header mt-4">
-            <h3>My Account</h3>
+            <span class="h5">
+              <-
+              <router-link to="/dashboard">
+                Go Back
+              </router-link> 
+            </span>
+            <h3 class="mt-4">My Account</h3>
             <span>personal Information</span>
           </div>
           <div class="d-flex gap-4 justify-content-center mt-4 w-100">
@@ -65,11 +71,11 @@
                   </thead>
                   <tbody>
                     <tr class="transactions" v-for="(transaction, index) in transactions" :key="index">
-                    <td>{{ transaction.order }}</td>
-                    <td>{{ transaction.date }}</td>
-                    <td>{{ transaction.type }}</td>
-                    <td>{{ transaction.volume }}</td>
-                  </tr>
+                      <td>{{ transaction.order }}</td>
+                      <td>{{ transaction.date }}</td>
+                      <td>{{ transaction.type }}</td>
+                      <td>{{ transaction.volume }}</td>
+                    </tr>
                   </tbody>
                   <tfoot>
                     <tr>
@@ -178,30 +184,36 @@ th {
   padding-block: 15px !important;
   border: none;
 }
+
 td {
   padding-block: 12px !important;
   color: #f5fafd !important;
   background-color: #1e222d !important;
   border: none;
 }
+
 .footer {
   background-color: #434d51 !important;
 }
-.footer select{
+
+.footer select {
   background-color: #434d51 !important;
   border-color: white;
   color: white;
   padding: 4px;
 }
-.transactions{
+
+.transactions {
   border-bottom: 1px solid;
 }
-input{
+
+input {
   border: 1px solid;
   background-color: #131722 !important;
   color: white !important;
 }
-.confirm-btn{
+
+.confirm-btn {
   background-color: #085bb4;
   color: white;
 }

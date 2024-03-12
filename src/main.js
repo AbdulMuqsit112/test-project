@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router/index';
 import store from './store/store';
+import './plugins/axios';
 
 if (MOB_DEBUG) {
     console.log = debug

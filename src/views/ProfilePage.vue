@@ -1,18 +1,33 @@
 <template>
   <div class="main__grid">
-    <div class="mainBlock" style="width: 100%; height: 100%; top: 0; left: 0;">
+    <div class="mainBlock" style="width: 100%; height: 23%; top: 0; left: 0;">
       <div class="mainBlock__content">
         <div class="p-3 d-flex flex-column gap-4 align-items-start">
           <div class="card-header mt-4">
-            <span class="h5">
-              <-
-              <router-link to="/dashboard">
+            <span class="h6">
+              <router-link to="/dashboard" class="d-flex align-items-center gap-1">
+                <svg class="back" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000"
+                  stroke="#000000">
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path fill="#f5f5f5" d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"></path>
+                    <path fill="#f5f5f5"
+                      d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z">
+                    </path>
+                  </g>
+                </svg>
                 Go Back
-              </router-link> 
+              </router-link>
             </span>
             <h3 class="mt-4">My Account</h3>
             <span>personal Information</span>
           </div>
+        </div>
+      </div>
+      </div>
+      <div class="mainBlock" style="width: 100%; height: 77%; top: 23%; left: 0;">
+        <div class="mainBlock__content">
           <div class="d-flex gap-4 justify-content-center mt-4 w-100">
             <div class="d-flex flex-column gap-4 w-100">
               <ul class="d-flex tab-btns py-1">
@@ -105,8 +120,8 @@
             </div>
           </div>
         </div>
+
       </div>
-    </div>
   </div>
 </template>
 
@@ -127,6 +142,13 @@ export default {
   },
   methods: {
     changePassword() {
+      if (this.isFakeServer) {
+        this.fakePwChange();
+      } else {
+        this.pwChange();
+      }
+    },
+    fakePwChange() {
       if (this.newPassword === this.confirmPassword) {
         console.log('Password changed successfully');
         this.newPassword = '';
@@ -134,12 +156,34 @@ export default {
       } else {
         console.error('Passwords do not match');
       }
-    }
-  }
+    },
+    async pwChange() {
+      if (this.newPassword === this.confirmPassword) {
+        const response = await this.$http.post('changePass', this.newPassword);
+        if (response.status == 200) {
+          console.log('Password changed successfully');
+          this.newPassword = '';
+          this.confirmPassword = '';
+        }
+      } else {
+        console.error('Passwords do not match');
+      }
+    },
+  },
+  computed: {
+    isFakeServer() {
+      return this.$store.getters.getServer;
+    },
+  },
 };
 </script>
 
 <style scoped>
+.back {
+  width: 16px;
+  height: 16px;
+}
+
 .wrapper {
   background-color: #131722;
   color: white;

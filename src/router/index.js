@@ -19,6 +19,11 @@ const routes = [
     name: 'profile',
     component: () => import('../views/ProfilePage.vue'), 
   },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: () => import('../views/SettingPage.vue'), 
+  },
 ];
 
 const router = new VueRouter({

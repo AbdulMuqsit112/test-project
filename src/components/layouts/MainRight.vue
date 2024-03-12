@@ -75,6 +75,10 @@
             <option value="all">All</option>
             <option v-for="category in categories" :value="category">{{ category }}</option>
           </select>
+          <div class="fav-grp d-flex align-items-center gap-1 p-1" @click="toggleShoFav()">
+            <input type="checkbox" v-model="showFav">
+            <label for="checkbox">favourites</label>
+          </div>
           <input type="text" v-model="searchQuery" placeholder="Search...">
         </div>
         <div class="w-100 h-100 overflow-auto" v-if="!isModalOpen">
@@ -88,7 +92,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(asset, index) in asssetArr" :key="asset.s" @click="toggleRowContent(index, asset)">
+              <tr v-for="(asset, index) in filteredAssets" :key="asset.s" @click="toggleRowContent(index, asset)">
                 <td :colspan="4" v-if="selectedRow === index">
                   <div class="buySell d-flex flex-column">
                     <div class="text-white fw-semibold d-flex justify-content-between">
@@ -105,8 +109,8 @@
                         {{ asset.s }}
                       </div>
                       <div class="icons-group d-flex gap-2 p-2">
-                        <svg class="info-icon" @click.stop="toggleInfoSection()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 125" fill="none" x="0px"
-                          y="0px">
+                        <svg class="info-icon" @click.stop="toggleInfoSection()" xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 100 125" fill="none" x="0px" y="0px">
                           <path
                             d="M50 41.6667C52.3012 41.6667 54.1666 43.5321 54.1666 45.8333V66.6667C54.1666 68.9678 52.3012 70.8333 50 70.8333C47.6988 70.8333 45.8333 68.9678 45.8333 66.6667V45.8333C45.8333 43.5321 47.6988 41.6667 50 41.6667Z"
                             fill="white" />
@@ -123,8 +127,19 @@
                             d="M6 21.748C2.54955 20.8599 0 17.7277 0 14C0 10.2723 2.54955 7.14012 6 6.25203L6 2.00139C6 0.896052 6.88773 0 8 0C9.10457 0 10 0.894938 10 2.00139L10 6.25203C13.4505 7.14012 16 10.2723 16 14C16 17.7277 13.4505 20.8599 10 21.748L10 45.9986C10 47.1039 9.11227 48 8 48C6.89543 48 6 47.1051 6 45.9986L6 21.748ZM26 41.748C22.5495 40.8599 20 37.7277 20 34C20 30.2723 22.5495 27.1401 26 26.252L26 2.00139C26 0.896052 26.8877 0 28 0C29.1046 0 30 0.894938 30 2.00139L30 26.252C33.4505 27.1401 36 30.2723 36 34C36 37.7277 33.4505 40.8599 30 41.748V45.9986C30 47.1039 29.1123 48 28 48C26.8954 48 26 47.1051 26 45.9986V41.748ZM32 34C32 31.7909 30.2091 30 28 30C25.7909 30 24 31.7909 24 34C24 36.2091 25.7909 38 28 38C30.2091 38 32 36.2091 32 34ZM12 14C12 11.7909 10.2091 10 8 10C5.79086 10 4 11.7909 4 14C4 16.2091 5.79086 18 8 18C10.2091 18 12 16.2091 12 14Z"
                             fill="white" />
                         </svg>
-                        <svg class="star" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                          version="1.1" x="0px" y="0px" viewBox="0 0 100 125" style="enable-background:new 0 0 100 100;"
+                        <svg class="star-2" @click.stop="addFav(asset)" v-if="isFavorite(asset)" viewBox="0 0 24 24"
+                          fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                          <g id="SVGRepo_iconCarrier">
+                            <path
+                              d="M11.2691 4.41115C11.5006 3.89177 11.6164 3.63208 11.7776 3.55211C11.9176 3.48263 12.082 3.48263 12.222 3.55211C12.3832 3.63208 12.499 3.89177 12.7305 4.41115L14.5745 8.54808C14.643 8.70162 14.6772 8.77839 14.7302 8.83718C14.777 8.8892 14.8343 8.93081 14.8982 8.95929C14.9705 8.99149 15.0541 9.00031 15.2213 9.01795L19.7256 9.49336C20.2911 9.55304 20.5738 9.58288 20.6997 9.71147C20.809 9.82316 20.8598 9.97956 20.837 10.1342C20.8108 10.3122 20.5996 10.5025 20.1772 10.8832L16.8125 13.9154C16.6877 14.0279 16.6252 14.0842 16.5857 14.1527C16.5507 14.2134 16.5288 14.2807 16.5215 14.3503C16.5132 14.429 16.5306 14.5112 16.5655 14.6757L17.5053 19.1064C17.6233 19.6627 17.6823 19.9408 17.5989 20.1002C17.5264 20.2388 17.3934 20.3354 17.2393 20.3615C17.0619 20.3915 16.8156 20.2495 16.323 19.9654L12.3995 17.7024C12.2539 17.6184 12.1811 17.5765 12.1037 17.56C12.0352 17.5455 11.9644 17.5455 11.8959 17.56C11.8185 17.5765 11.7457 17.6184 11.6001 17.7024L7.67662 19.9654C7.18404 20.2495 6.93775 20.3915 6.76034 20.3615C6.60623 20.3354 6.47319 20.2388 6.40075 20.1002C6.31736 19.9408 6.37635 19.6627 6.49434 19.1064L7.4341 14.6757C7.46898 14.5112 7.48642 14.429 7.47814 14.3503C7.47081 14.2807 7.44894 14.2134 7.41394 14.1527C7.37439 14.0842 7.31195 14.0279 7.18708 13.9154L3.82246 10.8832C3.40005 10.5025 3.18884 10.3122 3.16258 10.1342C3.13978 9.97956 3.19059 9.82316 3.29993 9.71147C3.42581 9.58288 3.70856 9.55304 4.27406 9.49336L8.77835 9.01795C8.94553 9.00031 9.02911 8.99149 9.10139 8.95929C9.16534 8.93081 9.2226 8.8892 9.26946 8.83718C9.32241 8.77839 9.35663 8.70162 9.42508 8.54808L11.2691 4.41115Z"
+                              stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                          </g>
+                        </svg>
+                        <svg class="star" @click.stop="addFav(asset)" v-if="!isFavorite(asset)"
+                          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                          x="0px" y="0px" viewBox="0 0 100 125" style="enable-background:new 0 0 100 100;"
                           xml:space="preserve">
                           <title>61 all</title>
                           <path
@@ -133,11 +148,13 @@
                         <svg class="add-icon" xmlns="http://www.w3.org/2000/svg"
                           xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 100 125"
                           style="enable-background:new 0 0 100 100;" xml:space="preserve">
-                        <g>
-                          <path fill="white" stroke="white" stroke-width="4" d="M83,5H17C10.4,5,5,10.4,5,17v66c0,6.6,5.4,12,12,12h66c6.6,0,12-5.4,12-12V17C95,10.4,89.6,5,83,5z M91,83c0,4.4-3.6,8-8,8   H17c-4.4,0-8-3.6-8-8V17c0-4.4,3.6-8,8-8h66c4.4,0,8,3.6,8,8V83z" />
-                          <polygon fill="white" stroke="white" stroke-width="4" points="52,24 48,24 48,48 24,48 24,52 48,52 48,76 52,76 52,52 76,52 76,48 52,48" />
-                        </g>
-                      </svg>
+                          <g>
+                            <path fill="white" stroke="white" stroke-width="4"
+                              d="M83,5H17C10.4,5,5,10.4,5,17v66c0,6.6,5.4,12,12,12h66c6.6,0,12-5.4,12-12V17C95,10.4,89.6,5,83,5z M91,83c0,4.4-3.6,8-8,8   H17c-4.4,0-8-3.6-8-8V17c0-4.4,3.6-8,8-8h66c4.4,0,8,3.6,8,8V83z" />
+                            <polygon fill="white" stroke="white" stroke-width="4"
+                              points="52,24 48,24 48,48 24,48 24,52 48,52 48,76 52,76 52,52 76,52 76,48 52,48" />
+                          </g>
+                        </svg>
                       </div>
                     </div>
                     <div class="d-flex text-white">
@@ -174,7 +191,8 @@
                         +
                       </button>
                     </div>
-                    <div v-if="isInfoSection" class="d-flex flex-column w-100 align-items-start info-block gap-2 px-2 py-4">
+                    <div v-if="isInfoSection"
+                      class="d-flex flex-column w-100 align-items-start info-block gap-2 px-2 py-4">
                       <span class="h5">Basic Info:</span>
                       <div class="d-flex justify-content-between w-100">
                         <span>
@@ -241,9 +259,9 @@
                 <td v-if="selectedRow != index" class="text-end">
                   {{ asset.v }}
                 </td>
-                <!-- <td v-if="selectedRow != index" class="text-end">
+                <td v-if="selectedRow != index" class="text-end">
                   {{ asset.chgPercent }}
-                </td> -->
+                </td>
               </tr>
             </tbody>
           </table>
@@ -263,7 +281,7 @@ export default {
   data() {
     return {
       asssetArr: [],
-      runSocket: true,
+      runSocket: false,
       selectedRow: null,
       sellVal: 0.01,
       isModalOpen: false,
@@ -271,9 +289,11 @@ export default {
       btnClass: "",
       btnVal: "",
       categories: [],
+      favArr: [],
       selectedCategory: "all",
       searchQuery: "",
       isInfoSection: false,
+      showFav: false,
     };
   },
   created() {
@@ -284,7 +304,19 @@ export default {
     }
   },
   methods: {
-    toggleInfoSection(){
+    toggleShoFav() {
+      this.showFav = !this.showFav
+    },
+    addFav(asset) {
+      const index = this.favArr.findIndex(item => item.s === asset.s);
+      if (index !== -1) {
+        this.favArr.splice(index, 1);
+      } else {
+        this.favArr.push(asset);
+      }
+    }
+    ,
+    toggleInfoSection() {
       this.isInfoSection = !this.isInfoSection;
     },
     toggleRowContent(index) {
@@ -302,8 +334,8 @@ export default {
     },
     loadDataFromJson() {
       try {
-        this.assets = symblRow.assets;
-        this.categories = [...new Set(this.assets.map(asset => asset.category))];
+        this.asssetArr = symblRow.assets;
+        this.categories = [...new Set(this.asssetArr.map(asset => asset.category))];
       } catch (error) {
         console.error("Error loading data from JSON file:", error);
       }
@@ -407,24 +439,49 @@ export default {
     },
     filteredAssets() {
       const lowerCaseQuery = this.searchQuery.toLowerCase();
-      if (this.selectedCategory === 'all') {
-        return this.assets.filter(asset => {
-          return asset.symbol.toLowerCase().includes(lowerCaseQuery);
+      if (this.showFav) {
+        return this.favArr.filter(asset => {
+          return (this.selectedCategory === 'all' || asset.category === this.selectedCategory) && asset.s.toLowerCase().includes(lowerCaseQuery);
         });
       } else {
-        return this.assets.filter(asset => {
-          return asset.category === this.selectedCategory && asset.symbol.toLowerCase().includes(lowerCaseQuery);
-        });
+        if (this.selectedCategory === 'all') {
+          return this.asssetArr.filter(asset => {
+            return asset.s.toLowerCase().includes(lowerCaseQuery);
+          });
+        } else {
+          return this.asssetArr.filter(asset => {
+            return asset.category === this.selectedCategory && asset.s.toLowerCase().includes(lowerCaseQuery);
+          });
+        }
       }
+    },
+    isFavorite() {
+      return (asset) => {
+        const index = this.favArr.findIndex((item) => item.s === asset.s);
+        return index !== -1;
+      };
     },
   },
 };
 </script>
 
 <style scoped>
+.fav-grp {
+  background-color: #0b0d0e;
+  color: #6c7293;
+  border: 0.2px solid #39404b;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 .info-block {
   border-top: 1px solid;
   font-weight: 400;
+}
+.star-2{
+  margin-block: -8.5px;
+  width: 28px;
+  height: 31px;
 }
 .star {
   margin-block: -4.5px;
@@ -436,10 +493,12 @@ export default {
   width: 23px;
   height: 20px;
 }
-.add-icon{
+
+.add-icon {
   width: 20px;
   height: 18px
 }
+
 .grp-icon {
   width: 20px;
   height: 16px;

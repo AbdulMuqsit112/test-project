@@ -36,6 +36,13 @@ export default {
   },
   methods: {
     login() {
+      if (this.isFakeServer) {
+        this.fakeLogin();
+      } else {
+        this.loginToServer();
+      }
+    },
+    fakeLogin() {
       const user = userData.find(user => user.username === this.username && user.password === this.password);
       if (user) {
         localStorage.setItem('token', user.token);
@@ -43,14 +50,32 @@ export default {
       } else {
         this.error = 'Invalid username or password. Please try again.';
       }
-    }
+    },
+    async loginToServer() {
+      let userObj = {
+        username: this.username,
+        password: this.password
+      }
+      const response = await this.$http.post(`login`, userObj);
+      if (response.status == 200) {
+        let token = response.data
+        localStorage.setItem('token',token );
+        this.$router.push({ path: '/dashboard', query: { token: token } });
+      } else {
+        this.error = 'Invalid username or password. Please try again.';
+      }
+    },
+  },
+  computed: {
+    isFakeServer() {
+      return this.$store.getters.getServer;
+    },
   }
 };
 </script>
 
 
 <style scoped>
-
 .wrapper {
   background-color: #3d3c3c;
 }
@@ -64,9 +89,9 @@ header {
 .login-container {
   width: 350px;
   height: 420px;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2); 
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
   background-color: rgba(50, 49, 49, 0.8);
-  border: 1px solid #09407a; 
+  border: 1px solid #09407a;
 }
 
 header {
@@ -103,7 +128,7 @@ button {
   background-color: #09407a;
   color: #fff;
   border: none;
-  width: 100%; 
+  width: 100%;
   padding: 10px 0;
   border-radius: 5px;
   cursor: pointer;
@@ -119,5 +144,4 @@ button:hover {
 .error-message {
   color: red;
 }
-
 </style>

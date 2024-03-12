@@ -281,7 +281,6 @@ export default {
   data() {
     return {
       asssetArr: [],
-      runSocket: false,
       selectedRow: null,
       sellVal: 0.01,
       isModalOpen: false,
@@ -297,171 +296,191 @@ export default {
     };
   },
   created() {
-    if (this.runSocket) {
-      this.$on("symbolDataUpdated", this.handleDataUpdated);
-    } else {
+    if (this.isFakeServer) {
       this.loadDataFromJson();
+    } else {
+      this.$on("symbolDataUpdated", this.handleDataUpdated);
+      this.fetchTableData();
     }
   },
   methods: {
-    toggleShoFav() {
-      this.showFav = !this.showFav
-    },
-    addFav(asset) {
-      const index = this.favArr.findIndex(item => item.s === asset.s);
-      if (index !== -1) {
-        this.favArr.splice(index, 1);
-      } else {
-        this.favArr.push(asset);
-      }
-    }
-    ,
-    toggleInfoSection() {
-      this.isInfoSection = !this.isInfoSection;
-    },
-    toggleRowContent(index) {
-      if (this.selectedRow === index) {
-        this.$emit("graph-data-change", false);
-        this.selectedRow = null;
-      } else {
-        this.selectedRow = index;
-        this.$emit("graph-data-change", true);
-      }
-      this.isInfoSection = false;
-    },
-    handleDataUpdated(data) {
-      this.updateData(JSON.parse(data).data);
-    },
-    loadDataFromJson() {
+    async fetchTableData() {
       try {
-        this.asssetArr = symblRow.assets;
-        this.categories = [...new Set(this.asssetArr.map(asset => asset.category))];
+        const response = await this.$http.get('getList');
+        this.asssetArr = response.data;
       } catch (error) {
-        console.error("Error loading data from JSON file:", error);
+        console.error('Error fetching data:', error);
       }
     },
-    updateData(receivedData) {
-      for (const item of receivedData) {
-        const index = this.asssetArr.findIndex(d => d.s === item.s);
-        if (index !== -1) {
-          this.$set(this.asssetArr, index, item);
-        } else {
-          this.asssetArr.push(item);
-        }
+    async sendAssetInfo(asset, action){
+      const response = await this.$http.post(`createOrder/${action}`, asset);
+      if (response.status == 200) {
+        console.log(`Asset ${action} successful`,asset);
       }
     },
-    handleInput(event, val) {
-      let value = event.target.value;
-      value = value.replace(/[^\d.]/g, "");
-      const decimalCount = (value.match(/\./g) || []).length;
-      if (decimalCount > 1) {
-        value = value.substr(0, value.lastIndexOf("."));
-      }
-      event.target.value = value;
-      if (val == "vol") {
-        this.volume = value;
-      } else {
-        this.sellVal = value;
-      }
-    },
-    handleBlur(val) {
-      if (val == "vol") {
-        if (!this.volume.trim()) {
-          this.volume = "0.01";
-        }
-      } else {
-        if (!this.sellVal.trim()) {
-          this.sellVal = "0.01";
-        }
-      }
-    },
-    handleIncrement() {
-      this.sellVal = (parseFloat(this.sellVal) + 0.01).toFixed(2);
-    },
-    handleDecrement() {
-      if (parseFloat(this.sellVal) > 0.01) {
-        this.sellVal = (parseFloat(this.sellVal) - 0.01).toFixed(2);
-      }
-    },
-    buyItem(item) {
-      this.isModalOpen = true;
-      this.btnClass = "btn-success";
-      this.btnVal = "Buy";
-    },
-    sellItem(item) {
-      this.btnClass = "btn-danger bg-danger";
-      this.isModalOpen = true;
-      this.btnVal = "Sell";
-    },
-    closeModal() {
+  toggleShoFav() {
+    this.showFav = !this.showFav
+  },
+  addFav(asset) {
+    const index = this.favArr.findIndex(item => item.s === asset.s);
+    if (index !== -1) {
+      this.favArr.splice(index, 1);
+    } else {
+      this.favArr.push(asset);
+    }
+  }
+  ,
+  toggleInfoSection() {
+    this.isInfoSection = !this.isInfoSection;
+  },
+  toggleRowContent(index) {
+    if (this.selectedRow === index) {
       this.$emit("graph-data-change", false);
       this.selectedRow = null;
-      this.isModalOpen = !this.isModalOpen;
-    },
+    } else {
+      this.selectedRow = index;
+      this.$emit("graph-data-change", true);
+    }
+    this.isInfoSection = false;
   },
-  computed: {
-    layout() {
-      return this.$store.state.layoutType;
-    },
-    getMainBlockStyle() {
-      let layoutType = this.layout;
-      if (layoutType == 2) {
-        return {
-          width: '25%',
-          height: '50%',
-          top: '50%',
-          left: '75%',
-        };
-      } else if (layoutType == 3) {
-        return {
-          width: '54.3968%',
-          height: '50%',
-          top: '50%',
-          left: '45.6032%',
-        };
+  handleDataUpdated(data) {
+    this.updateData(JSON.parse(data).data);
+  },
+  loadDataFromJson() {
+    try {
+      this.asssetArr = symblRow.assets;
+      this.categories = [...new Set(this.asssetArr.map(asset => asset.category))];
+    } catch (error) {
+      console.error("Error loading data from JSON file:", error);
+    }
+  },
+  updateData(receivedData) {
+    for (const item of receivedData) {
+      const index = this.asssetArr.findIndex(d => d.s === item.s);
+      if (index !== -1) {
+        this.$set(this.asssetArr, index, item);
+      } else {
+        this.asssetArr.push(item);
       }
-      else {
-        return {
-          width: '25%',
-          height: '100%',
-          top: '0%',
-          left: '75%',
-        };
+    }
+  },
+  handleInput(event, val) {
+    let value = event.target.value;
+    value = value.replace(/[^\d.]/g, "");
+    const decimalCount = (value.match(/\./g) || []).length;
+    if (decimalCount > 1) {
+      value = value.substr(0, value.lastIndexOf("."));
+    }
+    event.target.value = value;
+    if (val == "vol") {
+      this.volume = value;
+    } else {
+      this.sellVal = value;
+    }
+  },
+  handleBlur(val) {
+    if (val == "vol") {
+      if (!this.volume.trim()) {
+        this.volume = "0.01";
       }
-    },
-    modalDimensions() {
-      const Modal = this.$refs.Modal;
-      const dimensions = Modal.getBoundingClientRect();
+    } else {
+      if (!this.sellVal.trim()) {
+        this.sellVal = "0.01";
+      }
+    }
+  },
+  handleIncrement() {
+    this.sellVal = (parseFloat(this.sellVal) + 0.01).toFixed(2);
+  },
+  handleDecrement() {
+    if (parseFloat(this.sellVal) > 0.01) {
+      this.sellVal = (parseFloat(this.sellVal) - 0.01).toFixed(2);
+    }
+  },
+  buyItem(item) {
+    this.isModalOpen = true;
+    this.btnClass = "btn-success";
+    this.btnVal = "Buy";
+    if(!this.isFakeServer) this.sendAssetInfo(item, 'buy');
+  },
+  sellItem(item) {
+    this.btnClass = "btn-danger bg-danger";
+    this.isModalOpen = true;
+    this.btnVal = "Sell";
+    if(!this.isFakeServer) this.sendAssetInfo(item, 'sell');
+  },
+  closeModal() {
+    this.$emit("graph-data-change", false);
+    this.selectedRow = null;
+    this.isModalOpen = !this.isModalOpen;
+  },
+},
+computed: {
+  layout() {
+    return this.$store.state.layoutType;
+  },
+  getMainBlockStyle() {
+    let layoutType = this.layout;
+    if (layoutType == 2) {
       return {
-        width: `${dimensions.width}px`,
-        maxHeight: `${dimensions.height}px`,
+        width: '25%',
+        height: '50%',
+        top: '50%',
+        left: '75%',
       };
-    },
-    filteredAssets() {
-      const lowerCaseQuery = this.searchQuery.toLowerCase();
-      if (this.showFav) {
-        return this.favArr.filter(asset => {
-          return (this.selectedCategory === 'all' || asset.category === this.selectedCategory) && asset.s.toLowerCase().includes(lowerCaseQuery);
+    } else if (layoutType == 3) {
+      return {
+        width: '54.3968%',
+        height: '50%',
+        top: '50%',
+        left: '45.6032%',
+      };
+    }
+    else {
+      return {
+        width: '25%',
+        height: '100%',
+        top: '0%',
+        left: '75%',
+      };
+    }
+  },
+  modalDimensions() {
+    const Modal = this.$refs.Modal;
+    const dimensions = Modal.getBoundingClientRect();
+    return {
+      width: `${dimensions.width}px`,
+      maxHeight: `${dimensions.height}px`,
+    };
+  },
+  filteredAssets() {
+    const lowerCaseQuery = this.searchQuery.toLowerCase();
+    if (this.showFav) {
+      return this.favArr.filter(asset => {
+        return (this.selectedCategory === 'all' || asset.category === this.selectedCategory) && asset.s.toLowerCase().includes(lowerCaseQuery);
+      });
+    } else {
+      if (this.selectedCategory === 'all') {
+        return this.asssetArr.filter(asset => {
+          return asset.s.toLowerCase().includes(lowerCaseQuery);
         });
       } else {
-        if (this.selectedCategory === 'all') {
-          return this.asssetArr.filter(asset => {
-            return asset.s.toLowerCase().includes(lowerCaseQuery);
-          });
-        } else {
-          return this.asssetArr.filter(asset => {
-            return asset.category === this.selectedCategory && asset.s.toLowerCase().includes(lowerCaseQuery);
-          });
-        }
+        return this.asssetArr.filter(asset => {
+          return asset.category === this.selectedCategory && asset.s.toLowerCase().includes(lowerCaseQuery);
+        });
       }
-    },
-    isFavorite() {
-      return (asset) => {
-        const index = this.favArr.findIndex((item) => item.s === asset.s);
-        return index !== -1;
-      };
-    },
+    }
   },
+  isFavorite() {
+    return (asset) => {
+      const index = this.favArr.findIndex((item) => item.s === asset.s);
+      return index !== -1;
+    };
+  },
+  isFakeServer(){
+    return this.$store.getters.getServer;
+  },
+},
 };
 </script>
 
@@ -478,11 +497,13 @@ export default {
   border-top: 1px solid;
   font-weight: 400;
 }
-.star-2{
+
+.star-2 {
   margin-block: -8.5px;
   width: 28px;
   height: 31px;
 }
+
 .star {
   margin-block: -4.5px;
   width: 28px;

@@ -4,14 +4,21 @@
       <div class="mainBlock__tabsItem mainBlock__tabsItem_add">+</div>
     </div>
     <div class="mainBlock__content">
-      <div class="mainBlock__tabsEmpty" ref="Graph">
-        <trading-vue :width="width" :height="height" :data="chart" :toolbar="true"></trading-vue>
+      <div class="mainBlock__tabsEmpty p-0" ref="Graph">
+        <div v-if="selectedData.length > 0" class="d-flex w-100 gap-2" :class="`${multiGraphs}`">
+          <div v-for="(asset, index) in selectedData" :key="index" :class="`${graphClass}`">
+            <trading-vue :width="setMultiChartWidths()" :height="setMultiChartHeight()" :data="handleData(asset)"
+              :toolbar="true"></trading-vue>
+          </div>
+        </div>
+        <trading-vue v-else :width="width" :height="height" :data="chart" :toolbar="true"></trading-vue>
       </div>
     </div>
     <div v-if="layout == 1" class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"></div>
     <div v-else class="mainBlock__split mainBlock__split_v mainBlock__split_right"></div>
   </div>
 </template>
+
 
 <script>
 import TradingVue from "../../TradingVue.vue";
@@ -21,7 +28,6 @@ import DataCube from "../../helpers/datacube.js";
 export default {
   name: "GraphComponent",
   components: { TradingVue },
-  props: ["dataChanged"],
   data() {
     return {
       colors: {
@@ -30,8 +36,11 @@ export default {
         colorText: "#333",
       },
       chart: new DataCube(Data),
+      chart2: new DataCube(updatedData),
       width: 0,
       height: 0,
+      multiGraphs: '',
+      graphClass: ''
     };
   },
   mounted() {
@@ -42,6 +51,18 @@ export default {
     window.removeEventListener('resize', this.setChartDimensions)
   },
   methods: {
+    handleData(asset) {
+      let chartData = 
+      {
+        ...updatedData,
+        onchart: [{
+          type: asset.category,
+          name: asset.s,
+          data: []
+        }],}
+      chartData = new DataCube(chartData);
+      return chartData;
+    },
     setChartDimensions() {
       this.$nextTick(() => {
         const graphContainer = this.$refs.Graph;
@@ -49,6 +70,28 @@ export default {
         this.width = dimensions.width;
         this.height = dimensions.height;
       });
+    },
+    setMultiChartWidths() {
+      let selectedArr = this.selectedData;
+      if (selectedArr.length >= 2) {
+        this.graphClass = 'custom-graph';
+        0.4
+      }
+      if (selectedArr.length == 2) {
+        return this.width / 2.1;
+      }
+      if (selectedArr.length >= 3) {
+        this.multiGraphs = 'flex-wrap'
+        return this.width / 2.1;
+      }
+      return this.width;
+    },
+    setMultiChartHeight() {
+      let selectedArr = this.selectedData;
+      if (selectedArr.length >= 3) {
+        return this.height / 2.1
+      }
+      return this.height;
     },
   },
   computed: {
@@ -82,6 +125,9 @@ export default {
         };
       }
     },
+    selectedData() {
+      return this.$store.getters.getSelectedData;
+    },
   },
   watch: {
     dataChanged(newValue) {
@@ -99,8 +145,7 @@ export default {
 </script>
 
 <style scoped>
-.s-card {
-  width: fit-content;
-  height: fit-content;
+.custom-graph {
+  border: 0.4px solid #2a2e39;
 }
 </style>

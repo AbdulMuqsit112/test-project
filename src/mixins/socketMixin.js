@@ -39,8 +39,8 @@ export default {
   async created() {
     await this.createSignalRConnection();
     await this.startConnection();
+    await this.setSocketEvents();
     if(this.isSocketConnected) {
-      await this.setSocketEvents();
     }
     else{
       console.log("Socket Not Connected");

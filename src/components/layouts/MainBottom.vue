@@ -2,10 +2,10 @@
   <div class="mainBlock" :style="getMainBlockStyle">
     <div class="mainBlock__tabs">
       <div class="mainBlock__tabsItem mainBlock__tabsItem_add">+</div>
-        <button class="tab-buttons" @click="activeTab = 'stocks'">Stocks</button>
-        <button class="tab-buttons" @click="activeTab = 'history'">
-          History
-        </button>
+      <button class="tab-buttons" @click="activeTab = 'stocks'">Stocks</button>
+      <button class="tab-buttons" @click="activeTab = 'history'">
+        History
+      </button>
     </div>
     <div class="mainBlock__content">
       <div class="mainBlock__tabsEmpty p-0">
@@ -15,13 +15,8 @@
               <tr>
                 <th>
                   Ticker
-                  <input
-                    class="p-1 ml-1 rounded"
-                    type="text"
-                    v-model="searchTerm"
-                    placeholder="Search Ticker"
-                    @input="filterStocks"
-                  />
+                  <input class="p-1 ml-1 rounded" type="text" v-model="searchTerm" placeholder="Search Ticker"
+                    @input="filterStocks" />
                 </th>
                 <th class="px-2">Price</th>
                 <th class="px-2">Chg</th>
@@ -90,7 +85,7 @@
         </div>
       </div>
     </div>
-    <div v-if="layout !=1" class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"></div>
+    <div v-if="layout != 1" class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"></div>
   </div>
 </template>
 
@@ -135,15 +130,44 @@ export default {
     filterStocks(event) {
       this.searchTerm = event.target.value;
     },
+    resizeBottomTable() {
+      let heightchange = this.graphHeightChange;
+      const parentHeight = this.$el.parentElement.offsetHeight;
+      let startHeight = parseInt(this.getMainBlockStyle.height);
+      let startPos = parseInt(this.getMainBlockStyle.top);
+      let newHeight = startHeight - heightchange;
+      let newTopPos = startPos + heightchange;
+
+      newHeight = Math.max(Math.min(newHeight, 100), 0);
+
+
+      this.$store.commit('setBottomContHeight', newHeight);
+      this.$store.commit('setBottomConPosTop', newTopPos);
+    },
   },
   computed: {
+    isResized() {
+      return this.$store.getters.getIsGraphResized;
+    },
     filteredStocks() {
       return this.stocks.filter((stock) =>
         stock.ticker.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
     },
-    layout(){
+    layout() {
       return this.$store.state.layoutType;
+    },
+    contWidth() {
+      return this.$store.getters.getBottomConWidth;
+    },
+    contHeight() {
+      return this.$store.getters.getBottomConHeight;
+    },
+    contTop() {
+      return this.$store.getters.getBottomConPosTop;
+    },
+    graphHeightChange() {
+      return this.$store.getters.getGraphHeightChanged;
     },
     getMainBlockStyle() {
       let layoutType = this.layout;
@@ -154,7 +178,7 @@ export default {
           top: '0%',
           left: '25%',
         };
-      } else if (layoutType == 3){
+      } else if (layoutType == 3) {
         return {
           width: '54.4532%',
           height: '50%',
@@ -163,14 +187,24 @@ export default {
         };
       }
       else {
+        if (!this.isResized) {
+          this.$store.commit('setBottomContWidth', 75);
+          this.$store.commit('setBottomContHeight', 35);
+          this.$store.commit('setBottomConPosTop', 65);
+        }
         return {
-          width: '75%',
-          height: '35%',
-          top: '65%',
+          width: `${this.contWidth}%`,
+          height: `${this.contHeight}%`,
+          top: `${this.contTop}%`,
           left: '0%',
         };
       }
     },
+  },
+  watch: {
+    graphHeightChange() {
+      this.resizeBottomTable();
+    }
   },
 };
 </script>
@@ -213,8 +247,9 @@ th {
   background-color: #0b0d0e;
   font-size: 75%
 }
+
 .tab-buttons {
-  border-inline:  0.5px solid #48575e;
+  border-inline: 0.5px solid #48575e;
   border-bottom: 0.5px solid #48575e;
   border-radius: 4px;
   background-color: #131722;
@@ -231,11 +266,11 @@ th {
   td {
     padding: 2px;
   }
+
   input {
     margin-left: 2px !important;
     padding: 2px !important;
     border-radius: 2px !important;
   }
 }
-
 </style>

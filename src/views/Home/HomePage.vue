@@ -55,7 +55,7 @@ export default {
     },
     getMainBlockStyle() {
       let layoutType = this.layout;
-      if (layoutType === 2) {
+      if (layoutType == 2) {
         return {
           width: '25%',
           height: '50%',

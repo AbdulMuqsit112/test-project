@@ -5,7 +5,9 @@
     </div>
     <div class="mainBlock__content">
       <div class="mainBlock__tabsEmpty" ref="Graph">
-        <trading-vue :width="width" :height="height" :data="chart" :toolbar="true"></trading-vue>
+        <div class="d-flex">
+          <trading-vue :width="width" :height="height" :data="chart" :toolbar="true"></trading-vue>
+        </div>
       </div>
     </div>
     <div v-if="layout == 1" class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"></div>

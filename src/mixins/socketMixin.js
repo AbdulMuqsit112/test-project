@@ -21,7 +21,7 @@ export default {
     },
     createSignalRConnection() {
       this.socket = new HubConnectionBuilder()
-      .withUrl("http://185.189.27.121:8090/datahub", {
+      .withUrl("http://185.177.59.169:8090/datahub", {
         skipNegotiation: true,
         transport: HttpTransportType.WebSockets
       })
@@ -39,8 +39,8 @@ export default {
   async created() {
     await this.createSignalRConnection();
     await this.startConnection();
+    await this.setSocketEvents();
     if(this.isSocketConnected) {
-      await this.setSocketEvents();
     }
     else{
       console.log("Socket Not Connected");

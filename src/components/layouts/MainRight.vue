@@ -292,7 +292,6 @@ export default {
       searchQuery: "",
       isInfoSection: false,
       showFav: false,
-      selectedRows: [],
     };
   },
   created() {
@@ -330,28 +329,14 @@ export default {
       }
     },
     isSelected(asset) {
-      return this.selectedRows.some(selectedAsset => selectedAsset.s === asset.s)
+      return this.selectedData.some(selectedAsset => selectedAsset.s === asset.s)
     },
     toggleInfoSection() {
       this.isInfoSection = !this.isInfoSection;
     },
     toggleRowContent(asset) {
-      const selectedIndex = this.selectedRows.findIndex(selectedAsset => selectedAsset.s == asset.s);
-      if (selectedIndex !== -1) {
-        this.selectedRows.splice(selectedIndex, 1);
-        this.$emit("graph-data-change", false);
-      } else {
-        if (this.selectedRows.length < 4) {
-          this.selectedRows.push(asset);
-          this.$emit("graph-data-change", true);
-        } else {
-          console.log("You can only select up to 4 assets.");
-        }
-      }
+      this.$store.commit('setSelctedDate', asset);
       this.isInfoSection = false;
-    },
-    isRowOpen(index) {
-      return this.selectedRows.includes(index);
     },
     handleDataUpdated(data) {
       this.updateData(JSON.parse(data).data);
@@ -489,6 +474,9 @@ export default {
     },
     isFakeServer() {
       return this.$store.getters.getServer;
+    },
+    selectedData(){
+      return this.$store.getters.getSelectedData;
     },
   },
 };

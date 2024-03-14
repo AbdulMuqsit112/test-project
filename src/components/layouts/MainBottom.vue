@@ -2,10 +2,10 @@
   <div class="mainBlock" :style="getMainBlockStyle">
     <div class="mainBlock__tabs">
       <div class="mainBlock__tabsItem mainBlock__tabsItem_add">+</div>
-        <button class="tab-buttons" @click="activeTab = 'stocks'">Stocks</button>
-        <button class="tab-buttons" @click="activeTab = 'history'">
-          History
-        </button>
+      <button class="tab-buttons" @click="switchTabs('stocks')">Stocks</button>
+      <button class="tab-buttons" @click="switchTabs('history')">
+        History
+      </button>
     </div>
     <div class="mainBlock__content">
       <div class="mainBlock__tabsEmpty p-0">
@@ -15,13 +15,8 @@
               <tr>
                 <th>
                   Ticker
-                  <input
-                    class="p-1 ml-1 rounded"
-                    type="text"
-                    v-model="searchTerm"
-                    placeholder="Search Ticker"
-                    @input="filterStocks"
-                  />
+                  <input class="p-1 ml-1 rounded" type="text" v-model="searchTerm" placeholder="Search Ticker"
+                    @input="filterStocks" />
                 </th>
                 <th class="px-2">Price</th>
                 <th class="px-2">Chg</th>
@@ -90,7 +85,7 @@
         </div>
       </div>
     </div>
-    <div v-if="layout !=1" class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"></div>
+    <div v-if="layout != 1" class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"></div>
   </div>
 </template>
 
@@ -109,19 +104,27 @@ export default {
     };
   },
   created() {
-    if (this.runSocket) {
-      this.$on("stocksDataUpdated", this.handleDataUpdated("stocks"));
-      this.$on("historyDataUpdated", this.handleDataUpdated("history"));
-    } else {
+    if (this.isFakeServer) {
       this.loadDataFromJson();
+    } else {
+      this.fetchStockTableData();
     }
   },
   methods: {
-    handleDataUpdated(data, type) {
-      if (type == "history") {
-        this.histData = data;
-      } else {
-        this.stocks = data;
+    async fetchHistoryData() {
+      try {
+        const response = await this.$http.get('getOrderHistory');
+        if (response.status == 200) this.histData = response.data;
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    },
+    async fetchStockTableData() {
+      try {
+        const response = await this.$http.get('getOrderOpen');
+        if (response.status == 200) this.stocks = response.data;
+      } catch (error) {
+        console.error('Error fetching data:', error);
       }
     },
     async loadDataFromJson() {
@@ -135,14 +138,25 @@ export default {
     filterStocks(event) {
       this.searchTerm = event.target.value;
     },
+    switchTabs(tab) {
+      if (tab == 'stocks') {
+        this.fetchStockTableData();
+      } else {
+        this.fetchHistoryData();
+      }
+      this.activeTab = tab;
+    },
   },
   computed: {
+    isFakeServer() {
+      return this.$store.getters.getServer;
+    },
     filteredStocks() {
       return this.stocks.filter((stock) =>
         stock.ticker.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
     },
-    layout(){
+    layout() {
       return this.$store.state.layoutType;
     },
     getMainBlockStyle() {
@@ -154,7 +168,7 @@ export default {
           top: '0%',
           left: '25%',
         };
-      } else if (layoutType == 3){
+      } else if (layoutType == 3) {
         return {
           width: '54.4532%',
           height: '50%',
@@ -213,8 +227,9 @@ th {
   background-color: #0b0d0e;
   font-size: 75%
 }
+
 .tab-buttons {
-  border-inline:  0.5px solid #48575e;
+  border-inline: 0.5px solid #48575e;
   border-bottom: 0.5px solid #48575e;
   border-radius: 4px;
   background-color: #131722;
@@ -231,11 +246,11 @@ th {
   td {
     padding: 2px;
   }
+
   input {
     margin-left: 2px !important;
     padding: 2px !important;
     border-radius: 2px !important;
   }
 }
-
 </style>

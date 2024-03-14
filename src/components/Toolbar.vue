@@ -50,7 +50,7 @@ export default {
         styles() {
             let colors = this.$props.colors
             let b = this.$props.config.TB_BORDER
-            let w = this.$props.config.TOOLBAR - b
+            let w = (this.$props.config.TOOLBAR - b)/1.5
             let c = colors.grid
             let cb = colors.tbBack || colors.back
             let brd = colors.tbBorder || colors.scale

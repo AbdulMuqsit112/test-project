@@ -433,10 +433,10 @@ export default {
       }
       else {
         return {
-          width: '25%',
+          width: '20%',
           height: '100%',
           top: '0%',
-          left: '75%',
+          left: '80%',
         };
       }
     },

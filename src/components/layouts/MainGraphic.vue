@@ -7,11 +7,11 @@
       <div class="mainBlock__tabsEmpty p-0" ref="Graph">
         <div v-if="selectedData.length > 0" class="d-flex w-100 gap-2" :class="`${multiGraphs}`">
           <div v-for="(asset, index) in selectedData" :key="index" :class="`${graphClass}`">
-            <trading-vue :width="setMultiChartWidths()" :height="setMultiChartHeight()" :data="handleData(asset)"
+            <trading-vue :width="setMultiChartWidths()" :height="setMultiChartHeight()" :data="handleData(asset)" :font="graphFont" :titleTxt="asset.s"
               :toolbar="true"></trading-vue>
           </div>
         </div>
-        <trading-vue v-else :width="width" :height="height" :data="chart" :toolbar="true"></trading-vue>
+        <trading-vue v-else :width="width" :height="height" :data="chart" :toolbar="true" :font="graphFont"></trading-vue>
       </div>
     </div>
     <div v-if="layout == 1" class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"></div>
@@ -40,7 +40,8 @@ export default {
       width: 0,
       height: 0,
       multiGraphs: '',
-      graphClass: ''
+      graphClass: '',
+      graphFont: '6px Roboto'
     };
   },
   mounted() {
@@ -118,8 +119,8 @@ export default {
       }
       else {
         return {
-          width: '75%',
-          height: '65%',
+          width: '80%',
+          height: '75%',
           top: '0%',
           left: '0%',
         };

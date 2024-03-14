@@ -91,7 +91,7 @@ export default {
             }
             let conf = this.$props.config
             let im = conf.TB_ITEM_M
-            let m = (conf.TOOLBAR - conf.TB_ICON) * 0.5 - im
+            let m = ((conf.TOOLBAR - conf.TB_ICON) * 0.5 - im)/30
             let s = conf.TB_ICON + im * 2
             let b = this.exp_hover ? 0 : 3
             return {

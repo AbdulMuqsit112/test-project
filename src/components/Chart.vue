@@ -316,7 +316,7 @@ export default {
                 Utils.fast_filter_i : Utils.fast_filter
         },
         styles() {
-            let w = this.$props.toolbar ? this.$props.config.TOOLBAR : 0
+            let w = this.$props.toolbar ? this.$props.config.TOOLBAR/1.4 : 0
             return { 'margin-left': `${w}px` }
         },
         meta() {

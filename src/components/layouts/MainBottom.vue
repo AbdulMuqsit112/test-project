@@ -164,9 +164,9 @@ export default {
       }
       else {
         return {
-          width: '75%',
-          height: '35%',
-          top: '65%',
+          width: '80%',
+          height: '25%',
+          top: '75%',
           left: '0%',
         };
       }

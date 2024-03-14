@@ -193,7 +193,7 @@ export default {
                 title_txt: this.$props.titleTxt,
                 overlays: this.$props.overlays.concat(this.mod_ovs),
                 data: this.decubed,
-                width: this.$props.width - offset,
+                width: this.$props.width - (offset/1.6),
                 height: this.$props.height,
                 font: this.font_comp,
                 buttons: this.$props.legendButtons,

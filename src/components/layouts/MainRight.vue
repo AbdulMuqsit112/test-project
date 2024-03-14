@@ -306,7 +306,7 @@ export default {
     async fetchTableData() {
       try {
         const response = await this.$http.get('getList');
-        this.asssetArr = response.data;
+        if(response.status == 200) this.asssetArr = response.data;
       } catch (error) {
         console.error('Error fetching data:', error);
       }

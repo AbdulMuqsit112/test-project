@@ -31,7 +31,7 @@
             </div>
             <div class="form-check form-switch d-flex justify-content-between p-0">
               <label class="form-check-label" for="">Test Mode</label>
-              <input class="form-check-input" type="checkbox" v-model="isTestMode" @click="toggleTesMode">
+              <input class="form-check-input" type="checkbox" @click="toggleTestMode">
             </div>
           </div>
           <div class="d-flex p-5 flex-column gap-5 w-100">
@@ -89,7 +89,7 @@ export default {
     };
   },
   methods: {
-    toggleTesMode() {
+    toggleTestMode() {
       this.$store.commit('toggleTestMode');
     },
     selectOption(opt){

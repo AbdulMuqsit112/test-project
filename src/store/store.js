@@ -1,13 +1,20 @@
 import Vue from "vue";
 import Vuex from "vuex";
-
+import axios from "axios";
 Vue.use(Vuex);
+
+const http = axios.create({
+  baseURL: 'http://185.177.59.169:8090/',
+});
 
 const store = new Vuex.Store({
   state: {
+    http,
     layoutType: 1,
-    isFakeServer: true,
+    isFakeServer: false,
     selectedData: [],
+    userToken: null,
+    isAuthenticated: false,
   },
   mutations: {
     changeLayout(state, newLayoutType) {
@@ -30,13 +37,62 @@ const store = new Vuex.Store({
         }
       }
     },
+    setUserToken(state, token) {
+      state.userToken = token;
+    },
+    setIsAuthenticated(state, val) {
+      state.isAuthenticated = val;
+    },
   },
-  actions: {},
+  actions: {
+    getUserDetails({ commit }) {
+      let token = localStorage.getItem("token");
+      if (!token) {
+        const urlParams = new URLSearchParams(window.location.search);
+        token = urlParams.get("token");
+      }
+      if (token != "" && token != null && token != 'null') {
+        localStorage.setItem("token", token);
+        commit("setUserToken", token);
+        commit("setIsAuthenticated", true);
+        return;
+      }
+      commit("setIsAuthenticated", false);
+    },
+    async loginToServer({ state, commit }, { userObj }) {
+      try {
+        const response = await state.http.post("user/login", {...userObj});
+        if (response.status == 200) {
+          let data = response.data;
+          let token = data.token;
+          localStorage.setItem("token", token);
+          commit("setUserToken", token);
+          commit("setIsAuthenticated", true);
+          return { success: true, token: token };
+        } else {
+          commit("setIsAuthenticated", false);
+          return {
+            success: false,
+            error: "Invalid email or password. Please try again.",
+          };
+        }
+      } catch (error) {
+        console.error(error);
+        commit("setIsAuthenticated", false);
+        return {
+          success: false,
+          error: "An error occurred. Please try again later.",
+        };
+      }
+    },
+  },
   getters: {
     getServer(state) {
       return state.isFakeServer;
     },
     getSelectedData: (state) => state.selectedData,
+    getUserToken: (state) => state.selectedData,
+    getIsAuthenticated: (state) => state.isAuthenticated,
   },
 });
 

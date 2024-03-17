@@ -1,11 +1,13 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: 'https://api.example.com/',
+  baseURL: 'http://185.177.59.169:8090/',
 });
 
-export default {
-  install(VueInstance) {
-    VueInstance.prototype.$http = axiosInstance;
+const AxiosPlugin = {
+  install(Vue) {
+    Vue.prototype.$http = axiosInstance;
   },
 };
+
+export default AxiosPlugin;

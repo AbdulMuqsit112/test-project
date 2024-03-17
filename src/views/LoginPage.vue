@@ -1,18 +1,18 @@
 <template>
-  <div class="wrapper w-100 h-100 d-flex justify-content-center align-items-center text-white">
-    <div class="login-container d-flex flex-column p-4 gap-4 rounded-3">
+  <div class="login-wrapper w-100 h-100 justify-content-center d-flex align-items-center text-white">
+    <div class="login-container d-flex flex-column p-4 gap-4 rounded-4">
       <header>
         <h2>User Login</h2>
       </header>
       <main>
         <form @submit.prevent="login">
           <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" v-model="username" required>
+            <label for="email">Email</label>
+            <input class="login-input" type="email" id="email" v-model="email" required>
           </div>
-          <div class="form-group">
+          <div class="form-group mt-5">
             <label for="password">Password</label>
-            <input type="password" id="password" v-model="password" required>
+            <input class="login-input" type="password" id="password" v-model="password" required>
           </div>
           <button type="submit">Login</button>
         </form>
@@ -29,7 +29,7 @@ export default {
   name: 'LoginPage',
   data() {
     return {
-      username: '',
+      email: '',
       password: '',
       error: ''
     };
@@ -43,26 +43,26 @@ export default {
       }
     },
     fakeLogin() {
-      const user = userData.find(user => user.username === this.username && user.password === this.password);
+      const user = userData.find(user => user.email === this.email && user.password === this.password);
       if (user) {
         localStorage.setItem('token', user.token);
+        this.$store.commit('setUserToken', user.token);
+        this.$store.commit("setIsAuthenticated", true);
         this.$router.push({ path: '/dashboard', query: { token: user.token } });
       } else {
-        this.error = 'Invalid username or password. Please try again.';
+        this.error = 'Invalid email or password. Please try again.';
       }
     },
     async loginToServer() {
       let userObj = {
-        username: this.username,
+        email: this.email,
         password: this.password
       }
-      const response = await this.$http.post(`login`, userObj);
-      if (response.status == 200) {
-        let token = response.data
-        localStorage.setItem('token',token );
-        this.$router.push({ path: '/dashboard', query: { token: token } });
+      const result = await this.$store.dispatch('loginToServer', { userObj });
+      if (result.success) {
+        this.$router.push({ path: '/dashboard', query: { token: result.token } });
       } else {
-        this.error = 'Invalid username or password. Please try again.';
+        this.error = result.error;
       }
     },
   },
@@ -76,8 +76,9 @@ export default {
 
 
 <style scoped>
-.wrapper {
-  background-color: #3d3c3c;
+.login-wrapper {
+  background-color: #1e222d;
+  height: 100vh;
 }
 
 header {
@@ -88,9 +89,9 @@ header {
 
 .login-container {
   width: 350px;
-  height: 420px;
+  height: 520px;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-  background-color: rgba(50, 49, 49, 0.8);
+  background-color: #131722;
   border: 1px solid #09407a;
 }
 
@@ -104,7 +105,7 @@ main {
 
 .form-group {
   margin-top: 20px;
-  margin-bottom: 15px;
+  margin-bottom: 30px;
 }
 
 label {
@@ -112,15 +113,13 @@ label {
   margin-bottom: 10px;
 }
 
-input[type="text"],
-input[type="password"] {
+.login-input {
   width: 100%;
-  padding-block: 8px;
+  padding-block: 6px;
   padding-inline: 6px;
-  font-size: 16px;
-  background-color: #444;
+  font-size: 12px;
   color: #fff;
-  border: none;
+  border: 1px solid #788388;
   border-radius: 5px;
 }
 
@@ -132,7 +131,7 @@ button {
   padding: 10px 0;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 12px;
   justify-content: center;
   display: flex;
 }

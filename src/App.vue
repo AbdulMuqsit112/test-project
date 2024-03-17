@@ -1,25 +1,24 @@
 <template>
   <div id="app">
-    <div id="root" v-if="user && this.$route.path != '/login'">
-      <div class="document">
+    <div id="root">
+      <div class="document" v-if="isAuthenticated">
         <HeaderComponent/>
         <main class="app-main">
           <leftBar />
           <section class="app-section">
             <main class="main">
-              <router-view></router-view>
+              <router-view v-if="isAuthenticated"></router-view>
             </main>
           </section>
         </main>
         <FooterComponent/>
       </div>
+      <router-view v-if="this.$route.path === '/login'"></router-view>
     </div>
-    <router-view v-else-if="this.$route.path === '/login'"></router-view>
   </div>
 </template>
 
 <script>
-import userData from "./assets/user.json";
 import HeaderComponent from "./components/layouts/HeaderComponent.vue";
 import leftBar from "./components/layouts/leftBar.vue";
 import FooterComponent from "./components/layouts/FooterComponent.vue"
@@ -31,37 +30,15 @@ export default {
     leftBar,
     FooterComponent
   },
-  data() {
-    return {
-      user: null,
-    };
+  async created(){
+    this.getUser();
   },
   mounted() {
-    this.setUser();
     this.setLayout();
   },
   methods: {
-    setUser() {
-      const tokenFromLocalStorage = localStorage.getItem("token");
-      if (tokenFromLocalStorage) {
-        const user = userData.find(
-          (user) => user.token === tokenFromLocalStorage
-        );
-        if (user) {
-          this.user = user;
-          return;
-        }
-      }
-      const urlParams = new URLSearchParams(window.location.search);
-      const tokenFromURL = urlParams.get("token");
-      if (tokenFromURL) {
-        const user = userData.find((user) => user.token === tokenFromURL);
-        if (user) {
-          this.user = user;
-          return;
-        }
-      }
-      this.$router.push("/login");
+    getUser(){
+      this.$store.dispatch('getUserDetails');
     },
     setLayout() {
       let layout = localStorage.getItem('layout');
@@ -72,13 +49,11 @@ export default {
       this.$store.commit('changeLayout', 1);
     },
   },
-  watch: {
-    $route(to, from) {
-      if (to.path == '/dashboard') {
-        this.setUser();
-      }
+  computed: {
+    isAuthenticated(){
+      return this.$store.getters.getIsAuthenticated;
     },
-  }
+  },
 };
 </script>
 
@@ -87,7 +62,7 @@ export default {
 @import url('./views/Home/style.css');
 
 #app {
-  height: 100vh;
-  ;
+  /* height: 100vh; */
+  /* width: 100vh; */
 }
 </style>

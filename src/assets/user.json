@@ -1,16 +1,16 @@
 [
   {
-    "username": "user1",
+    "email": "user1@user.com",
     "password": "password1",
     "token": "u1p1p1u1"
   },
   {
-    "username": "user2",
+    "email": "user2@user.com",
     "password": "password2",
     "token": "u1p1p1u1222"
   },
   {
-    "username": "user3",
+    "email": "user3@user.com",
     "password": "password3",
     "token": "u1p1p1u1224533"
   }

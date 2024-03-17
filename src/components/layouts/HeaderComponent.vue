@@ -69,22 +69,26 @@
                 />
                 Trading
               </li>
+              <router-link to="/profile">
               <li class="menu-item">
-                <img
-                  src="src/assets/account.png"
-                  class="menu-icon"
-                  alt="menu icon"
-                />
-                My account
-              </li>
+                  <img
+                    src="src/assets/account.png"
+                    class="menu-icon"
+                    alt="menu icon"
+                  />
+                  My account
+                </li>
+              </router-link>
+              <router-link to="/settings">
               <li class="menu-item">
-                <img
-                  src="src/assets/settings.png"
-                  class="menu-icon"
-                  alt="menu icon"
-                />
-                Settings
-              </li>
+                  <img
+                    src="src/assets/settings.png"
+                    class="menu-icon"
+                    alt="menu icon"
+                  />
+                  Settings
+                </li>
+              </router-link>
               <li class="menu-item line2" @click="siginOut">
                 <img
                   src="src/assets/sign-out.png"
@@ -117,6 +121,7 @@ export default {
     },
     siginOut() {
       localStorage.removeItem("token");
+      this.$store.commit("setIsAuthenticated", false);
       this.$router.push("/login");
     },
   },
@@ -132,7 +137,7 @@ export default {
   position: absolute;
   top: 4rem;
   right: 0rem;
-  z-index: 1000;
+  z-index: 1300;
   background-color: #131722 !important;
   color: #c4c9c9;
   padding: 21px;

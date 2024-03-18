@@ -13,7 +13,7 @@ const store = new Vuex.Store({
     userToken: null,
     isAuthenticated: false,
     showAccountBar: true,
-    isDarkMode: false,
+    isDarkMode: true,
   },
   mutations: {
     changeLayout(state, newLayoutType) {

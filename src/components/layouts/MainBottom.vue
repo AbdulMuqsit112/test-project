@@ -2,8 +2,8 @@
   <div class="mainBlock" :style="getMainBlockStyle">
     <div class="mainBlock__tabs">
       <div class="mainBlock__tabsItem mainBlock__tabsItem_add">+</div>
-      <button class="tab-buttons" @click="switchTabs('stocks')">Stocks</button>
-      <button class="tab-buttons" @click="switchTabs('history')">
+      <button class="tab-buttons" :class="{ 'dark-theme': isDarkMode }" @click="switchTabs('stocks')">Open Positions</button>
+      <button class="tab-buttons" :class="{ 'dark-theme': isDarkMode }" @click="switchTabs('history')">
         History
       </button>
     </div>
@@ -12,7 +12,7 @@
         <div v-show="activeTab === 'stocks'" class="overflow-auto w-100 h-100">
           <table class="w-100">
             <thead class="sticky-top">
-              <tr>
+              <tr :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }">
                 <th>
                   Ticker
                   <input class="p-1 ml-1 rounded" type="text" v-model="searchTerm" placeholder="Search Ticker"
@@ -32,7 +32,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="stock in filteredStocks" :key="stock.ticker">
+              <tr v-for="stock in filteredStocks" :key="stock.ticker" :class="{ 'dark-tr': isDarkMode, 'light-tr': !isDarkMode }">
                 <td class="px-2">{{ stock.ticker }}</td>
                 <td class="px-2">{{ stock.price }}</td>
                 <td class="px-2">{{ stock.chg }}</td>
@@ -52,7 +52,7 @@
         <div v-show="activeTab === 'history'" class="overflow-auto  w-100 h-100">
           <table class="w-100">
             <thead class="sticky-top">
-              <tr>
+              <tr :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }">
                 <th class="px-3">Positions</th>
                 <th class="px-3">Open Date</th>
                 <th class="px-3">Type</th>
@@ -67,7 +67,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item, index) in histData" :key="index">
+              <tr :class="{ 'dark-tr': isDarkMode, 'light-tr': !isDarkMode }" v-for="(item, index) in histData" :key="index">
                 <td class="px-3">{{ item.positions }}</td>
                 <td class="px-3">{{ item.openDate }}</td>
                 <td class="px-3">{{ item.type }}</td>
@@ -185,14 +185,16 @@ export default {
         };
       }
     },
+    isDarkMode(){
+      return this.$store.getters.getIsDarkMode;
+    },
   },
 };
 </script>
 
 <style scoped>
+
 input {
-  background-color: #0b0d0e;
-  color: #6c7293;
   border: 0.2px solid #39404b;
 }
 
@@ -215,32 +217,28 @@ td {
   font-size: 60%;
 }
 
-tr:hover {
+.dark-tr:hover {
   background-color: #212529;
+}
+.light-tr:hover {
+  background-color: #eff0f1;
 }
 
 th {
   vertical-align: middle;
   border-bottom: 2px solid #2c2e33 !important;
-  color: #6c7293;
   border-bottom-width: 1px;
-  background-color: #0b0d0e;
   font-size: 75%
 }
 
 .tab-buttons {
   border-inline: 0.5px solid #48575e;
-  border-bottom: 0.5px solid #48575e;
+  border-bottom: 0.3px solid #48575e;
   border-radius: 4px;
-  background-color: #131722;
-  color: #c1c4cd;
   cursor: pointer;
   padding: 0px 10px;
   transition: background-color 0.3s ease;
 }
-
-
-
 
 @media screen and (max-width: 1024px) {
   td {

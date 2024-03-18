@@ -1,20 +1,19 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import axios from "axios";
+import AxiosPlugin from '../plugins/axios'
+Vue.use(AxiosPlugin)
 Vue.use(Vuex);
-
-const http = axios.create({
-  baseURL: 'http://185.177.59.169:8090/',
-});
 
 const store = new Vuex.Store({
   state: {
-    http,
+    $http: Vue.prototype.$http,
     layoutType: 1,
     isFakeServer: false,
     selectedData: [],
     userToken: null,
     isAuthenticated: false,
+    showAccountBar: true,
+    isDarkMode: true,
   },
   mutations: {
     changeLayout(state, newLayoutType) {
@@ -43,8 +42,24 @@ const store = new Vuex.Store({
     setIsAuthenticated(state, val) {
       state.isAuthenticated = val;
     },
+    toggleShowAccountBar(state) {
+      state.showAccountBar = !state.showAccountBar;
+    },
+    toggleIsDarkMode(state) {
+      state.isDarkMode = !state.isDarkMode;
+      this.dispatch('setAppTheme');
+    },
   },
   actions: {
+    setAppTheme({ state }) {
+      if (state.isDarkMode) {
+        document.body.classList.add('dark');
+        document.body.classList.remove('light');
+      } else {
+        document.body.classList.add('light');
+        document.body.classList.remove('dark');
+      }
+    },
     getUserDetails({ commit }) {
       let token = localStorage.getItem("token");
       if (!token) {
@@ -61,7 +76,7 @@ const store = new Vuex.Store({
     },
     async loginToServer({ state, commit }, { userObj }) {
       try {
-        const response = await state.http.post("user/login", {...userObj});
+        const response = await state.$http.post("user/login", {...userObj});
         if (response.status == 200) {
           let data = response.data;
           let token = data.token;
@@ -87,12 +102,12 @@ const store = new Vuex.Store({
     },
   },
   getters: {
-    getServer(state) {
-      return state.isFakeServer;
-    },
+    getServer: (state) => state.isFakeServer,
     getSelectedData: (state) => state.selectedData,
     getUserToken: (state) => state.selectedData,
     getIsAuthenticated: (state) => state.isAuthenticated,
+    getShowAccountBar: (state) => state.showAccountBar,
+    getIsDarkMode: (state) => state.isDarkMode,
   },
 });
 

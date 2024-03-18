@@ -7,7 +7,7 @@
     </div>
     <div class="app-header-section">
       <div class="app-header-box">
-        <div class="header-balances">
+        <div class="header-balances" v-if="isAccountBar">
           <div class="header-wrap">
             <span class="header-balances-item">
               <div class="">Balance:</div>
@@ -124,6 +124,11 @@ export default {
       this.$store.commit("setIsAuthenticated", false);
       this.$router.push("/login");
     },
+  },
+  computed: {
+    isAccountBar(){
+      return this.$store.getters.getShowAccountBar;
+    }
   },
 };
 </script>

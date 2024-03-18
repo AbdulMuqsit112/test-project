@@ -1,9 +1,23 @@
 <template>
-  <div class="login-wrapper w-100 h-100 justify-content-center d-flex align-items-center text-white">
+  <div class="login-wrapper dark-theme w-100 h-100 justify-content-center d-flex align-items-center text-white">
+    <div class="language-color-wrapper d-flex gap-4 align-items-center">
+      <select name="languages" class="py-1 px-4 dark-theme" v-model="selectedLang" @change="changeLanguage">
+        <option value="en">English</option>
+        <option value="es">Spanish</option>
+      </select>
+      <div class="checkbox-wrapper">
+        <input type="checkbox" class="theme-checkbox" id="checkbox" @change="toggleDarkMode" v-model="isDarkModeChecked">
+        <label for="checkbox" class="checkbox-label">
+          <i class="fas fa-moon"></i>
+          <i class="fas fa-sun"></i>
+          <span class="ball"></span>
+        </label>
+      </div>
+    </div>
     <div class="login-container d-flex flex-column p-4 gap-4 rounded-4">
-      <header>
-        <h2>User Login</h2>
-      </header>
+      <div class="form-header">
+        <h2>{{ $t('Login.Title') }}</h2>
+      </div>
       <main>
         <form @submit.prevent="login">
           <div class="form-group">
@@ -31,7 +45,9 @@ export default {
     return {
       email: '',
       password: '',
-      error: ''
+      error: '',
+      selectedLang: this.$i18n.locale,
+      isDarkModeChecked: this.isDarkMode
     };
   },
   methods: {
@@ -65,24 +81,76 @@ export default {
         this.error = result.error;
       }
     },
+    changeLanguage() {
+      this.$i18n.locale = this.selectedLang;
+    },
+    toggleDarkMode(){
+      this.$store.commit('toggleIsDarkMode');
+      this.isDarkModeChecked = this.isDarkMode;
+    },
   },
   computed: {
     isFakeServer() {
       return this.$store.getters.getServer;
     },
+    isDarkMode(){
+      return this.$store.getters.isDarkMode;
+    }
   }
 };
 </script>
 
 
 <style scoped>
-.login-wrapper {
-  background-color: #1e222d;
-  height: 100vh;
+.checkbox-wrapper{
+  border-radius: 20px;
+  border: 1px solid;
+}
+.theme-checkbox {
+  opacity: 0;
+  position: absolute;
 }
 
-header {
+.checkbox-label {
+  margin: 0;
+  background-color: #111;
+  width: 50px;
+  height: 26px;
+  border-radius: 50px;
+  position: relative;
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fa-moon {color: #f1c40f;}
+
+.fa-sun {color: #f39c12;}
+
+.checkbox-label .ball {
+  background-color: #fff;
+  width: 22px;
+  height: 22px;
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  border-radius: 50%;
+  transition: transform 0.2s linear;
+}
+
+.theme-checkbox:checked + .checkbox-label .ball {
+  transform: translateX(24px);
+}
+.language-color-wrapper {
+  position: absolute;
+  top: 4%;
+  left: 4%;
+}
+.form-header {
   margin-top: 20px;
+  margin-bottom: 20px;
   display: flex;
   justify-content: center;
 }
@@ -90,13 +158,6 @@ header {
 .login-container {
   width: 350px;
   height: 520px;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-  background-color: #131722;
-  border: 1px solid #09407a;
-}
-
-header {
-  margin-bottom: 20px;
 }
 
 main {
@@ -118,7 +179,9 @@ label {
   padding-block: 6px;
   padding-inline: 6px;
   font-size: 12px;
-  color: #fff;
+}
+
+.login-input:focus {
   border: 1px solid #788388;
   border-radius: 5px;
 }

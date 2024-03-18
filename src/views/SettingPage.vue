@@ -5,12 +5,12 @@
         <div class="d-flex gap-1 flex-column p-3">
           <span class="h6">
             <router-link to="/dashboard" class="d-flex align-items-center gap-1">
-                <svg class="back" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#f5f5f5" d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"></path><path fill="#f5f5f5" d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"></path></g></svg>
+                <svg class="back" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="inherit" stroke="inherit"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="inherit" d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"></path><path fill="inherit" d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"></path></g></svg>
                 Go Back
               </router-link> 
             </span>
-          <span class="h3 setting">Settings</span>
-          <span class="h6 adjust">Adjust Platform To your need</span>
+          <span class="h3" :class="{ 'setting': isDarkMode, 'light-settings': !isDarkMode }">Settings</span>
+          <span class="h6" :class="{ 'adjust': isDarkMode, 'light-adjust': !isDarkMode }">Adjust Platform To your need</span>
         </div>
       </div>
     </div>
@@ -22,7 +22,7 @@
               <label for="language">Languages</label>
               <select name="languages" class="dropdown">
                 <option value="English" selected>English</option>
-                <option value="Spanish">Spanish</option>
+                <option value="Spanish">Italian</option>
               </select>
             </div>
             <div class="form-check form-switch d-flex justify-content-between p-0">
@@ -31,7 +31,7 @@
             </div>
             <div class="form-check form-switch d-flex justify-content-between p-0">
               <label class="form-check-label" for="">Test Mode</label>
-              <input class="form-check-input" type="checkbox" @click="toggleTestMode">
+              <input class="form-check-input" type="checkbox" @click="toggleTestMode" v-model="isTestMode">
             </div>
           </div>
           <div class="d-flex p-5 flex-column gap-5 w-100">
@@ -43,7 +43,7 @@
             </div>
             <div class="form-check form-switch d-flex justify-content-between p-0">
               <label class="form-check-label" for="">Hide account bar value</label>
-              <input class="form-check-input" type="checkbox" id="">
+              <input class="form-check-input" type="checkbox" @click="toggleShowAccountBar" v-model="showAccountBar">
             </div>
             <div class="form-check form-switch d-flex justify-content-between p-0">
               <label class="form-check-label" for="">Multi Trade Pannel</label>
@@ -92,6 +92,9 @@ export default {
     toggleTestMode() {
       this.$store.commit('toggleTestMode');
     },
+    toggleShowAccountBar(){
+      this.$store.commit('toggleShowAccountBar');
+    },
     selectOption(opt){
       if (opt === 1){
         this.imgClass = ''
@@ -101,7 +104,18 @@ export default {
         this.imgClass = ''
       }
     }
-  }
+  },
+  computed: {
+    isTestMode(){
+      return this.$store.getters.getServer;
+    },
+    showAccountBar(){
+      return this.$store.getters.getShowAccountBar;
+    },
+    isDarkMode(){
+      return this.$store.getters.getIsDarkMode;
+    }
+  },
 };
 </script>
 
@@ -113,11 +127,15 @@ export default {
 .setting {
   color: #d1d5d8;
 }
-
+.light-setting {
+  color: #2a2e39;
+}
 .adjust {
   color: #96a4aa;
 }
-
+.light-adjust {
+  color: #3d4353;
+}
 .dropdown {
   background-color: transparent;
   padding-block: 8px;

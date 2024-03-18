@@ -8,8 +8,8 @@
       <div class="mainBlock__tabsEmpty p-0" ref="Modal">
         <div class="modal-wrapper" v-if="isModalOpen" :style="modalDimensions">
           <div class="modal-content gap-4">
-            <div class="modal-header d-flex">
-              <h5 class="modal-title varaible-font d-flex justify-content-start">Trade Pannel</h5>
+            <div class="modal-header d-flex justify-content-between">
+              <h5 class="varaible-font">Trade Pannel</h5>
               <button type="button" class="btn varaible-font" @click="closeModal" aria-label="Close">
                 X
               </button>
@@ -23,7 +23,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                   <span>Volume:</span>
                   <input type="number" step="0.01" @input="handleInput('vol')" @blur="handleBlur('vol')"
-                    v-model="volume" class="vol" />
+                    v-model="volume" class="vol" :class="{ 'dark-vol': isDarkMode }" />
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <span>Stop Loss:</span>
@@ -70,33 +70,35 @@
             </div>
           </div>
         </div>
-        <div class="d-flex gap-2 w-100 search-box p-2" v-if="!isModalOpen">
-          <select class="category p-1" v-model="selectedCategory">
+        <div class="d-flex gap-2 w-100 p-2" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }" v-if="!isModalOpen">
+          <select class="category p-1" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }" v-model="selectedCategory">
             <option value="all">All</option>
             <option v-for="category in categories" :value="category">{{ category }}</option>
           </select>
-          <div class="fav-grp d-flex align-items-center gap-1 p-1" @click="toggleShoFav()">
+          <div class="fav-grp d-flex align-items-center gap-1 p-1" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }"
+            @click="toggleShoFav()">
             <input type="checkbox" v-model="showFav">
             <label for="checkbox">favourites</label>
           </div>
-          <input type="text" v-model="searchQuery" placeholder="Search...">
+          <input type="text" class="w-100" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }" v-model="searchQuery"
+            placeholder="Search...">
         </div>
         <div class="w-100 h-100 overflow-auto" v-if="!isModalOpen">
           <table class="table table-hover">
             <thead class="sticky-top">
               <tr>
-                <th class="text-white fw-semibold">Symbol</th>
-                <th class="text-end">Last</th>
-                <th class="text-end">Change</th>
-                <th class="text-end">Change Percent</th>
+                <th class="fw-semibold" :class="{ 'dark-symbol-table text-white': isDarkMode }">Symbol</th>
+                <th class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">Last</th>
+                <th class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">Change</th>
+                <th class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">Change Percent</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="(asset, index) in filteredAssets" :key="asset.s" @click="toggleRowContent(asset)">
-                <td :colspan="4" v-if="isSelected(asset)">
-                  <div class="buySell d-flex flex-column">
-                    <div class="text-white fw-semibold d-flex justify-content-between">
-                      <div class="symGroup d-flex gap-2 align-items-center">
+                <td :colspan="4" v-if="isSelected(asset)" :class="{ 'dark-symbol-table': isDarkMode }">
+                  <div class="buySell d-flex flex-column" :class="{ 'dark-symbol-table': isDarkMode }">
+                    <div class="fw-semibold d-flex justify-content-between" :class="{ 'text-white': isDarkMode }">
+                      <div class="d-flex gap-2 align-items-center">
                         <!-- <img
                           class="symIcon"
                           :src="
@@ -113,22 +115,22 @@
                           viewBox="0 0 100 125" fill="none" x="0px" y="0px">
                           <path
                             d="M50 41.6667C52.3012 41.6667 54.1666 43.5321 54.1666 45.8333V66.6667C54.1666 68.9678 52.3012 70.8333 50 70.8333C47.6988 70.8333 45.8333 68.9678 45.8333 66.6667V45.8333C45.8333 43.5321 47.6988 41.6667 50 41.6667Z"
-                            fill="white" />
+                            fill="inherit" />
                           <path
                             d="M50 29.1667C52.3012 29.1667 54.1666 31.0321 54.1666 33.3333C54.1666 35.6345 52.3012 37.5 50 37.5C47.6988 37.5 45.8333 35.6345 45.8333 33.3333C45.8333 31.0321 47.6988 29.1667 50 29.1667Z"
-                            fill="white" />
+                            fill="inherit" />
                           <path fill-rule="evenodd" clip-rule="evenodd"
                             d="M8.33331 50C8.33331 26.9881 26.9881 8.33333 50 8.33333C73.0118 8.33333 91.6666 26.9881 91.6666 50C91.6666 73.0119 73.0118 91.6667 50 91.6667C26.9881 91.6667 8.33331 73.0119 8.33331 50ZM50 16.6667C31.5905 16.6667 16.6666 31.5905 16.6666 50C16.6666 68.4095 31.5905 83.3333 50 83.3333C68.4095 83.3333 83.3333 68.4095 83.3333 50C83.3333 31.5905 68.4095 16.6667 50 16.6667Z"
-                            fill="white" />
+                            fill="inherit" />
                         </svg>
                         <svg class="grp-icon" width="36" height="48" viewBox="0 0 36 48" fill="none"
                           xmlns="http://www.w3.org/2000/svg">
                           <path fill-rule="evenodd" clip-rule="evenodd"
                             d="M6 21.748C2.54955 20.8599 0 17.7277 0 14C0 10.2723 2.54955 7.14012 6 6.25203L6 2.00139C6 0.896052 6.88773 0 8 0C9.10457 0 10 0.894938 10 2.00139L10 6.25203C13.4505 7.14012 16 10.2723 16 14C16 17.7277 13.4505 20.8599 10 21.748L10 45.9986C10 47.1039 9.11227 48 8 48C6.89543 48 6 47.1051 6 45.9986L6 21.748ZM26 41.748C22.5495 40.8599 20 37.7277 20 34C20 30.2723 22.5495 27.1401 26 26.252L26 2.00139C26 0.896052 26.8877 0 28 0C29.1046 0 30 0.894938 30 2.00139L30 26.252C33.4505 27.1401 36 30.2723 36 34C36 37.7277 33.4505 40.8599 30 41.748V45.9986C30 47.1039 29.1123 48 28 48C26.8954 48 26 47.1051 26 45.9986V41.748ZM32 34C32 31.7909 30.2091 30 28 30C25.7909 30 24 31.7909 24 34C24 36.2091 25.7909 38 28 38C30.2091 38 32 36.2091 32 34ZM12 14C12 11.7909 10.2091 10 8 10C5.79086 10 4 11.7909 4 14C4 16.2091 5.79086 18 8 18C10.2091 18 12 16.2091 12 14Z"
-                            fill="white" />
+                            fill="inherit" />
                         </svg>
-                        <svg class="star-2" @click.stop="addFav(asset)" v-if="isFavorite(asset)" viewBox="0 0 24 24"
-                          fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg :class="{ 'star-2': isDarkMode, 'light-star-2': !isDarkMode }" @click.stop="addFav(asset)"
+                          v-if="isFavorite(asset)" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                           <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                           <g id="SVGRepo_iconCarrier">
@@ -149,9 +151,11 @@
                           xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 100 125"
                           style="enable-background:new 0 0 100 100;" xml:space="preserve">
                           <g>
-                            <path fill="white" stroke="white" stroke-width="4"
+                            <path :fill="isDarkMode ? 'white' : 'black'" :stroke="isDarkMode ? 'white' : 'black'"
+                              stroke-width="4"
                               d="M83,5H17C10.4,5,5,10.4,5,17v66c0,6.6,5.4,12,12,12h66c6.6,0,12-5.4,12-12V17C95,10.4,89.6,5,83,5z M91,83c0,4.4-3.6,8-8,8   H17c-4.4,0-8-3.6-8-8V17c0-4.4,3.6-8,8-8h66c4.4,0,8,3.6,8,8V83z" />
-                            <polygon fill="white" stroke="white" stroke-width="4"
+                            <polygon :fill="isDarkMode ? 'white' : 'black'" :stroke="isDarkMode ? 'white' : 'black'"
+                              stroke-width="4"
                               points="52,24 48,24 48,48 24,48 24,52 48,52 48,76 52,76 52,52 76,52 76,48 52,48" />
                           </g>
                         </svg>
@@ -182,12 +186,12 @@
                       </button>
                     </div>
                     <div class="inpbox">
-                      <button @click="handleDecrement('sellVal')" class="inc-dec-btn rounded-start-1">
+                      <button @click="handleDecrement('sellVal')" class="inc-dec-btn rounded-start-1" :class="{ 'inc-dec-dark': isDarkMode }">
                         -
                       </button>
-                      <input class="sell-val" type="text" @input="handleInput('sellVal')" @blur="handleBlur('sellVal')"
+                      <input class="sell-val" :class="{ 'sel-val-dark': isDarkMode }" type="text" @input="handleInput('sellVal')" @blur="handleBlur('sellVal')"
                         v-model="sellVal" />
-                      <button @click="handleIncrement('sellVal')" class="inc-dec-btn rounded-end-1">
+                      <button @click="handleIncrement('sellVal')" class="inc-dec-btn rounded-end-1" :class="{ 'inc-dec-dark': isDarkMode }">
                         +
                       </button>
                     </div>
@@ -239,8 +243,9 @@
                     </div>
                   </div>
                 </td>
-                <td v-if="!isSelected(asset)" class="text-white fw-semibold">
-                  <div class="symGroup d-flex gap-2 align-items-center">
+                <td v-if="!isSelected(asset)" class="fw-semibold"
+                  :class="{ 'dark-symbol-table text-white': isDarkMode }">
+                  <div class="d-flex gap-2 align-items-center">
                     <!-- <img
                       class="symIcon"
                       :src="
@@ -253,13 +258,13 @@
                     {{ asset.s }}
                   </div>
                 </td>
-                <td v-if="!isSelected(asset)" class="text-end">
+                <td v-if="!isSelected(asset)" class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">
                   {{ asset.p }}
                 </td>
-                <td v-if="!isSelected(asset)" class="text-end">
+                <td v-if="!isSelected(asset)" class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">
                   {{ asset.v }}
                 </td>
-                <td v-if="!isSelected(asset)" class="text-end">
+                <td v-if="!isSelected(asset)" class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">
                   {{ asset.chgPercent }}
                 </td>
               </tr>
@@ -306,7 +311,7 @@ export default {
     async fetchTableData() {
       try {
         const response = await this.$http.get('getList');
-        if(response.status == 200) this.asssetArr = response.data;
+        if (response.status == 200) this.asssetArr = response.data;
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -475,8 +480,11 @@ export default {
     isFakeServer() {
       return this.$store.getters.getServer;
     },
-    selectedData(){
+    selectedData() {
       return this.$store.getters.getSelectedData;
+    },
+    isDarkMode() {
+      return this.$store.getters.getIsDarkMode;
     },
   },
 };
@@ -484,7 +492,6 @@ export default {
 
 <style scoped>
 .fav-grp {
-  background-color: #0b0d0e;
   color: #6c7293;
   border: 0.2px solid #39404b;
   border-radius: 4px;
@@ -494,6 +501,12 @@ export default {
 .info-block {
   border-top: 1px solid;
   font-weight: 400;
+}
+
+.light-star-2 {
+  margin-block: -3px;
+  width: 28px;
+  height: 20px;
 }
 
 .star-2 {
@@ -524,7 +537,6 @@ export default {
 }
 
 .buySell {
-  background-color: #191c24;
   padding-block: 8px;
   font-size: small;
   font-weight: 800;
@@ -536,10 +548,10 @@ export default {
 }
 
 .buySellBtn {
-  background-color: #191c24;
   border: 1px solid;
   padding: 4px 8px;
   border-radius: 4px;
+  background-color: inherit;
 }
 
 .inpbox {
@@ -552,27 +564,30 @@ export default {
 .sell-val {
   width: 15%;
   text-align: center;
+  border: none;
+}
+.sel-val-dark {
   background-color: #22252e;
   color: #6c7293;
-  border: none;
 }
 
 .vol {
   padding: 4px;
-  background-color: #22252e;
-  color: white;
   text-align: center;
   border: none;
 }
-
+.dark-vol {
+  background-color: #22252e;
+  color: white;
+}
 .inc-dec-btn {
-  background-color: #3d4353;
   border-color: transparent;
-
-  color: #c5c3c1;
   padding: 6px 10px;
 }
-
+.inc-dec-dark {
+  color: #c5c3c1;
+  background-color: #3d4353
+}
 .arrowIcon {
   width: 15px;
   height: 15px;
@@ -592,11 +607,10 @@ export default {
   border-bottom-width: 1px;
   font-weight: 500;
   color: #6c7293;
-  background-color: #191c24;
 }
 
 .table tbody td {
-  background-color: #191c24;
+  /* background-color: #191c24; */
   color: #6c7293;
   font-weight: 300;
 }
@@ -628,10 +642,6 @@ export default {
   white-space: nowrap;
 }
 
-.symGroup {
-  background-color: #191c24;
-}
-
 .symIcon {
   width: 8px;
   height: 8px;
@@ -642,7 +652,7 @@ export default {
   padding: 15px;
   border: 1px solid;
   border-color: #39404b;
-  background-color: #191c24;
+  background-color: inherit;
 }
 
 .modal-header {
@@ -650,8 +660,7 @@ export default {
 }
 
 .modal-header button {
-  color: #fff;
-  background-color: transparent;
+  color: inherit;
   border: none;
 }
 
@@ -665,12 +674,7 @@ export default {
   color: #6c7293;
 }
 
-.search-box {
-  background-color: #0b0d0e;
-}
-
 .category {
-  background-color: #0b0d0e;
   color: #6c7293;
   border: 0.2px solid #39404b;
   border-radius: 4px;

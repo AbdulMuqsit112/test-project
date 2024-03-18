@@ -8,10 +8,10 @@
         <div v-if="selectedData.length > 0" class="d-flex w-100 gap-2" :class="`${multiGraphs}`">
           <div v-for="(asset, index) in selectedData" :key="index" :class="`${graphClass}`">
             <trading-vue :width="setMultiChartWidths()" :height="setMultiChartHeight()" :data="handleData(asset)" :font="graphFont" :titleTxt="asset.s"
-              :toolbar="true"></trading-vue>
+              :toolbar="true" :color-back="colors.colorBack" :color-grid="colors.colorGrid" :color-text="colors.colorText"></trading-vue>
           </div>
         </div>
-        <trading-vue v-else :width="width" :height="height" :data="chart" :toolbar="true" :font="graphFont"></trading-vue>
+        <trading-vue v-else :width="width" :height="height" :data="chart" :toolbar="true" :font="graphFont" :color-back="colors.colorBack" :color-grid="colors.colorGrid" :color-text="colors.colorText"></trading-vue>
       </div>
     </div>
     <div v-if="layout == 1" class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"></div>
@@ -31,9 +31,9 @@ export default {
   data() {
     return {
       colors: {
-        colorBack: "#fff",
-        colorGrid: "#eee",
-        colorText: "#333",
+        colorBack: "",
+        colorGrid: "",
+        colorText: "",
       },
       chart: new DataCube(Data),
       chart2: new DataCube(updatedData),
@@ -47,11 +47,27 @@ export default {
   mounted() {
     this.setChartDimensions();
     window.addEventListener('resize', this.setChartDimensions);
+    this.setGraphTheme();
   },
   destroyed() {
     window.removeEventListener('resize', this.setChartDimensions)
   },
   methods: {
+    setGraphTheme(){
+      if(!this.isDarkMode){
+        colors = {
+          colorBack: "#fff",
+          colorGrid: "#eee",
+          colorText: "#333",
+        };
+      } else {
+        colors = {
+          colorBack: "",
+          colorGrid: "",
+          colorText: "",
+        };
+      }
+    },
     handleData(asset) {
       let chartData = 
       {
@@ -128,6 +144,9 @@ export default {
     },
     selectedData() {
       return this.$store.getters.getSelectedData;
+    },
+    isDarkMode(){
+      return this.$store.getters.getIsDarkMode;
     },
   },
   watch: {

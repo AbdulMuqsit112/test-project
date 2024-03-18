@@ -76,9 +76,6 @@ export default {
 </script>
 
 <style scoped>
-@import url(./style.css);
-
-
 h3 {
   margin: 0;
 }

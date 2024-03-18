@@ -2,7 +2,7 @@
   <div id="app">
     <div id="root">
       <div class="document" v-if="isAuthenticated">
-        <HeaderComponent/>
+        <HeaderComponent />
         <main class="app-main">
           <leftBar />
           <section class="app-section">
@@ -11,7 +11,7 @@
             </main>
           </section>
         </main>
-        <FooterComponent/>
+        <FooterComponent />
       </div>
       <router-view v-if="this.$route.path === '/login'"></router-view>
     </div>
@@ -30,14 +30,16 @@ export default {
     leftBar,
     FooterComponent
   },
-  async created(){
+  async created() {
     this.getUser();
+    if (!this.isAuthenticated) this.$router.push('/login');
+    this.$store.dispatch('setAppTheme');
   },
   mounted() {
     this.setLayout();
   },
   methods: {
-    getUser(){
+    getUser() {
       this.$store.dispatch('getUserDetails');
     },
     setLayout() {
@@ -50,8 +52,11 @@ export default {
     },
   },
   computed: {
-    isAuthenticated(){
+    isAuthenticated() {
       return this.$store.getters.getIsAuthenticated;
+    },
+    isDarkMode() {
+      return this.$store.getters.getIsDarkMode;
     },
   },
 };
@@ -59,10 +64,4 @@ export default {
 
 <style>
 @import url("../style.css");
-@import url('./views/Home/style.css');
-
-#app {
-  /* height: 100vh; */
-  /* width: 100vh; */
-}
 </style>

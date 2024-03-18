@@ -2,8 +2,8 @@
   <menu class="menu">
     <ul class="menu-list-box">
       <li class="menu-list-item">
-        <router-link to="/dashboard" :class="{ 'menu-list-item-link_active': $route.path === '/dashboard' }"
-          href="/en/platform"><i class="icon-xlg"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+        <router-link to="/dashboard" :class="{ 'menu-list-item-link_active': $route.path === '/dashboard' }">
+          <i class="icon-xlg"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
               <path
                 d="M31 31.36H1A.36.36 0 01.64 31V1h.72v29.64H31v.72zM24.36 26h-.72v-2.64H21v-.72h2.64V7h.721v1.64H27v.72h-2.64V26zm-8 0h-.72v-6.64H13v-.72h2.64V7h.72v5.64H19v.72h-2.64V26zm-8 0h-.72v-4.64H5v-.72h2.64V7h.72v3.64H11v.72H8.36V26z">
               </path>

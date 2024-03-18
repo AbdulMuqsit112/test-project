@@ -1,7 +1,7 @@
 <template>
-  <div class="login-wrapper dark-theme w-100 h-100 justify-content-center d-flex align-items-center text-white">
+  <div class="w-100 h-100 justify-content-center d-flex align-items-center text-white" :class="{'dark-theme': isDarkMode, 'light-background': !isDarkMode}">
     <div class="language-color-wrapper d-flex gap-4 align-items-center">
-      <select name="languages" class="py-1 px-4 dark-theme" v-model="selectedLang" @change="changeLanguage">
+      <select name="languages" class="py-1 px-4" v-model="selectedLang" @change="changeLanguage" :class="{'dark-theme': isDarkMode }">
         <option value="en">English</option>
         <option value="es">Spanish</option>
       </select>
@@ -14,7 +14,7 @@
         </label>
       </div>
     </div>
-    <div class="login-container d-flex flex-column p-4 gap-4 rounded-4">
+    <div class="login-container d-flex flex-column p-4 gap-4 rounded-4" :class="{'dark-color': !isDarkMode }">
       <div class="form-header">
         <h2>{{ $t('Login.Title') }}</h2>
       </div>
@@ -94,7 +94,7 @@ export default {
       return this.$store.getters.getServer;
     },
     isDarkMode(){
-      return this.$store.getters.isDarkMode;
+      return this.$store.getters.getIsDarkMode;
     }
   }
 };
@@ -102,6 +102,9 @@ export default {
 
 
 <style scoped>
+.light-background{
+  background-color: #dde2e5;
+}
 .checkbox-wrapper{
   border-radius: 20px;
   border: 1px solid;
@@ -156,10 +159,13 @@ export default {
 }
 
 .login-container {
+  color: inherit;
   width: 350px;
   height: 520px;
 }
-
+.dark-color{
+  color: #111;
+}
 main {
   padding: 0;
 }

@@ -20,9 +20,9 @@
           <div class="d-flex p-5 flex-column gap-5 w-100">
             <div class="d-flex flex-column gap-3">
               <label for="language">Languages</label>
-              <select name="languages" class="dropdown">
-                <option value="English" selected>English</option>
-                <option value="Spanish">Italian</option>
+              <select name="languages" class="dropdown" v-model="selectedLang" @change="changeLanguage">
+                <option value="en">English</option>
+                <option value="es">Spanish</option>
               </select>
             </div>
             <div class="form-check form-switch d-flex justify-content-between p-0">
@@ -85,7 +85,8 @@ export default {
     return {
       isTestMode: true,
       secondImgClass :'',
-      imgClass: ''
+      imgClass: '',
+      selectedLang: this.$i18n.locale,
     };
   },
   methods: {
@@ -103,7 +104,10 @@ export default {
         this.secondImgClass = '';
         this.imgClass = ''
       }
-    }
+    },
+    changeLanguage() {
+      this.$i18n.locale = this.selectedLang;
+    },
   },
   computed: {
     isTestMode(){

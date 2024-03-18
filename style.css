@@ -5633,8 +5633,8 @@ input[type="radio"]:checked + .sbxTableRadioField__radio:after {
   cursor: nwse-resize;
 }
 .dark-theme {
-  background-color: var(--black-900);
-  color: var(--grey-100);
+  background-color: var(--black-900) !important;
+  color: var(--grey-100) !important;
 }
 .light-header {
   background-color: var(--grey-75) !important;

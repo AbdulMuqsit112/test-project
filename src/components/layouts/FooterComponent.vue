@@ -112,7 +112,7 @@ export default {
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: #22252e;
+  background-color: inherit;
   border: 1px solid #434d51;
   border-radius: 4px;
   position: absolute;

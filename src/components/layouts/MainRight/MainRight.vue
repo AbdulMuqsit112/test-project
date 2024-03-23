@@ -66,14 +66,13 @@
                 <br />
                 178.8
               </button>
-              <!-- Additional buttons or actions -->
             </div>
           </div>
         </div>
         <div class="d-flex gap-2 w-100 p-2" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }" v-if="!isModalOpen">
           <select class="category p-1" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }" v-model="selectedCategory">
             <option value="all">All</option>
-            <option v-for="category in categories" :value="category">{{ category }}</option>
+            <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
           </select>
           <div class="fav-grp d-flex align-items-center gap-1 p-1" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }"
             @click="toggleShoFav()">
@@ -179,10 +178,10 @@
                     </div>
                     <div class="d-flex justify-content-between">
                       <button class="text-danger buySellBtn">
-                        Low 173.20
+                        Low {{ assetVal(asset.p, 'low') }}
                       </button>
                       <button class="text-success buySellBtn">
-                        High 179.74
+                        High {{ assetVal(asset.p, 'high') }}
                       </button>
                     </div>
                     <div class="inpbox">
@@ -279,13 +278,13 @@
 </template>
 
 <script>
-import symblRow from "../../assets/symbolRow.json";
-import socketMixin from "../../mixins/socketMixin";
+import { onMounted } from "vue";
+import symblRow from "../../../assets/symbolRow.json";
+import socketMixin from "../../../mixins/socketMixin";
 export default {
   mixins: [socketMixin],
   data() {
     return {
-      asssetArr: [],
       sellVal: 0.01,
       isModalOpen: false,
       volume: 0.01,
@@ -303,17 +302,30 @@ export default {
     if (this.isFakeServer) {
       this.loadDataFromJson();
     } else {
-      this.$on("symbolDataUpdated", this.handleDataUpdated);
+      this.fetchAssetCategory();
       this.fetchTableData();
+      this.$on("symbolDataUpdated", this.handleDataUpdated);
     }
   },
   methods: {
-    async fetchTableData() {
+    fetchTableData() {
+      const limits = {
+        limit: 1,
+        offset: 1
+      }
+      this.$store.dispatch('fetchSymbolsData', { limits });
+    },
+    async fetchAssetCategory(){
       try {
-        const response = await this.$http.get('getList');
-        if (response.status == 200) this.asssetArr = response.data;
-      } catch (error) {
-        console.error('Error fetching data:', error);
+        const response = await this.$http.get('symbols');
+        if(response.status == 200){
+          this.categories = response.data;
+        } else {
+          console.log("Something went wrong");
+        }
+      }
+      catch(error) {
+        console.error('Error fetching Categories:', error);
       }
     },
     async sendAssetInfo(asset, action) {
@@ -334,34 +346,25 @@ export default {
       }
     },
     isSelected(asset) {
-      return this.selectedData.some(selectedAsset => selectedAsset.s === asset.s)
+      return this.selectedData.some(selectedAsset => selectedAsset.id === asset.id)
     },
     toggleInfoSection() {
       this.isInfoSection = !this.isInfoSection;
     },
     toggleRowContent(asset) {
-      this.$store.commit('setSelctedDate', asset);
+      this.$store.commit('setSelctedData', asset);
       this.isInfoSection = false;
     },
     handleDataUpdated(data) {
-      this.updateData(JSON.parse(data).data);
+      const processedData = JSON.parse(data).data;
+      if (processedData && processedData.length > 0 ) this.$store.dispatch('updateSymbolsData', { receivedData: processedData });
     },
     loadDataFromJson() {
       try {
-        this.asssetArr = symblRow.assets;
-        this.categories = [...new Set(this.asssetArr.map(asset => asset.category))];
+        this.symbolsData = symblRow.assets;
+        this.categories = [...new Set(this.symbolsData.map(asset => asset.category))];
       } catch (error) {
         console.error("Error loading data from JSON file:", error);
-      }
-    },
-    updateData(receivedData) {
-      for (const item of receivedData) {
-        const index = this.asssetArr.findIndex(d => d.s === item.s);
-        if (index !== -1) {
-          this.$set(this.asssetArr, index, item);
-        } else {
-          this.asssetArr.push(item);
-        }
       }
     },
     handleInput(event, val) {
@@ -414,6 +417,10 @@ export default {
       this.selectedRow = null;
       this.isModalOpen = !this.isModalOpen;
     },
+    assetVal(price, type){
+      if (type == 'high') return price + 0.02
+      return price - 0.02
+    },
   },
   computed: {
     layout() {
@@ -461,12 +468,12 @@ export default {
         });
       } else {
         if (this.selectedCategory === 'all') {
-          return this.asssetArr.filter(asset => {
+          return this.symbolsData.filter(asset => {
             return asset.s.toLowerCase().includes(lowerCaseQuery);
           });
         } else {
-          return this.asssetArr.filter(asset => {
-            return asset.category === this.selectedCategory && asset.s.toLowerCase().includes(lowerCaseQuery);
+          return this.symbolsData.filter(asset => {
+            return asset.symbolId === this.selectedCategory && asset.s.toLowerCase().includes(lowerCaseQuery);
           });
         }
       }
@@ -486,293 +493,13 @@ export default {
     isDarkMode() {
       return this.$store.getters.getIsDarkMode;
     },
+    symbolsData(){
+      return this.$store.getters.getSymbolsData;
+    },
   },
 };
 </script>
 
 <style scoped>
-.fav-grp {
-  color: #6c7293;
-  border: 0.2px solid #39404b;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.info-block {
-  border-top: 1px solid;
-  font-weight: 400;
-}
-
-.light-star-2 {
-  margin-block: -3px;
-  width: 28px;
-  height: 20px;
-}
-
-.star-2 {
-  margin-block: -8.5px;
-  width: 28px;
-  height: 31px;
-}
-
-.star {
-  margin-block: -4.5px;
-  width: 28px;
-  height: 31px;
-}
-
-.info-icon {
-  width: 23px;
-  height: 20px;
-}
-
-.add-icon {
-  width: 20px;
-  height: 18px
-}
-
-.grp-icon {
-  width: 20px;
-  height: 16px;
-}
-
-.buySell {
-  padding-block: 8px;
-  font-size: small;
-  font-weight: 800;
-}
-
-.buySellSpan {
-  font-size: x-small;
-  font-weight: 400;
-}
-
-.buySellBtn {
-  border: 1px solid;
-  padding: 4px 8px;
-  border-radius: 4px;
-  background-color: inherit;
-}
-
-.inpbox {
-  position: relative;
-  bottom: 48px;
-  display: flex;
-  justify-content: center;
-}
-
-.sell-val {
-  width: 15%;
-  text-align: center;
-  border: none;
-}
-.sel-val-dark {
-  background-color: #22252e;
-  color: #6c7293;
-}
-
-.vol {
-  padding: 4px;
-  text-align: center;
-  border: none;
-}
-.dark-vol {
-  background-color: #22252e;
-  color: white;
-}
-.inc-dec-btn {
-  border-color: transparent;
-  padding: 6px 10px;
-}
-.inc-dec-dark {
-  color: #c5c3c1;
-  background-color: #3d4353
-}
-.arrowIcon {
-  width: 15px;
-  height: 15px;
-}
-
-.text-white {
-  color: #fff;
-}
-
-.table {
-  margin-bottom: 0;
-  color: #6c7293;
-}
-
-.table thead th {
-  border-top: 0;
-  border-bottom-width: 1px;
-  font-weight: 500;
-  color: #6c7293;
-}
-
-.table tbody td {
-  /* background-color: #191c24; */
-  color: #6c7293;
-  font-weight: 300;
-}
-
-.table thead th {
-  vertical-align: middle;
-  border-bottom: 2px solid #2c2e33;
-}
-
-.table tr {
-  border-color: #39404b;
-  cursor: pointer;
-}
-
-.table tr:hover {
-  background-color: #212529;
-}
-
-.table th {
-  vertical-align: middle;
-  line-height: 1;
-  white-space: nowrap;
-  cursor: auto;
-}
-
-.table td {
-  vertical-align: middle;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.symIcon {
-  width: 8px;
-  height: 8px;
-}
-
-.modal-wrapper {
-  overflow-y: auto;
-  padding: 15px;
-  border: 1px solid;
-  border-color: #39404b;
-  background-color: inherit;
-}
-
-.modal-header {
-  border: none;
-}
-
-.modal-header button {
-  color: inherit;
-  border: none;
-}
-
-.modal-footer {
-  justify-content: center;
-  border: none;
-}
-
-.quantity-grp {
-  border-block: 2px solid #39404b;
-  color: #6c7293;
-}
-
-.category {
-  color: #6c7293;
-  border: 0.2px solid #39404b;
-  border-radius: 4px;
-}
-
-@media screen and (max-width: 4500px) {
-  .varaible-font {
-    font-size: xx-large !important;
-  }
-
-  .modal-body {
-    font-size: x-large;
-  }
-
-  .footer-font {
-    font-size: x-large;
-  }
-}
-
-@media screen and (max-width: 3000px) {
-  .table th {
-    font-size: small;
-  }
-
-  .table td {
-    font-size: small;
-  }
-}
-
-@media screen and (max-width: 2500px) {
-  .varaible-font {
-    font-size: x-large !important;
-  }
-
-  .modal-body {
-    font-size: larger;
-  }
-
-  .footer-font {
-    font-size: larger;
-  }
-}
-
-@media screen and (max-width: 2000px) {
-  .varaible-font {
-    font-size: larger !important;
-  }
-
-  .modal-body {
-    font-size: large;
-  }
-
-  .footer-font {
-    font-size: large;
-  }
-}
-
-@media screen and (max-width: 1500px) {
-  .varaible-font {
-    font-size: medium !important;
-  }
-
-  .modal-body {
-    font-size: small;
-  }
-
-  .footer-font {
-    font-size: small;
-  }
-
-  .table th {
-    font-size: x-small;
-  }
-
-  .table td {
-    font-size: x-small;
-  }
-}
-
-@media screen and (max-width: 1300px) {
-  .varaible-font {
-    font-size: small !important;
-  }
-
-  .modal-body {
-    font-size: x-small;
-  }
-
-  .footer-font {
-    font-size: x-small;
-  }
-
-  .table th {
-    font-size: x-small;
-  }
-
-  .table td {
-    font-size: x-small;
-  }
-}
+@import url(./mainRight.css);
 </style>

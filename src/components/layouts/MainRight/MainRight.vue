@@ -166,14 +166,14 @@
                           Sell
                           <img src="src/assets/down.png" class="arrowIcon" alt="icon" />
                         </div>
-                        <span class="buySellSpan">178.95</span>
+                        <span class="buySellSpan d-flex justify-content-start">{{ assetVal(asset.p, 'low') }}</span>
                       </div>
                       <div class="bg-success d-flex flex-column gap-3 w-100 p-2" @click="buyItem(asset)">
                         <div class="d-flex justify-content-between">
                           <img src="src/assets/up.png" class="arrowIcon" alt="icon" />
                           Buy
                         </div>
-                        <span class="buySellSpan d-flex justify-content-end">179.01</span>
+                        <span class="buySellSpan d-flex justify-content-end">{{ assetVal(asset.p, 'high') }}</span>
                       </div>
                     </div>
                     <div class="d-flex justify-content-between">
@@ -185,12 +185,12 @@
                       </button>
                     </div>
                     <div class="inpbox">
-                      <button @click="handleDecrement('sellVal')" class="inc-dec-btn rounded-start-1" :class="{ 'inc-dec-dark': isDarkMode }">
+                      <button @click.stop="handleDecrement('sellVal')" class="inc-dec-btn rounded-start-1" :class="{ 'inc-dec-dark': isDarkMode }">
                         -
                       </button>
                       <input class="sell-val" :class="{ 'sel-val-dark': isDarkMode }" type="text" @input="handleInput('sellVal')" @blur="handleBlur('sellVal')"
                         v-model="sellVal" />
-                      <button @click="handleIncrement('sellVal')" class="inc-dec-btn rounded-end-1" :class="{ 'inc-dec-dark': isDarkMode }">
+                      <button @click.stop="handleIncrement('sellVal')" class="inc-dec-btn rounded-end-1" :class="{ 'inc-dec-dark': isDarkMode }">
                         +
                       </button>
                     </div>
@@ -298,7 +298,7 @@ export default {
       showFav: false,
     };
   },
-  created() {
+  mounted() {
     if (this.isFakeServer) {
       this.loadDataFromJson();
     } else {
@@ -418,8 +418,8 @@ export default {
       this.isModalOpen = !this.isModalOpen;
     },
     assetVal(price, type){
-      if (type == 'high') return price + 0.02
-      return price - 0.02
+      if (type == 'high') return price + 0.01
+      return price - 0.01
     },
   },
   computed: {

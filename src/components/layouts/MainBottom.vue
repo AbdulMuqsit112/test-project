@@ -33,7 +33,7 @@
             </thead>
             <tbody>
               <tr v-for="stock in filteredStocks" :key="stock.ticker" :class="{ 'dark-tr': isDarkMode, 'light-tr': !isDarkMode }">
-                <td class="px-2">{{ stock.ticker }}</td>
+                <td class="px-2">{{ stock.symbolName }}</td>
                 <td class="px-2">{{ stock.price }}</td>
                 <td class="px-2">{{ stock.chg }}</td>
                 <td class="px-2">{{ stock.chgPercent }}</td>
@@ -42,7 +42,7 @@
                 <td class="px-2">{{ stock.volumePrice }}</td>
                 <td class="px-2">{{ stock.mktCap }}</td>
                 <td class="px-2">{{ stock.pe }}</td>
-                <td class="px-2">{{ stock.eps }}</td>
+                <td class="px-2">{{ stock.epsTim }}</td>
                 <td class="px-2">{{ stock.employees }}</td>
                 <td class="px-2">{{ stock.sector }}</td>
               </tr>
@@ -113,7 +113,7 @@ export default {
   methods: {
     async fetchHistoryData() {
       try {
-        const response = await this.$http.get('getOrderHistory');
+        const response = await this.$http.get('orders/history');
         if (response.status == 200) this.histData = response.data;
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -121,8 +121,13 @@ export default {
     },
     async fetchStockTableData() {
       try {
-        const response = await this.$http.get('getOrderOpen');
-        if (response.status == 200) this.stocks = response.data;
+        const response = await this.$http.get('orders', {
+          params: {
+            limit: 1,
+            offset: 1
+          }
+        });
+        if (response.status == 200) this.stocks = response.data.orders;
       } catch (error) {
         console.error('Error fetching data:', error);
       }

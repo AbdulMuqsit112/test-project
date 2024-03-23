@@ -141,6 +141,19 @@ export default {
     };
   },
   methods: {
+    async fetchTransactionsData(){
+      try {
+        const response = await this.$http.get('transactions', {
+          params: {
+            limit: 1,
+            offset: 1
+          }
+        });
+        if (response.status == 200 ) this.transactions = response.data.orders;
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    },
     changePassword() {
       if (this.isFakeServer) {
         this.fakePwChange();
@@ -178,6 +191,13 @@ export default {
       return this.$store.getters.getIsDarkMode;
     }
   },
+  watch: {
+    activeTab(newVal){
+      if (newVal == 'transactions'){
+        this.fetchTransactionsData();
+      }
+    }
+  }
 };
 </script>
 

@@ -1,6 +1,6 @@
 [
   {
-    "ticker": "AAPL",
+    "symbolName": "AAPL",
     "price": 150.55,
     "chg": 2.35,
     "chgPercent": "+1.5%",
@@ -14,7 +14,7 @@
     "sector": "Technology"
   },
   {
-    "ticker": "GOOGL",
+    "symbolName": "GOOGL",
     "price": 2800.5,
     "chg": -15.75,
     "chgPercent": "-0.6%",
@@ -28,7 +28,7 @@
     "sector": "Technology"
   },
   {
-    "ticker": "MSFT",
+    "symbolName": "MSFT",
     "price": 330.75,
     "chg": 1.2,
     "chgPercent": "+0.4%",
@@ -42,7 +42,7 @@
     "sector": "Technology"
   },
   {
-    "ticker": "AMZN",
+    "symbolName": "AMZN",
     "price": 3400.0,
     "chg": 30.0,
 

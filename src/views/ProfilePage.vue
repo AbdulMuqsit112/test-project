@@ -42,8 +42,8 @@
                 <li class="tab-btn-item">
                   <button class="tab-button" :class="{ active: activeTab === 'changePassword', 'text-white': isDarkMode }"
                     @click="activeTab = 'changePassword'">Change Password</button>
-                </li>
-              </ul>
+                  </li>
+                </ul>
               <div class="p-4" v-if="activeTab === 'personalInfo'">
                 <table class="table">
                   <thead>
@@ -116,6 +116,7 @@
                   <input type="password" class="form-control" v-model="confirmPassword" :class="{'dark-input': isDarkMode, 'light-input': !isDarkMode }">
                 </div>
                 <button class="btn confirm-btn" @click="changePassword">Confirm</button>
+                <span :class="msgClass">{{ message }}</span>
               </div>
             </div>
           </div>
@@ -137,7 +138,9 @@ export default {
         { order: 12314246, date: '2024-02-11', type: 'Deposit', volume: '$300.00' },
       ],
       newPassword: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      message: '',
+      msgClass: ''
     };
   },
   methods: {
@@ -172,15 +175,24 @@ export default {
     },
     async pwChange() {
       if (this.newPassword === this.confirmPassword) {
-        const response = await this.$http.post('changePass', this.newPassword);
+        let pwChangePaload = {
+          login: 'user2@email.com',
+          password: this.newPassword
+        };
+        const response = await this.$http.put('accounts/change-password', pwChangePaload);
         if (response.status == 200) {
-          console.log('Password changed successfully');
-          this.newPassword = '';
-          this.confirmPassword = '';
+          this.message = 'Password changed successfully';
+          this.msgClass = 'text-success'
+        } else {
+          this.message = 'Something Went Wrong';
+          this.msgClass = 'text-danger'
         }
       } else {
-        console.error('Passwords do not match');
+        this.message = 'Password mismatch';
+        this.msgClass = 'text-danger'
       }
+      this.newPassword = '';
+      this.confirmPassword = '';
     },
   },
   computed: {
@@ -189,6 +201,9 @@ export default {
     },
     isDarkMode(){
       return this.$store.getters.getIsDarkMode;
+    },
+    userID(){
+      return this.$store.getters.getUser.loginId;
     }
   },
   watch: {

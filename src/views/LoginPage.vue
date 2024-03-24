@@ -187,8 +187,12 @@ label {
   font-size: 12px;
 }
 
-.login-input:focus {
+.login-input {
   border: 1px solid #788388;
+  border-radius: 5px;
+}
+.login-input:focus {
+  border: 1px solid #9b9d9e;
   border-radius: 5px;
 }
 

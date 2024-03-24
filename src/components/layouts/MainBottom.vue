@@ -2,7 +2,8 @@
   <div class="mainBlock" :style="getMainBlockStyle">
     <div class="mainBlock__tabs">
       <div class="mainBlock__tabsItem mainBlock__tabsItem_add">+</div>
-      <button class="tab-buttons" :class="{ 'dark-theme': isDarkMode }" @click="switchTabs('stocks')">Open Positions</button>
+      <button class="tab-buttons" :class="{ 'dark-theme': isDarkMode }" @click="switchTabs('stocks')">Open
+        Positions</button>
       <button class="tab-buttons" :class="{ 'dark-theme': isDarkMode }" @click="switchTabs('history')">
         History
       </button>
@@ -32,7 +33,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="stock in filteredStocks" :key="stock.ticker" :class="{ 'dark-tr': isDarkMode, 'light-tr': !isDarkMode }">
+              <tr v-for="stock in filteredStocks" :key="stock.symbolName"
+                :class="{ 'dark-tr': isDarkMode, 'light-tr': !isDarkMode }">
                 <td class="px-2">{{ stock.symbolName }}</td>
                 <td class="px-2">{{ stock.price }}</td>
                 <td class="px-2">{{ stock.chg }}</td>
@@ -67,7 +69,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr :class="{ 'dark-tr': isDarkMode, 'light-tr': !isDarkMode }" v-for="(item, index) in histData" :key="index">
+              <tr :class="{ 'dark-tr': isDarkMode, 'light-tr': !isDarkMode }" v-for="(item, index) in histData"
+                :key="index">
                 <td class="px-3">{{ item.positions }}</td>
                 <td class="px-3">{{ item.openDate }}</td>
                 <td class="px-3">{{ item.type }}</td>
@@ -100,10 +103,9 @@ export default {
       runSocket: false,
       searchTerm: "",
       histData: [],
-      stocks: [],
     };
   },
-  created() {
+  mounted() {
     if (this.isFakeServer) {
       this.loadDataFromJson();
     } else {
@@ -111,6 +113,13 @@ export default {
     }
   },
   methods: {
+    fetchStockTableData() {
+      const limits = {
+        limit: 1,
+        offset: 1
+      }
+      this.$store.dispatch('fetchStockTableData', { limits });
+    },
     async fetchHistoryData() {
       try {
         const response = await this.$http.get('orders/history');
@@ -119,22 +128,9 @@ export default {
         console.error('Error fetching data:', error);
       }
     },
-    async fetchStockTableData() {
-      try {
-        const response = await this.$http.get('orders', {
-          params: {
-            limit: 1,
-            offset: 1
-          }
-        });
-        if (response.status == 200) this.stocks = response.data.orders;
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    },
     async loadDataFromJson() {
       try {
-        this.stocks = stocksData;
+        this.$store.commit('setStocks', stocksData);
         this.histData = historyData;
       } catch (error) {
         console.error("Error loading data from JSON file:", error);
@@ -158,7 +154,7 @@ export default {
     },
     filteredStocks() {
       return this.stocks.filter((stock) =>
-        stock.ticker.toLowerCase().includes(this.searchTerm.toLowerCase())
+        stock.symbolName.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
     },
     layout() {
@@ -190,15 +186,17 @@ export default {
         };
       }
     },
-    isDarkMode(){
+    isDarkMode() {
       return this.$store.getters.getIsDarkMode;
     },
+    stocks() {
+      return this.$store.getters.getStocks;
+    }
   },
 };
 </script>
 
 <style scoped>
-
 input {
   border: 0.2px solid #39404b;
 }
@@ -225,6 +223,7 @@ td {
 .dark-tr:hover {
   background-color: #212529;
 }
+
 .light-tr:hover {
   background-color: #eff0f1;
 }

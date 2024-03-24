@@ -17,8 +17,8 @@
             <div class="modal-body d-flex flex-column gap-5">
               <div class="d-flex flex-column gap-2">
                 <div class="d-flex justify-content-between">
-                  <span>Bid: 178</span>
-                  <span>Ask: 179.02</span>
+                  <span>Bid: {{ bid }}</span>
+                  <span>Ask: {{ ask }}</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <span>Volume:</span>
@@ -27,17 +27,17 @@
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <span>Stop Loss:</span>
-                  <input type="checkbox" />
+                  <input type="checkbox" v-model="stopLoss"/>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <span>Take Profit:</span>
-                  <input type="checkbox" />
+                  <input type="checkbox" v-model="takeProfit"/>
                 </div>
               </div>
               <div class="d-flex flex-column quantity-grp py-4 gap-1">
                 <div class="d-flex justify-content-between align-items-center">
                   <span>Quantity:</span>
-                  <span>0.01 Units</span>
+                  <span>{{ volume }} Units</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <span>Required margin:</span>
@@ -61,26 +61,28 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn p-0 w-100 footer-font" :class="`${btnClass}`" @click="closeModal">
+              <button type="button" class="btn p-0 w-100 footer-font" :class="`${btnClass}`" @click="createOrder">
                 {{ btnVal }}
                 <br />
-                178.8
+                {{ bid }}
               </button>
             </div>
           </div>
         </div>
-        <div class="d-flex gap-2 w-100 p-2" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }" v-if="!isModalOpen">
-          <select class="category p-1" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }" v-model="selectedCategory">
+        <div class="d-flex gap-2 w-100 p-2" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }"
+          v-if="!isModalOpen">
+          <select class="category p-1" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }"
+            v-model="selectedCategory">
             <option value="all">All</option>
             <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
           </select>
-          <div class="fav-grp d-flex align-items-center gap-1 p-1" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }"
-            @click="toggleShoFav()">
+          <div class="fav-grp d-flex align-items-center gap-1 p-1"
+            :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }" @click="toggleShoFav()">
             <input type="checkbox" v-model="showFav">
             <label for="checkbox">favourites</label>
           </div>
-          <input type="text" class="w-100" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }" v-model="searchQuery"
-            placeholder="Search...">
+          <input type="text" class="w-100" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }"
+            v-model="searchQuery" placeholder="Search...">
         </div>
         <div class="w-100 h-100 overflow-auto" v-if="!isModalOpen">
           <table class="table table-hover">
@@ -89,11 +91,11 @@
                 <th class="fw-semibold" :class="{ 'dark-symbol-table text-white': isDarkMode }">Symbol</th>
                 <th class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">Last</th>
                 <th class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">Change</th>
-                <th class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">Change Percent</th>
+                <th class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">Change %</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(asset, index) in filteredAssets" :key="asset.s" @click="toggleRowContent(asset)">
+              <tr v-for="(asset, index) in filteredAssets" :key="asset.s" @click.stop="toggleRowContent(asset)">
                 <td :colspan="4" v-if="isSelected(asset)" :class="{ 'dark-symbol-table': isDarkMode }">
                   <div class="buySell d-flex flex-column" :class="{ 'dark-symbol-table': isDarkMode }">
                     <div class="fw-semibold d-flex justify-content-between" :class="{ 'text-white': isDarkMode }">
@@ -161,14 +163,14 @@
                       </div>
                     </div>
                     <div class="d-flex text-white">
-                      <div class="bg-danger d-flex flex-column gap-3 w-100 p-2" @click="sellItem(asset)">
+                      <div class="bg-danger d-flex flex-column gap-3 w-100 p-2" @click="generateOrder(asset, 'sell')">
                         <div class="d-flex justify-content-between">
                           Sell
                           <img src="src/assets/down.png" class="arrowIcon" alt="icon" />
                         </div>
                         <span class="buySellSpan d-flex justify-content-start">{{ assetVal(asset.p, 'low') }}</span>
                       </div>
-                      <div class="bg-success d-flex flex-column gap-3 w-100 p-2" @click="buyItem(asset)">
+                      <div class="bg-success d-flex flex-column gap-3 w-100 p-2" @click="generateOrder(asset, 'buy')">
                         <div class="d-flex justify-content-between">
                           <img src="src/assets/up.png" class="arrowIcon" alt="icon" />
                           Buy
@@ -184,13 +186,15 @@
                         High {{ assetVal(asset.p, 'high') }}
                       </button>
                     </div>
-                    <div class="inpbox">
-                      <button @click.stop="handleDecrement('sellVal')" class="inc-dec-btn rounded-start-1" :class="{ 'inc-dec-dark': isDarkMode }">
+                    <div class="inpbox" @click.stop>
+                      <button @click.stop="handleSum('Decrement')" class="inc-dec-btn rounded-start-1"
+                        :class="{ 'inc-dec-dark': isDarkMode }">
                         -
                       </button>
-                      <input class="sell-val" :class="{ 'sel-val-dark': isDarkMode }" type="text" @input="handleInput('sellVal')" @blur="handleBlur('sellVal')"
-                        v-model="sellVal" />
-                      <button @click.stop="handleIncrement('sellVal')" class="inc-dec-btn rounded-end-1" :class="{ 'inc-dec-dark': isDarkMode }">
+                      <input class="sell-val" :class="{ 'sel-val-dark': isDarkMode }" type="text"
+                        @input="handleInput('sellVal')" @blur="handleBlur('sellVal')" v-model="sellVal" />
+                      <button @click.stop="handleSum('Increment')" class="inc-dec-btn rounded-end-1"
+                        :class="{ 'inc-dec-dark': isDarkMode }">
                         +
                       </button>
                     </div>
@@ -264,7 +268,7 @@
                   {{ asset.v }}
                 </td>
                 <td v-if="!isSelected(asset)" class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">
-                  {{ asset.chgPercent }}
+                  {{ asset.changePercentage }}
                 </td>
               </tr>
             </tbody>
@@ -296,6 +300,11 @@ export default {
       searchQuery: "",
       isInfoSection: false,
       showFav: false,
+      bid: 0,
+      ask: 0,
+      cureentAsset: null,
+      takeProfit: false,
+      stopLoss: false
     };
   },
   mounted() {
@@ -315,23 +324,56 @@ export default {
       }
       this.$store.dispatch('fetchSymbolsData', { limits });
     },
-    async fetchAssetCategory(){
+    async fetchAssetCategory() {
       try {
         const response = await this.$http.get('symbols');
-        if(response.status == 200){
+        if (response.status == 200) {
           this.categories = response.data;
         } else {
           console.log("Something went wrong");
         }
       }
-      catch(error) {
+      catch (error) {
         console.error('Error fetching Categories:', error);
       }
     },
-    async sendAssetInfo(asset, action) {
-      const response = await this.$http.post(`createOrder/${action}`, asset);
-      if (response.status == 200) {
-        console.log(`Asset ${action} successful`, asset);
+    async createOrder() {
+      const asset = this.generateOrderPayload();
+      this.$store.dispatch('createOrder', { asset });
+      this.closeModal();
+    },
+    generateOrderPayload(){
+      const {change, changePercentage, p, symbolId, s} = this.cureentAsset
+      const orderType = this.btnVal == 'buy' ? 1 : 2;
+      return {
+        price: p,
+        chg: change,
+        chgPercentage: changePercentage,
+        type: orderType,
+        volume: this.volume,
+        volumePrice: 0,
+        mktCap: 0,
+        pe: 0,
+        epsTim: 0,
+        employees: 0,
+        sector: 'some sector',
+        position: 0,
+        slPrice: 0,
+        tpPrice: 0,
+        openPrice: 0,
+        marketPrice: 0,
+        commission: 0,
+        swaps: 0,
+        grossProfit: 0,
+        bid: this.bid,
+        ask: this.ask,
+        stopLoss: this.stopLoss,
+        takeProfit: this.takeProfit,
+        spread: 0,
+        spread_Pips: 0,
+        pipValue: 0,
+        symbolId: symbolId,
+        symbolName: s
       }
     },
     toggleShoFav() {
@@ -357,7 +399,7 @@ export default {
     },
     handleDataUpdated(data) {
       const processedData = JSON.parse(data).data;
-      if (processedData && processedData.length > 0 ) this.$store.dispatch('updateSymbolsData', { receivedData: processedData });
+      if (processedData && processedData.length > 0) this.$store.dispatch('updateSymbolsData', { receivedData: processedData });
     },
     loadDataFromJson() {
       try {
@@ -382,42 +424,52 @@ export default {
       }
     },
     handleBlur(val) {
-      if (val == "vol") {
-        if (!this.volume.trim()) {
+      if (val === "vol") {
+        let volume = parseFloat(this.volume);
+        if (isNaN(volume) || volume <= 0) {
           this.volume = "0.01";
+        } else {
+          this.volume = volume.toString();
         }
       } else {
-        if (!this.sellVal.trim()) {
+        let sellVal = parseFloat(this.sellVal);
+        if (isNaN(sellVal) || sellVal <= 0) {
           this.sellVal = "0.01";
+        } else {
+          this.sellVal = sellVal.toString();
         }
       }
     },
-    handleIncrement() {
-      this.sellVal = (parseFloat(this.sellVal) + 0.01).toFixed(2);
-    },
-    handleDecrement() {
+    handleSum(type) {
+      if (type == 'Increment') {
+        this.sellVal = (parseFloat(this.sellVal) + 0.01).toFixed(2);
+        return;
+      }
       if (parseFloat(this.sellVal) > 0.01) {
         this.sellVal = (parseFloat(this.sellVal) - 0.01).toFixed(2);
       }
     },
-    buyItem(item) {
+    generateOrder(asset, type) {
+      this.cureentAsset = asset;
+      if (type == 'buy') {
+        this.btnClass = "btn-success";
+        this.btnVal = "Buy";
+      } else {
+        this.btnClass = "btn-danger bg-danger";
+        this.btnVal = "Sell";
+      }
+      this.bid = this.assetVal(asset.p, 'high')
+      this.ask = this.assetVal(asset.p, 'low')
       this.isModalOpen = true;
-      this.btnClass = "btn-success";
-      this.btnVal = "Buy";
-      if (!this.isFakeServer) this.sendAssetInfo(item, 'buy');
-    },
-    sellItem(item) {
-      this.btnClass = "btn-danger bg-danger";
-      this.isModalOpen = true;
-      this.btnVal = "Sell";
-      if (!this.isFakeServer) this.sendAssetInfo(item, 'sell');
     },
     closeModal() {
       this.$emit("graph-data-change", false);
       this.selectedRow = null;
       this.isModalOpen = !this.isModalOpen;
+      this.volume = 0.01;
+      this.cureentAsset = null;
     },
-    assetVal(price, type){
+    assetVal(price, type) {
       if (type == 'high') return price + 0.01
       return price - 0.01
     },
@@ -493,7 +545,7 @@ export default {
     isDarkMode() {
       return this.$store.getters.getIsDarkMode;
     },
-    symbolsData(){
+    symbolsData() {
       return this.$store.getters.getSymbolsData;
     },
   },

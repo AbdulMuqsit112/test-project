@@ -166,11 +166,7 @@ const store = new Vuex.Store({
     },
     async createOrder({state }, { asset }) {
       try {
-        const response = state.$http.post('orders', {
-          params: {
-            ...asset
-          },
-        });
+        const response = await state.$http.post('orders', asset);
         if (response.status == 200) {
           const limits = {
             limit: 1,

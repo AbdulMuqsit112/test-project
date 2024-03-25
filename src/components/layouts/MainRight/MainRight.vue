@@ -22,16 +22,16 @@
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <span>Volume:</span>
-                  <input type="number" step="0.01" @input="handleInput('vol')" @blur="handleBlur('vol')"
+                  <input type="number" step="0.01" @input="handleInput($event, 'vol')" @blur="handleBlur('vol')"
                     v-model="volume" class="vol" :class="{ 'dark-vol': isDarkMode }" />
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <span>Stop Loss:</span>
-                  <input type="checkbox" v-model="stopLoss"/>
+                  <input type="checkbox" v-model="stopLoss" />
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <span>Take Profit:</span>
-                  <input type="checkbox" v-model="takeProfit"/>
+                  <input type="checkbox" v-model="takeProfit" />
                 </div>
               </div>
               <div class="d-flex flex-column quantity-grp py-4 gap-1">
@@ -192,7 +192,7 @@
                         -
                       </button>
                       <input class="sell-val" :class="{ 'sel-val-dark': isDarkMode }" type="text"
-                        @input="handleInput('sellVal')" @blur="handleBlur('sellVal')" v-model="sellVal" />
+                        @input="handleInput($event, 'sellVal')" @blur="handleBlur('sellVal')" v-model="sellVal" />
                       <button @click.stop="handleSum('Increment')" class="inc-dec-btn rounded-end-1"
                         :class="{ 'inc-dec-dark': isDarkMode }">
                         +
@@ -342,13 +342,17 @@ export default {
       this.$store.dispatch('createOrder', { asset });
       this.closeModal();
     },
-    generateOrderPayload(){
-      const {change, changePercentage, p, symbolId, s} = this.cureentAsset
-      const orderType = this.btnVal == 'buy' ? 1 : 2;
+    generateOrderPayload() {
+      const { change, changePercentage, p, symbolId } = this.cureentAsset;
+      const percentageNumber = parseFloat(changePercentage.replace('%', ''));
+      const orderType = this.btnVal == 'Buy' ? 1 : 2;
+      const matchingObject = this.categories.find(obj => obj.id === symbolId);
+      let name = '';
+      if (matchingObject) name = matchingObject.name;
       return {
         price: p,
         chg: change,
-        chgPercentage: changePercentage,
+        chgPercentage: percentageNumber,
         type: orderType,
         volume: this.volume,
         volumePrice: 0,
@@ -356,7 +360,7 @@ export default {
         pe: 0,
         epsTim: 0,
         employees: 0,
-        sector: 'some sector',
+        sector: 'someSector',
         position: 0,
         slPrice: 0,
         tpPrice: 0,
@@ -373,7 +377,7 @@ export default {
         spread_Pips: 0,
         pipValue: 0,
         symbolId: symbolId,
-        symbolName: s
+        symbolName: name
       }
     },
     toggleShoFav() {

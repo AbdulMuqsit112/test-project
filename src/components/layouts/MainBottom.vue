@@ -30,10 +30,11 @@
                 <th class="px-2">EPS (TTM)</th>
                 <th class="px-2">Employees</th>
                 <th class="px-2">Sector</th>
+                <th class="px-2">close Order</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="stock in filteredStocks" :key="stock.symbolName"
+              <tr v-for="stock in filteredStocks" :key="stock.id"
                 :class="{ 'dark-tr': isDarkMode, 'light-tr': !isDarkMode }">
                 <td class="px-2">{{ stock.symbolName }}</td>
                 <td class="px-2">{{ stock.price }}</td>
@@ -47,6 +48,23 @@
                 <td class="px-2">{{ stock.epsTim }}</td>
                 <td class="px-2">{{ stock.employees }}</td>
                 <td class="px-2">{{ stock.sector }}</td>
+                <td class="px-2 text-center text-danger">
+                  <div class="position-relative">
+                    <span class="cursor-pointer" @click="showModal(stock.id)">
+                      <i class="fas fa-times"></i>
+                    </span>
+                    <div v-if="isModalVisible && stock.id === selectedStockSymbol"
+                      class="tooltip-content d-flex flex-column gap-1 text-sm"
+                      :class="{ 'dark-bg': isDarkMode, 'light-bg': !isDarkMode }">
+                      <p>Are you sure?</p>
+                      <span class="d-flex gap-2">
+                        <button class="btn bg-danger btn-danger text-xs px-2" @click="hideModal">Cancel</button>
+                        <button class="btn btn-success text-xs px-3"
+                          @click="confirmDelete(stock.id, stock.closePrice)">Ok</button>
+                      </span>
+                    </div>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -71,9 +89,16 @@
             <tbody>
               <tr :class="{ 'dark-tr': isDarkMode, 'light-tr': !isDarkMode }" v-for="(item, index) in histData"
                 :key="index">
-                <td class="px-3">{{ item.positions }}</td>
+                <td class="px-3">{{ item.position }}</td>
                 <td class="px-3">{{ item.openDate }}</td>
-                <td class="px-3">{{ item.type }}</td>
+                <td class="px-3">
+                  <span class="text-danger py-1 px-2" v-if="item.type == 2">
+                    Sell
+                  </span>
+                  <span class="text-success py-1 px-2" v-if="item.type == 1">
+                    Buy
+                  </span>
+                </td>
                 <td class="px-3">{{ item.volume }}</td>
                 <td class="px-3">{{ item.slPrice }}</td>
                 <td class="px-3">{{ item.tpPrice }}</td>
@@ -103,6 +128,8 @@ export default {
       runSocket: false,
       searchTerm: "",
       histData: [],
+      selectedStockSymbol: null,
+      isModalVisible: false,
     };
   },
   mounted() {
@@ -113,6 +140,32 @@ export default {
     }
   },
   methods: {
+    showModal(symbolName) {
+      this.selectedStockSymbol = symbolName;
+      this.isModalVisible = true;
+    },
+    hideModal() {
+      this.isModalVisible = false;
+    },
+    async confirmDelete(id, price) {
+      try {
+        const response = await this.$http.delete('orders/close', {
+          params: {
+            closePrice: price,
+            orderId: id,
+          }
+        });
+        if (response.status == 200) {
+          this.fetchStockTableData()
+          this.fetchHistoryData();
+        } else {
+          console.log('something went wrong', response.message);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+      this.hideModal();
+    },
     fetchStockTableData() {
       const limits = {
         limit: 1,
@@ -123,7 +176,7 @@ export default {
     async fetchHistoryData() {
       try {
         const response = await this.$http.get('orders/history');
-        if (response.status == 200) this.histData = response.data;
+        if (response.status == 200) this.histData = response.data.orders;
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -197,8 +250,26 @@ export default {
 </script>
 
 <style scoped>
+.tooltip-content {
+  position: absolute;
+  top: -35%;
+  left: -90%;
+  border-radius: 4px;
+  padding: 8px;
+  z-index: 1;
+}
+
+
 input {
   border: 0.2px solid #39404b;
+}
+
+.dark-bg {
+  background-color: #2a2e39;
+}
+
+.light-bg {
+  background-color: #dde2e5;
 }
 
 table {

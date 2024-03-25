@@ -30,7 +30,7 @@ export default {
     },
     setSocketEvents(){
       this.socket.on("ReceiveMessage", (data) => {
-        // console.log("Received data update:", data);
+        console.log("Received data update:", data);
         this.$emit("symbolDataUpdated", data);
       });
       this.socket.onclose(() => this.startConnection());

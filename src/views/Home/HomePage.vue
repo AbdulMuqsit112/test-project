@@ -28,7 +28,7 @@ import leftBar from "../../components/layouts/leftBar.vue";
 import HeaderComponent from "../../components/layouts/HeaderComponent.vue";
 import MainGraphic from "../../components/layouts/MainGraphic.vue";
 import MainBottom from "../../components/layouts/MainBottom.vue";
-import MainRight from "../../components/layouts/MainRight.vue";
+import MainRight from "../../components/layouts/MainRight/MainRight.vue";
 export default {
   name: "HomePage2",
   components: {

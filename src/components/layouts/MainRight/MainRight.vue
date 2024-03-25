@@ -17,27 +17,27 @@
             <div class="modal-body d-flex flex-column gap-5">
               <div class="d-flex flex-column gap-2">
                 <div class="d-flex justify-content-between">
-                  <span>Bid: 178</span>
-                  <span>Ask: 179.02</span>
+                  <span>Bid: {{ bid }}</span>
+                  <span>Ask: {{ ask }}</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <span>Volume:</span>
-                  <input type="number" step="0.01" @input="handleInput('vol')" @blur="handleBlur('vol')"
+                  <input type="number" step="0.01" @input="handleInput($event, 'vol')" @blur="handleBlur('vol')"
                     v-model="volume" class="vol" :class="{ 'dark-vol': isDarkMode }" />
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <span>Stop Loss:</span>
-                  <input type="checkbox" />
+                  <input type="checkbox" v-model="stopLoss" />
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <span>Take Profit:</span>
-                  <input type="checkbox" />
+                  <input type="checkbox" v-model="takeProfit" />
                 </div>
               </div>
               <div class="d-flex flex-column quantity-grp py-4 gap-1">
                 <div class="d-flex justify-content-between align-items-center">
                   <span>Quantity:</span>
-                  <span>0.01 Units</span>
+                  <span>{{ volume }} Units</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                   <span>Required margin:</span>
@@ -61,27 +61,28 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn p-0 w-100 footer-font" :class="`${btnClass}`" @click="closeModal">
+              <button type="button" class="btn p-0 w-100 footer-font" :class="`${btnClass}`" @click="createOrder">
                 {{ btnVal }}
                 <br />
-                178.8
+                {{ bid }}
               </button>
-              <!-- Additional buttons or actions -->
             </div>
           </div>
         </div>
-        <div class="d-flex gap-2 w-100 p-2" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }" v-if="!isModalOpen">
-          <select class="category p-1" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }" v-model="selectedCategory">
+        <div class="d-flex gap-2 w-100 p-2" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }"
+          v-if="!isModalOpen">
+          <select class="category p-1" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }"
+            v-model="selectedCategory">
             <option value="all">All</option>
-            <option v-for="category in categories" :value="category">{{ category }}</option>
+            <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
           </select>
-          <div class="fav-grp d-flex align-items-center gap-1 p-1" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }"
-            @click="toggleShoFav()">
+          <div class="fav-grp d-flex align-items-center gap-1 p-1"
+            :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }" @click="toggleShoFav()">
             <input type="checkbox" v-model="showFav">
             <label for="checkbox">favourites</label>
           </div>
-          <input type="text" class="w-100" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }" v-model="searchQuery"
-            placeholder="Search...">
+          <input type="text" class="w-100" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }"
+            v-model="searchQuery" placeholder="Search...">
         </div>
         <div class="w-100 h-100 overflow-auto" v-if="!isModalOpen">
           <table class="table table-hover">
@@ -90,11 +91,11 @@
                 <th class="fw-semibold" :class="{ 'dark-symbol-table text-white': isDarkMode }">Symbol</th>
                 <th class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">Last</th>
                 <th class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">Change</th>
-                <th class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">Change Percent</th>
+                <th class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">Change %</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(asset, index) in filteredAssets" :key="asset.s" @click="toggleRowContent(asset)">
+              <tr v-for="(asset, index) in filteredAssets" :key="asset.s" @click.stop="toggleRowContent(asset)">
                 <td :colspan="4" v-if="isSelected(asset)" :class="{ 'dark-symbol-table': isDarkMode }">
                   <div class="buySell d-flex flex-column" :class="{ 'dark-symbol-table': isDarkMode }">
                     <div class="fw-semibold d-flex justify-content-between" :class="{ 'text-white': isDarkMode }">
@@ -162,36 +163,38 @@
                       </div>
                     </div>
                     <div class="d-flex text-white">
-                      <div class="bg-danger d-flex flex-column gap-3 w-100 p-2" @click="sellItem(asset)">
+                      <div class="bg-danger d-flex flex-column gap-3 w-100 p-2" @click="generateOrder(asset, 'sell')">
                         <div class="d-flex justify-content-between">
                           Sell
                           <img src="src/assets/down.png" class="arrowIcon" alt="icon" />
                         </div>
-                        <span class="buySellSpan">178.95</span>
+                        <span class="buySellSpan d-flex justify-content-start">{{ assetVal(asset.p, 'low') }}</span>
                       </div>
-                      <div class="bg-success d-flex flex-column gap-3 w-100 p-2" @click="buyItem(asset)">
+                      <div class="bg-success d-flex flex-column gap-3 w-100 p-2" @click="generateOrder(asset, 'buy')">
                         <div class="d-flex justify-content-between">
                           <img src="src/assets/up.png" class="arrowIcon" alt="icon" />
                           Buy
                         </div>
-                        <span class="buySellSpan d-flex justify-content-end">179.01</span>
+                        <span class="buySellSpan d-flex justify-content-end">{{ assetVal(asset.p, 'high') }}</span>
                       </div>
                     </div>
                     <div class="d-flex justify-content-between">
                       <button class="text-danger buySellBtn">
-                        Low 173.20
+                        Low {{ assetVal(asset.p, 'low') }}
                       </button>
                       <button class="text-success buySellBtn">
-                        High 179.74
+                        High {{ assetVal(asset.p, 'high') }}
                       </button>
                     </div>
-                    <div class="inpbox">
-                      <button @click="handleDecrement('sellVal')" class="inc-dec-btn rounded-start-1" :class="{ 'inc-dec-dark': isDarkMode }">
+                    <div class="inpbox" @click.stop>
+                      <button @click.stop="handleSum('Decrement')" class="inc-dec-btn rounded-start-1"
+                        :class="{ 'inc-dec-dark': isDarkMode }">
                         -
                       </button>
-                      <input class="sell-val" :class="{ 'sel-val-dark': isDarkMode }" type="text" @input="handleInput('sellVal')" @blur="handleBlur('sellVal')"
-                        v-model="sellVal" />
-                      <button @click="handleIncrement('sellVal')" class="inc-dec-btn rounded-end-1" :class="{ 'inc-dec-dark': isDarkMode }">
+                      <input class="sell-val" :class="{ 'sel-val-dark': isDarkMode }" type="text"
+                        @input="handleInput($event, 'sellVal')" @blur="handleBlur('sellVal')" v-model="sellVal" />
+                      <button @click.stop="handleSum('Increment')" class="inc-dec-btn rounded-end-1"
+                        :class="{ 'inc-dec-dark': isDarkMode }">
                         +
                       </button>
                     </div>
@@ -265,7 +268,7 @@
                   {{ asset.v }}
                 </td>
                 <td v-if="!isSelected(asset)" class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">
-                  {{ asset.chgPercent }}
+                  {{ asset.changePercentage }}
                 </td>
               </tr>
             </tbody>
@@ -279,13 +282,13 @@
 </template>
 
 <script>
-import symblRow from "../../assets/symbolRow.json";
-import socketMixin from "../../mixins/socketMixin";
+import { onMounted } from "vue";
+import symblRow from "../../../assets/symbolRow.json";
+import socketMixin from "../../../mixins/socketMixin";
 export default {
   mixins: [socketMixin],
   data() {
     return {
-      asssetArr: [],
       sellVal: 0.01,
       isModalOpen: false,
       volume: 0.01,
@@ -297,29 +300,84 @@ export default {
       searchQuery: "",
       isInfoSection: false,
       showFav: false,
+      bid: 0,
+      ask: 0,
+      cureentAsset: null,
+      takeProfit: false,
+      stopLoss: false
     };
   },
-  created() {
+  mounted() {
     if (this.isFakeServer) {
       this.loadDataFromJson();
     } else {
-      this.$on("symbolDataUpdated", this.handleDataUpdated);
+      this.fetchAssetCategory();
       this.fetchTableData();
+      this.$on("symbolDataUpdated", this.handleDataUpdated);
     }
   },
   methods: {
-    async fetchTableData() {
+    fetchTableData() {
+      const limits = {
+        limit: 1,
+        offset: 1
+      }
+      this.$store.dispatch('fetchSymbolsData', { limits });
+    },
+    async fetchAssetCategory() {
       try {
-        const response = await this.$http.get('getList');
-        if (response.status == 200) this.asssetArr = response.data;
-      } catch (error) {
-        console.error('Error fetching data:', error);
+        const response = await this.$http.get('symbols');
+        if (response.status == 200) {
+          this.categories = response.data;
+        } else {
+          console.log("Something went wrong");
+        }
+      }
+      catch (error) {
+        console.error('Error fetching Categories:', error);
       }
     },
-    async sendAssetInfo(asset, action) {
-      const response = await this.$http.post(`createOrder/${action}`, asset);
-      if (response.status == 200) {
-        console.log(`Asset ${action} successful`, asset);
+    async createOrder() {
+      const asset = this.generateOrderPayload();
+      this.$store.dispatch('createOrder', { asset });
+      this.closeModal();
+    },
+    generateOrderPayload() {
+      const { change, changePercentage, p, symbolId } = this.cureentAsset;
+      const percentageNumber = parseFloat(changePercentage.replace('%', ''));
+      const orderType = this.btnVal == 'Buy' ? 1 : 2;
+      const matchingObject = this.categories.find(obj => obj.id === symbolId);
+      let name = '';
+      if (matchingObject) name = matchingObject.name;
+      return {
+        price: p,
+        chg: change,
+        chgPercentage: percentageNumber,
+        type: orderType,
+        volume: this.volume,
+        volumePrice: 0,
+        mktCap: 0,
+        pe: 0,
+        epsTim: 0,
+        employees: 0,
+        sector: 'someSector',
+        position: 0,
+        slPrice: 0,
+        tpPrice: 0,
+        openPrice: 0,
+        marketPrice: 0,
+        commission: 0,
+        swaps: 0,
+        grossProfit: 0,
+        bid: this.bid,
+        ask: this.ask,
+        stopLoss: this.stopLoss,
+        takeProfit: this.takeProfit,
+        spread: 0,
+        spread_Pips: 0,
+        pipValue: 0,
+        symbolId: symbolId,
+        symbolName: name
       }
     },
     toggleShoFav() {
@@ -334,34 +392,25 @@ export default {
       }
     },
     isSelected(asset) {
-      return this.selectedData.some(selectedAsset => selectedAsset.s === asset.s)
+      return this.selectedData.some(selectedAsset => selectedAsset.id === asset.id)
     },
     toggleInfoSection() {
       this.isInfoSection = !this.isInfoSection;
     },
     toggleRowContent(asset) {
-      this.$store.commit('setSelctedDate', asset);
+      this.$store.commit('setSelctedData', asset);
       this.isInfoSection = false;
     },
     handleDataUpdated(data) {
-      this.updateData(JSON.parse(data).data);
+      const processedData = JSON.parse(data).data;
+      if (processedData && processedData.length > 0) this.$store.dispatch('updateSymbolsData', { receivedData: processedData });
     },
     loadDataFromJson() {
       try {
-        this.asssetArr = symblRow.assets;
-        this.categories = [...new Set(this.asssetArr.map(asset => asset.category))];
+        this.symbolsData = symblRow.assets;
+        this.categories = [...new Set(this.symbolsData.map(asset => asset.category))];
       } catch (error) {
         console.error("Error loading data from JSON file:", error);
-      }
-    },
-    updateData(receivedData) {
-      for (const item of receivedData) {
-        const index = this.asssetArr.findIndex(d => d.s === item.s);
-        if (index !== -1) {
-          this.$set(this.asssetArr, index, item);
-        } else {
-          this.asssetArr.push(item);
-        }
       }
     },
     handleInput(event, val) {
@@ -379,40 +428,54 @@ export default {
       }
     },
     handleBlur(val) {
-      if (val == "vol") {
-        if (!this.volume.trim()) {
+      if (val === "vol") {
+        let volume = parseFloat(this.volume);
+        if (isNaN(volume) || volume <= 0) {
           this.volume = "0.01";
+        } else {
+          this.volume = volume.toString();
         }
       } else {
-        if (!this.sellVal.trim()) {
+        let sellVal = parseFloat(this.sellVal);
+        if (isNaN(sellVal) || sellVal <= 0) {
           this.sellVal = "0.01";
+        } else {
+          this.sellVal = sellVal.toString();
         }
       }
     },
-    handleIncrement() {
-      this.sellVal = (parseFloat(this.sellVal) + 0.01).toFixed(2);
-    },
-    handleDecrement() {
+    handleSum(type) {
+      if (type == 'Increment') {
+        this.sellVal = (parseFloat(this.sellVal) + 0.01).toFixed(2);
+        return;
+      }
       if (parseFloat(this.sellVal) > 0.01) {
         this.sellVal = (parseFloat(this.sellVal) - 0.01).toFixed(2);
       }
     },
-    buyItem(item) {
+    generateOrder(asset, type) {
+      this.cureentAsset = asset;
+      if (type == 'buy') {
+        this.btnClass = "btn-success";
+        this.btnVal = "Buy";
+      } else {
+        this.btnClass = "btn-danger bg-danger";
+        this.btnVal = "Sell";
+      }
+      this.bid = this.assetVal(asset.p, 'high')
+      this.ask = this.assetVal(asset.p, 'low')
       this.isModalOpen = true;
-      this.btnClass = "btn-success";
-      this.btnVal = "Buy";
-      if (!this.isFakeServer) this.sendAssetInfo(item, 'buy');
-    },
-    sellItem(item) {
-      this.btnClass = "btn-danger bg-danger";
-      this.isModalOpen = true;
-      this.btnVal = "Sell";
-      if (!this.isFakeServer) this.sendAssetInfo(item, 'sell');
     },
     closeModal() {
       this.$emit("graph-data-change", false);
       this.selectedRow = null;
       this.isModalOpen = !this.isModalOpen;
+      this.volume = 0.01;
+      this.cureentAsset = null;
+    },
+    assetVal(price, type) {
+      if (type == 'high') return price + 0.01
+      return price - 0.01
     },
   },
   computed: {
@@ -461,12 +524,12 @@ export default {
         });
       } else {
         if (this.selectedCategory === 'all') {
-          return this.asssetArr.filter(asset => {
+          return this.symbolsData.filter(asset => {
             return asset.s.toLowerCase().includes(lowerCaseQuery);
           });
         } else {
-          return this.asssetArr.filter(asset => {
-            return asset.category === this.selectedCategory && asset.s.toLowerCase().includes(lowerCaseQuery);
+          return this.symbolsData.filter(asset => {
+            return asset.symbolId === this.selectedCategory && asset.s.toLowerCase().includes(lowerCaseQuery);
           });
         }
       }
@@ -486,293 +549,13 @@ export default {
     isDarkMode() {
       return this.$store.getters.getIsDarkMode;
     },
+    symbolsData() {
+      return this.$store.getters.getSymbolsData;
+    },
   },
 };
 </script>
 
 <style scoped>
-.fav-grp {
-  color: #6c7293;
-  border: 0.2px solid #39404b;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.info-block {
-  border-top: 1px solid;
-  font-weight: 400;
-}
-
-.light-star-2 {
-  margin-block: -3px;
-  width: 28px;
-  height: 20px;
-}
-
-.star-2 {
-  margin-block: -8.5px;
-  width: 28px;
-  height: 31px;
-}
-
-.star {
-  margin-block: -4.5px;
-  width: 28px;
-  height: 31px;
-}
-
-.info-icon {
-  width: 23px;
-  height: 20px;
-}
-
-.add-icon {
-  width: 20px;
-  height: 18px
-}
-
-.grp-icon {
-  width: 20px;
-  height: 16px;
-}
-
-.buySell {
-  padding-block: 8px;
-  font-size: small;
-  font-weight: 800;
-}
-
-.buySellSpan {
-  font-size: x-small;
-  font-weight: 400;
-}
-
-.buySellBtn {
-  border: 1px solid;
-  padding: 4px 8px;
-  border-radius: 4px;
-  background-color: inherit;
-}
-
-.inpbox {
-  position: relative;
-  bottom: 48px;
-  display: flex;
-  justify-content: center;
-}
-
-.sell-val {
-  width: 15%;
-  text-align: center;
-  border: none;
-}
-.sel-val-dark {
-  background-color: #22252e;
-  color: #6c7293;
-}
-
-.vol {
-  padding: 4px;
-  text-align: center;
-  border: none;
-}
-.dark-vol {
-  background-color: #22252e;
-  color: white;
-}
-.inc-dec-btn {
-  border-color: transparent;
-  padding: 6px 10px;
-}
-.inc-dec-dark {
-  color: #c5c3c1;
-  background-color: #3d4353
-}
-.arrowIcon {
-  width: 15px;
-  height: 15px;
-}
-
-.text-white {
-  color: #fff;
-}
-
-.table {
-  margin-bottom: 0;
-  color: #6c7293;
-}
-
-.table thead th {
-  border-top: 0;
-  border-bottom-width: 1px;
-  font-weight: 500;
-  color: #6c7293;
-}
-
-.table tbody td {
-  /* background-color: #191c24; */
-  color: #6c7293;
-  font-weight: 300;
-}
-
-.table thead th {
-  vertical-align: middle;
-  border-bottom: 2px solid #2c2e33;
-}
-
-.table tr {
-  border-color: #39404b;
-  cursor: pointer;
-}
-
-.table tr:hover {
-  background-color: #212529;
-}
-
-.table th {
-  vertical-align: middle;
-  line-height: 1;
-  white-space: nowrap;
-  cursor: auto;
-}
-
-.table td {
-  vertical-align: middle;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.symIcon {
-  width: 8px;
-  height: 8px;
-}
-
-.modal-wrapper {
-  overflow-y: auto;
-  padding: 15px;
-  border: 1px solid;
-  border-color: #39404b;
-  background-color: inherit;
-}
-
-.modal-header {
-  border: none;
-}
-
-.modal-header button {
-  color: inherit;
-  border: none;
-}
-
-.modal-footer {
-  justify-content: center;
-  border: none;
-}
-
-.quantity-grp {
-  border-block: 2px solid #39404b;
-  color: #6c7293;
-}
-
-.category {
-  color: #6c7293;
-  border: 0.2px solid #39404b;
-  border-radius: 4px;
-}
-
-@media screen and (max-width: 4500px) {
-  .varaible-font {
-    font-size: xx-large !important;
-  }
-
-  .modal-body {
-    font-size: x-large;
-  }
-
-  .footer-font {
-    font-size: x-large;
-  }
-}
-
-@media screen and (max-width: 3000px) {
-  .table th {
-    font-size: small;
-  }
-
-  .table td {
-    font-size: small;
-  }
-}
-
-@media screen and (max-width: 2500px) {
-  .varaible-font {
-    font-size: x-large !important;
-  }
-
-  .modal-body {
-    font-size: larger;
-  }
-
-  .footer-font {
-    font-size: larger;
-  }
-}
-
-@media screen and (max-width: 2000px) {
-  .varaible-font {
-    font-size: larger !important;
-  }
-
-  .modal-body {
-    font-size: large;
-  }
-
-  .footer-font {
-    font-size: large;
-  }
-}
-
-@media screen and (max-width: 1500px) {
-  .varaible-font {
-    font-size: medium !important;
-  }
-
-  .modal-body {
-    font-size: small;
-  }
-
-  .footer-font {
-    font-size: small;
-  }
-
-  .table th {
-    font-size: x-small;
-  }
-
-  .table td {
-    font-size: x-small;
-  }
-}
-
-@media screen and (max-width: 1300px) {
-  .varaible-font {
-    font-size: small !important;
-  }
-
-  .modal-body {
-    font-size: x-small;
-  }
-
-  .footer-font {
-    font-size: x-small;
-  }
-
-  .table th {
-    font-size: x-small;
-  }
-
-  .table td {
-    font-size: x-small;
-  }
-}
+@import url(./mainRight.css);
 </style>

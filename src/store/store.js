@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import AxiosPlugin from '../plugins/axios'
-Vue.use(AxiosPlugin)
+import AxiosPlugin from "../plugins/axios";
+Vue.use(AxiosPlugin);
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -14,6 +14,11 @@ const store = new Vuex.Store({
     isAuthenticated: false,
     showAccountBar: true,
     isDarkMode: true,
+    symbolsData: [],
+    user: {
+      loginId: "",
+    },
+    stocks: [],
   },
   mutations: {
     changeLayout(state, newLayoutType) {
@@ -22,7 +27,7 @@ const store = new Vuex.Store({
     toggleTestMode(state) {
       state.isFakeServer = !state.isFakeServer;
     },
-    setSelctedDate(state, asset) {
+    setSelctedData(state, asset) {
       const selectedIndex = state.selectedData.findIndex(
         (selectedAsset) => selectedAsset.s == asset.s
       );
@@ -47,17 +52,31 @@ const store = new Vuex.Store({
     },
     toggleIsDarkMode(state) {
       state.isDarkMode = !state.isDarkMode;
-      this.dispatch('setAppTheme');
+      this.dispatch("setAppTheme");
+    },
+    setSymbolsData(state, data) {
+      state.symbolsData = data;
+    },
+    setSymbolItemVal(state, payload) {
+      const { item, index } = payload;
+      state.symbolsData[index].p = item.p;
+      state.symbolsData[index].v = item.v;
+    },
+    setUser(state, payload) {
+      state.user.loginId = payload;
+    },
+    setStocks(state, payload) {
+      state.stocks = payload;
     },
   },
   actions: {
     setAppTheme({ state }) {
       if (state.isDarkMode) {
-        document.body.classList.add('dark');
-        document.body.classList.remove('light');
+        document.body.classList.add("dark");
+        document.body.classList.remove("light");
       } else {
-        document.body.classList.add('light');
-        document.body.classList.remove('dark');
+        document.body.classList.add("light");
+        document.body.classList.remove("dark");
       }
     },
     getUserDetails({ commit }) {
@@ -66,7 +85,7 @@ const store = new Vuex.Store({
         const urlParams = new URLSearchParams(window.location.search);
         token = urlParams.get("token");
       }
-      if (token != "" && token != null && token != 'null') {
+      if (token != "" && token != null && token != "null") {
         localStorage.setItem("token", token);
         commit("setUserToken", token);
         commit("setIsAuthenticated", true);
@@ -74,14 +93,25 @@ const store = new Vuex.Store({
       }
       commit("setIsAuthenticated", false);
     },
+    updateSymbolsData({ state, commit }, { receivedData }) {
+      if (state.symbolsData.length > 0) {
+        for (const item of receivedData) {
+          const index = state.symbolsData.findIndex((d) => d.s === item.s);
+          if (index !== -1) {
+            commit("setSymbolItemVal", { item: item, index: index });
+          }
+        }
+      }
+    },
     async loginToServer({ state, commit }, { userObj }) {
       try {
-        const response = await state.$http.post("user/login", {...userObj});
+        const response = await state.$http.post("user/login", { ...userObj });
         if (response.status == 200) {
           let data = response.data;
           let token = data.token;
           localStorage.setItem("token", token);
           commit("setUserToken", token);
+          commit("setUser", data.login);
           commit("setIsAuthenticated", true);
           return { success: true, token: token };
         } else {
@@ -100,6 +130,57 @@ const store = new Vuex.Store({
         };
       }
     },
+    async fetchSymbolsData({ state, commit }, { limits }) {
+      try {
+        const response = await state.$http.get("symbols/history", {
+          params: {
+            limit: limits.limit,
+            offset: limits.offset,
+          },
+        });
+        if (response.status == 200) {
+          commit("setSymbolsData", response.data);
+        } else {
+          console.log("Something went Wrong", response.message);
+        }
+      } catch (error) {
+        console.error("Error fetching symbols data:", error);
+      }
+    },
+    async fetchStockTableData({state, commit }, { limits }) {
+      try {
+        const response = await state.$http.get("orders", {
+          params: {
+            limit: limits.limit,
+            offset: limits.offset1,
+          },
+        });
+        if (response.status == 200) {
+          commit("setStocks", response.data.orders);
+        } else {
+          console.log("Something went Wrong", response.message);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    },
+    async createOrder({state }, { asset }) {
+      try {
+        const response = await state.$http.post('orders', asset);
+        if (response.status == 200) {
+          const limits = {
+            limit: 1,
+            offset: 1
+          }
+          this.dispatch('fetchStockTableData', { limits });
+        } else {
+          console.log("Something went Wrong", response.message);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+      
+    }
   },
   getters: {
     getServer: (state) => state.isFakeServer,
@@ -108,6 +189,9 @@ const store = new Vuex.Store({
     getIsAuthenticated: (state) => state.isAuthenticated,
     getShowAccountBar: (state) => state.showAccountBar,
     getIsDarkMode: (state) => state.isDarkMode,
+    getSymbolsData: (state) => state.symbolsData,
+    getUser: (state) => state.user,
+    getStocks: (state) => state.stocks,
   },
 });
 

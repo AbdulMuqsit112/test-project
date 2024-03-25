@@ -1,0 +1,284 @@
+.fav-grp {
+  color: #6c7293;
+  border: 0.2px solid #39404b;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.info-block {
+  border-top: 1px solid;
+  font-weight: 400;
+}
+
+.light-star-2 {
+  margin-block: -3px;
+  width: 28px;
+  height: 20px;
+}
+
+.star-2 {
+  margin-block: -8.5px;
+  width: 28px;
+  height: 31px;
+}
+
+.star {
+  margin-block: -4.5px;
+  width: 28px;
+  height: 31px;
+}
+
+.info-icon {
+  width: 23px;
+  height: 20px;
+}
+
+.add-icon {
+  width: 20px;
+  height: 18px;
+}
+
+.grp-icon {
+  width: 20px;
+  height: 16px;
+}
+
+.buySell {
+  padding-block: 8px;
+  font-size: small;
+  font-weight: 800;
+}
+
+.buySellSpan {
+  font-size: x-small;
+  font-weight: 400;
+}
+
+.buySellBtn {
+  border: 1px solid;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: inherit;
+  font-size: smaller;
+}
+
+.inpbox {
+  position: relative;
+  bottom: 46px;
+  display: flex;
+  justify-content: center;
+}
+
+.sell-val {
+  width: 15%;
+  text-align: center;
+  border: none;
+}
+.sel-val-dark {
+  background-color: #22252e;
+  color: #6c7293;
+}
+
+.vol {
+  padding: 4px;
+  text-align: center;
+  border: none;
+}
+.dark-vol {
+  background-color: #22252e;
+  color: white;
+}
+.inc-dec-btn {
+  border-color: transparent;
+  padding: 6px 10px;
+}
+.inc-dec-dark {
+  color: #c5c3c1;
+  background-color: #3d4353;
+}
+.arrowIcon {
+  width: 15px;
+  height: 15px;
+}
+
+.text-white {
+  color: #fff;
+}
+
+.table {
+  margin-bottom: 0;
+  color: #6c7293;
+}
+
+.table thead th {
+  border-top: 0;
+  border-bottom-width: 1px;
+  font-weight: 500;
+  color: #6c7293;
+}
+
+.table tbody td {
+  color: #6c7293;
+  font-weight: 300;
+}
+
+.table thead th {
+  vertical-align: middle;
+  border-bottom: 2px solid #2c2e33;
+}
+
+.table tr {
+  border-color: #39404b;
+  cursor: pointer;
+}
+
+.table tr:hover {
+  background-color: #212529;
+}
+
+.table th {
+  vertical-align: middle;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: auto;
+}
+
+.table td {
+  vertical-align: middle;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.symIcon {
+  width: 8px;
+  height: 8px;
+}
+
+.modal-wrapper {
+  overflow-y: auto;
+  padding: 15px;
+  border: 1px solid;
+  border-color: #39404b;
+  background-color: inherit;
+}
+
+.modal-header {
+  border: none;
+}
+
+.modal-header button {
+  color: inherit;
+  border: none;
+}
+
+.modal-footer {
+  justify-content: center;
+  border: none;
+}
+
+.quantity-grp {
+  border-block: 2px solid #39404b;
+  color: #6c7293;
+}
+
+.category {
+  color: #6c7293;
+  border: 0.2px solid #39404b;
+  border-radius: 4px;
+}
+
+@media screen and (max-width: 4500px) {
+  .varaible-font {
+    font-size: xx-large !important;
+  }
+
+  .modal-body {
+    font-size: x-large;
+  }
+
+  .footer-font {
+    font-size: x-large;
+  }
+}
+
+@media screen and (max-width: 3000px) {
+  .table th {
+    font-size: small;
+  }
+
+  .table td {
+    font-size: small;
+  }
+}
+
+@media screen and (max-width: 2500px) {
+  .varaible-font {
+    font-size: x-large !important;
+  }
+
+  .modal-body {
+    font-size: larger;
+  }
+
+  .footer-font {
+    font-size: larger;
+  }
+}
+
+@media screen and (max-width: 2000px) {
+  .varaible-font {
+    font-size: larger !important;
+  }
+
+  .modal-body {
+    font-size: large;
+  }
+
+  .footer-font {
+    font-size: large;
+  }
+}
+
+@media screen and (max-width: 1500px) {
+  .varaible-font {
+    font-size: medium !important;
+  }
+
+  .modal-body {
+    font-size: small;
+  }
+
+  .footer-font {
+    font-size: small;
+  }
+
+  .table th {
+    font-size: x-small;
+  }
+
+  .table td {
+    font-size: x-small;
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  .varaible-font {
+    font-size: small !important;
+  }
+
+  .modal-body {
+    font-size: x-small;
+  }
+
+  .footer-font {
+    font-size: x-small;
+  }
+
+  .table th {
+    font-size: x-small;
+  }
+
+  .table td {
+    font-size: x-small;
+  }
+}

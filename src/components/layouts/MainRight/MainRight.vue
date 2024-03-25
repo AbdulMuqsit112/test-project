@@ -7,7 +7,7 @@
     <div class="mainBlock__content">
       <div class="mainBlock__tabsEmpty p-0" ref="Modal">
         <div class="modal-wrapper" v-if="isModalOpen" :style="modalDimensions">
-          <div class="modal-content gap-4">
+          <div class="modal-content gap-4" :class="{ 'dark-mode-text': isDarkMode, 'light-mode-text': !isDarkMode }">
             <div class="modal-header d-flex justify-content-between">
               <h5 class="varaible-font">Trade Pannel</h5>
               <button type="button" class="btn varaible-font" @click="closeModal" aria-label="Close">

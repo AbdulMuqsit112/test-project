@@ -6,6 +6,10 @@ import store from './store/store'
 import VueI18n from 'vue-i18n'
 import en from './locales/en.json'
 import es from './locales/es.json'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
 
 Vue.use(AxiosPlugin);
 Vue.use(VueI18n);

@@ -5645,3 +5645,9 @@ input[type="radio"]:checked + .sbxTableRadioField__radio:after {
 .dark-symbol-table {
   background-color: #191c24 !important;
 }
+.dark-mode-text {
+  color: #c4c9c9 !important;
+}
+.light-mode-text{
+  color: black !important;
+}

@@ -1,11 +1,11 @@
 <template>
   <header class="app-header">
-    <div class="app-header-section">
+    <div class="app-header-section" >
       <div class="app-header-box">
         <div class="favoriteAssets"></div>
       </div>
     </div>
-    <div class="app-header-section">
+    <div class="app-header-section" :class="{ 'dark-mode-text': isDarkMode, 'light-mode-text': !isDarkMode }">
       <div class="app-header-box">
         <div class="header-balances" v-if="isAccountBar">
           <div class="header-wrap">
@@ -146,10 +146,9 @@ export default {
 .margin-bar {
   padding: 1px;
 }
-
 .dark-dropdown {
-  background-color: #131722 !important;
   color: #c4c9c9;
+  background-color: #131722 !important;
 }
 
 .light-dropdown {

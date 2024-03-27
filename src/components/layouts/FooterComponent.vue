@@ -14,19 +14,19 @@
       <div class="app-footer-box">
         <div class="app-footer-time">
           <div class="title">CURRENT TIME:</div>
-          <div class="value">{{ currentDateTime }}</div>
+          <div :class="{ 'text-white': isDarkMode }" class="value">{{ currentDateTime }}</div>
         </div>
       </div>
       <div class="app-footer-box">
         <div class="app-footer-icon" @click="toggleDropdown">
           <svg v-if="layout != 3" xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 32 30" width="23" height="21">
-            <g fill="none" stroke="currentColor" transform="translate(.5 .5)">
+            <g fill="none" :stroke="isDarkMode ? '#c4c9c9': 'black'" transform="translate(.5 .5)">
               <rect width="22" height="20" rx="2"></rect>
               <path d="M0 10h11m0-10v20"></path>
             </g>
           </svg>
           <svg v-if="layout == 3" xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 32 30" width="23" height="21">
-            <g fill="none" stroke="currentColor" transform="translate(.5 .5)">
+            <g fill="none" :stroke="isDarkMode ? '#c4c9c9': 'black'" transform="translate(.5 .5)">
               <rect width="22" height="20" rx="2"></rect>
               <path d="M0 10h22M11 0v20"></path>
             </g>
@@ -35,7 +35,7 @@
         <div class="dropdown" v-show="dropdownOpen">
           <div class="icons" @click="changeLayout(1)">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 32 30" width="23" height="21">
-              <g fill="none" stroke="currentColor" transform="translate(.5 .5)">
+              <g fill="none" :stroke="isDarkMode ? '#c4c9c9': 'black'" transform="translate(.5 .5)">
                 <rect width="22" height="20" rx="2"></rect>
                 <path d="M0 10h11m0-10v20"></path>
               </g>
@@ -43,7 +43,7 @@
           </div>
           <div class="icons" @click="changeLayout(2)">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 32 30" width="23" height="21">
-              <g fill="none" stroke="currentColor" transform="translate(.5 .5)">
+              <g fill="none" :stroke="isDarkMode ? '#c4c9c9': 'black'" transform="translate(.5 .5)">
                 <rect width="22" height="20" rx="2"></rect>
                 <path d="M0 10h11m0-10v20"></path>
               </g>
@@ -51,7 +51,7 @@
           </div>
           <div class="icons" @click="changeLayout(3)">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 32 30" width="23" height="21">
-              <g fill="none" stroke="currentColor" transform="translate(.5 .5)">
+              <g fill="none" :stroke="isDarkMode ? '#c4c9c9': 'black'" transform="translate(.5 .5)">
                 <rect width="22" height="20" rx="2"></rect>
                 <path d="M0 10h22M11 0v20"></path>
               </g>
@@ -62,8 +62,8 @@
       <div class="app-footer-box">
         <div class="app-footer-icon">
           <svg width="16" height="16" viewBox="-4 -4 24 24" xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor" class="fullscreen_svg__bi fullscreen_svg__bi-fullscreen">
-            <path fill="currentcolor"
+            :fill="isDarkMode ? '#c4c9c9': 'black'" class="fullscreen_svg__bi fullscreen_svg__bi-fullscreen">
+            <path :fill="isDarkMode ? '#c4c9c9': 'black'"
               d="M1.5 1a.5.5 0 00-.5.5v4a.5.5 0 01-1 0v-4A1.5 1.5 0 011.5 0h4a.5.5 0 010 1h-4zM10 .5a.5.5 0 01.5-.5h4A1.5 1.5 0 0116 1.5v4a.5.5 0 01-1 0v-4a.5.5 0 00-.5-.5h-4a.5.5 0 01-.5-.5zM.5 10a.5.5 0 01.5.5v4a.5.5 0 00.5.5h4a.5.5 0 010 1h-4A1.5 1.5 0 010 14.5v-4a.5.5 0 01.5-.5zm15 0a.5.5 0 01.5.5v4a1.5 1.5 0 01-1.5 1.5h-4a.5.5 0 010-1h4a.5.5 0 00.5-.5v-4a.5.5 0 01.5-.5z">
             </path>
           </svg>
@@ -103,6 +103,9 @@ export default {
     layout() {
       return this.$store.state.layoutType;
     },
+    isDarkMode() {
+      return this.$store.getters.getIsDarkMode;
+    }
   }
 }
 </script>

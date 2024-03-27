@@ -5669,8 +5669,14 @@ input[type="radio"]:checked + .sbxTableRadioField__radio:after {
 .adj-settings {
   font-size: smaller;
 }
+.light-text:hover{
+  color: #c4c9c9;
+}
 .light-text {
   color: #c4c9c9;
+}
+.dark-text :hover {
+  color: #000;
 }
 .dark-text {
   color: black;

@@ -133,11 +133,7 @@ export default {
     };
   },
   mounted() {
-    if (this.isFakeServer) {
-      this.loadDataFromJson();
-    } else {
-      this.fetchStockTableData();
-    }
+    this.fetchStockTableData();
   },
   methods: {
     showModal(symbolName) {
@@ -181,14 +177,6 @@ export default {
         console.error('Error fetching data:', error);
       }
     },
-    async loadDataFromJson() {
-      try {
-        this.$store.commit('setStocks', stocksData);
-        this.histData = historyData;
-      } catch (error) {
-        console.error("Error loading data from JSON file:", error);
-      }
-    },
     filterStocks(event) {
       this.searchTerm = event.target.value;
     },
@@ -202,9 +190,6 @@ export default {
     },
   },
   computed: {
-    isFakeServer() {
-      return this.$store.getters.getServer;
-    },
     filteredStocks() {
       return this.stocks.filter((stock) =>
         stock.symbolName.toLowerCase().includes(this.searchTerm.toLowerCase())

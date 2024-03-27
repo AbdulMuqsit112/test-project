@@ -308,13 +308,9 @@ export default {
     };
   },
   mounted() {
-    if (this.isFakeServer) {
-      this.loadDataFromJson();
-    } else {
       this.fetchAssetCategory();
       this.fetchTableData();
       this.$on("symbolDataUpdated", this.handleDataUpdated);
-    }
   },
   methods: {
     fetchTableData() {
@@ -404,14 +400,6 @@ export default {
     handleDataUpdated(data) {
       const processedData = JSON.parse(data).data;
       if (processedData && processedData.length > 0) this.$store.dispatch('updateSymbolsData', { receivedData: processedData });
-    },
-    loadDataFromJson() {
-      try {
-        this.symbolsData = symblRow.assets;
-        this.categories = [...new Set(this.symbolsData.map(asset => asset.category))];
-      } catch (error) {
-        console.error("Error loading data from JSON file:", error);
-      }
     },
     handleInput(event, val) {
       let value = event.target.value;
@@ -539,9 +527,6 @@ export default {
         const index = this.favArr.findIndex((item) => item.s === asset.s);
         return index !== -1;
       };
-    },
-    isFakeServer() {
-      return this.$store.getters.getServer;
     },
     selectedData() {
       return this.$store.getters.getSelectedData;

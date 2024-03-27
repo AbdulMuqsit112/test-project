@@ -1,34 +1,18 @@
 <template>
   <div class="main__grid">
-    <div class="mainBlock" style="width: 100%; height: 23%; top: 0; left: 0;">
+    <div class="mainBlock" style="width: 100%; height: 15%; top: 0; left: 0;">
       <div class="mainBlock__content">
-        <div class="p-3 d-flex flex-column gap-4 align-items-start">
-          <div class="card-header mt-4">
-            <span class="h6">
-              <router-link to="/dashboard" class="d-flex align-items-center gap-1">
-                <svg class="back" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000"
-                  stroke="#000000">
-                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                  <g id="SVGRepo_iconCarrier">
-                    <path fill="inherit" d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"></path>
-                    <path fill="inherit"
-                      d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z">
-                    </path>
-                  </g>
-                </svg>
-                Go Back
-              </router-link>
-            </span>
-            <h3 class="mt-4">My Account</h3>
-            <span>personal Information</span>
+        <div class="p-3 d-flex flex-column align-items-start mt-3 gap-0">
+          <div class="card-header">
+            <h3 class="" :class="{ 'setting': isDarkMode, 'light-settings': !isDarkMode }">My account</h3>
+            <span class="adj-settings" :class="{ 'adjust': isDarkMode, 'light-adjust': !isDarkMode }">personal Information</span>
           </div>
         </div>
       </div>
       </div>
-      <div class="mainBlock" style="width: 100%; height: 77%; top: 23%; left: 0;">
+      <div class="mainBlock" style="width: 100%; height: 85.5%; top: 14.5%; left: 0;">
         <div class="mainBlock__content">
-          <div class="d-flex gap-4 justify-content-center mt-4 w-100">
+          <div class="d-flex gap-4 justify-content-center w-100">
             <div class="d-flex flex-column gap-4 w-100">
               <ul class="d-flex tab-btns py-1">
                 <li class="tab-btn-item">
@@ -54,7 +38,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
+                    <tr :class="{ 'text-white': isDarkMode }">
                       <td>USERNAME - 00001233</td>
                       <td>EUR</td>
                       <td>Main</td>
@@ -74,7 +58,6 @@
                 </table>
               </div>
               <div class="p-4" v-else-if="activeTab === 'transactions'">
-                <h4>Transactions</h4>
                 <table class="table">
                   <thead>
                     <tr>
@@ -85,7 +68,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr class="transactions" v-for="(transaction, index) in transactions" :key="index">
+                    <tr :class="{ 'text-white': isDarkMode }" class="transactions" v-for="(transaction, index) in transactions" :key="index">
                       <td>{{ transaction.order }}</td>
                       <td>{{ transaction.date }}</td>
                       <td>{{ transaction.type }}</td>
@@ -106,13 +89,13 @@
                 </table>
               </div>
               <div class="p-4 d-flex flex-column gap-4" v-else>
-                <h4>Change Password</h4>
+                <h4 :class="{ 'text-white': isDarkMode }">Change Password</h4>
                 <div class="form-group">
-                  <label>New Password</label>
+                  <label :class="{ 'text-white': isDarkMode }">New Password</label>
                   <input type="password" class="form-control" :class="{'dark-input': isDarkMode, 'light-input': !isDarkMode }" v-model="newPassword">
                 </div>
                 <div class="form-group">
-                  <label>Confirm New Password</label>
+                  <label :class="{ 'text-white': isDarkMode }">Confirm New Password</label>
                   <input type="password" class="form-control" v-model="confirmPassword" :class="{'dark-input': isDarkMode, 'light-input': !isDarkMode }">
                 </div>
                 <button class="btn confirm-btn" @click="changePassword">Confirm</button>
@@ -132,11 +115,7 @@ export default {
   data() {
     return {
       activeTab: 'personalInfo',
-      transactions: [
-        { order: 12314241, date: '2024-03-11', type: 'Deposit', volume: '$100.00' },
-        { order: 12314244, date: '2024-03-21', type: 'Withdraw', volume: '$1000.00' },
-        { order: 12314246, date: '2024-02-11', type: 'Deposit', volume: '$300.00' },
-      ],
+      transactions: [],
       newPassword: '',
       confirmPassword: '',
       message: '',
@@ -157,23 +136,7 @@ export default {
         console.error('Error fetching data:', error);
       }
     },
-    changePassword() {
-      if (this.isFakeServer) {
-        this.fakePwChange();
-      } else {
-        this.pwChange();
-      }
-    },
-    fakePwChange() {
-      if (this.newPassword === this.confirmPassword) {
-        console.log('Password changed successfully');
-        this.newPassword = '';
-        this.confirmPassword = '';
-      } else {
-        console.error('Passwords do not match');
-      }
-    },
-    async pwChange() {
+    async changePassword() {
       if (this.newPassword === this.confirmPassword) {
         let pwChangePaload = {
           login: 'user2@email.com',
@@ -196,9 +159,6 @@ export default {
     },
   },
   computed: {
-    isFakeServer() {
-      return this.$store.getters.getServer;
-    },
     isDarkMode(){
       return this.$store.getters.getIsDarkMode;
     },
@@ -240,8 +200,8 @@ export default {
 
 .tab-button.active {
   padding-block: 2px;
-  color: #085bb4;
-  border-bottom: 2px solid #085bb4;
+  color: #007BFF !important;
+  border-bottom: 2px solid #007BFF;
 }
 
 .line-item {
@@ -293,7 +253,10 @@ input{
   border-color: #434d51;
 }
 .confirm-btn {
-  background-color: #085bb4;
+  background-color: #007BFF;
   color: white;
+}
+.text-white {
+  color: white !important;
 }
 </style>

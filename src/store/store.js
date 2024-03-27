@@ -8,7 +8,6 @@ const store = new Vuex.Store({
   state: {
     $http: Vue.prototype.$http,
     layoutType: 1,
-    isFakeServer: false,
     selectedData: [],
     userToken: null,
     isAuthenticated: false,
@@ -23,9 +22,6 @@ const store = new Vuex.Store({
   mutations: {
     changeLayout(state, newLayoutType) {
       state.layoutType = newLayoutType;
-    },
-    toggleTestMode(state) {
-      state.isFakeServer = !state.isFakeServer;
     },
     setSelctedData(state, asset) {
       const selectedIndex = state.selectedData.findIndex(
@@ -183,7 +179,6 @@ const store = new Vuex.Store({
     }
   },
   getters: {
-    getServer: (state) => state.isFakeServer,
     getSelectedData: (state) => state.selectedData,
     getUserToken: (state) => state.selectedData,
     getIsAuthenticated: (state) => state.isAuthenticated,

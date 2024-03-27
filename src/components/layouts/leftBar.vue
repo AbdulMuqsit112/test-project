@@ -2,7 +2,11 @@
   <menu class="menu">
     <ul class="menu-list-box">
       <li class="menu-list-item">
-        <router-link to="/dashboard" :class="{ 'menu-list-item-link_active': $route.path === '/dashboard' }">
+        <router-link to="/dashboard" class="router-link" :class="{
+          'menu-list-item-link_active': $route.path === '/dashboard',
+          'light-text': isDarkMode,
+          'dark-text': !isDarkMode
+        }">
           <i class="icon-xlg"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
               <path
                 d="M31 31.36H1A.36.36 0 01.64 31V1h.72v29.64H31v.72zM24.36 26h-.72v-2.64H21v-.72h2.64V7h.721v1.64H27v.72h-2.64V26zm-8 0h-.72v-6.64H13v-.72h2.64V7h.72v5.64H19v.72h-2.64V26zm-8 0h-.72v-4.64H5v-.72h2.64V7h.72v3.64H11v.72H8.36V26z">
@@ -11,8 +15,10 @@
             </svg></i><span>Trading</span></router-link>
       </li>
       <li class="menu-list-item">
-        <router-link to="/profile" :class="{ 'menu-list-item-link_active': $route.path === '/profile' }"><i
-            class="icon-xlg"><svg height="800" width="800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
+        <router-link class="router-link" to="/profile" :class="{
+          'menu-list-item-link_active': $route.path === '/profile', 'light-text': isDarkMode,
+          'dark-text': !isDarkMode
+          }"><i class="icon-xlg"><svg height="800" width="800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
               <path
                 d="M52.179 40.5l-5.596 8.04-3.949-3.241a1 1 0 10-1.268 1.545l4.786 3.929a.995.995 0 00.771.217c.276-.038.524-.19.684-.419l6.214-8.929a1 1 0 10-1.642-1.142z">
               </path>
@@ -22,8 +28,10 @@
             </svg></i><span>My account</span></router-link>
       </li>
       <li class="menu-list-item">
-        <router-link to="/settings" :class="{ 'menu-list-item-link_active': $route.path === '/settings' }"><i
-            class="icon-xlg"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 57 57">
+        <router-link class="router-link" to="/settings" :class="{
+          'menu-list-item-link_active': $route.path === '/settings', 'light-text': isDarkMode,
+          'dark-text': !isDarkMode
+          }"><i class="icon-xlg"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 57 57">
               <path
                 d="M55.688 41.863l-1.444-.277a1.934 1.934 0 01-1.462-1.216 1.932 1.932 0 01.245-1.885l.907-1.236a1 1 0 00-.1-1.299l-1.959-1.958a1.001 1.001 0 00-1.268-.121l-1.217.824a1.935 1.935 0 01-1.895.175 1.935 1.935 0 01-1.16-1.508l-.233-1.515a.998.998 0 00-.987-.847h-2.77a1 1 0 00-.982.812l-.358 1.865a1.94 1.94 0 01-1.181 1.448 1.934 1.934 0 01-1.86-.189l-1.572-1.064a1.001 1.001 0 00-1.268.121l-1.959 1.958a1 1 0 00-.1 1.299l.907 1.236c.408.556.498 1.243.245 1.885a1.934 1.934 0 01-1.462 1.216l-1.444.277a1.001 1.001 0 00-.812.982v2.77a1 1 0 00.848.988l1.515.233a1.937 1.937 0 011.508 1.16 1.938 1.938 0 01-.175 1.895l-.824 1.217a1 1 0 00.121 1.268l1.958 1.959c.348.349.899.39 1.299.1l1.236-.907a1.934 1.934 0 011.885-.245 1.934 1.934 0 011.216 1.462l.277 1.444c.091.469.503.81.983.81h2.77a1 1 0 00.988-.848l.164-1.065a1.955 1.955 0 011.193-1.522 1.957 1.957 0 011.921.232l.869.638c.4.293.951.25 1.299-.1l1.958-1.959a1 1 0 00.121-1.268l-.824-1.217a1.938 1.938 0 01-.175-1.895 1.935 1.935 0 011.508-1.16l1.515-.233a1 1 0 00.848-.988v-2.77a1.003 1.003 0 00-.813-.982zM54.5 44.758l-.667.103a3.95 3.95 0 00-3.036 2.337 3.95 3.95 0 00.352 3.815l.361.533-.768.768-.177-.13a3.947 3.947 0 00-3.869-.467 3.942 3.942 0 00-2.405 3.065l-.033.218h-1.086l-.121-.633a3.952 3.952 0 00-2.449-2.947 3.96 3.96 0 00-3.8.494l-.544.399-.768-.768.361-.533a3.953 3.953 0 00.352-3.815 3.95 3.95 0 00-3.036-2.337l-.667-.102v-1.086l.633-.121a3.952 3.952 0 002.947-2.449 3.956 3.956 0 00-.494-3.8l-.399-.544.768-.768.889.602a3.96 3.96 0 003.747.381 3.963 3.963 0 002.38-2.919L43.172 33h1.086l.103.667a3.95 3.95 0 002.337 3.036 3.952 3.952 0 003.815-.352l.533-.361.768.768-.399.544a3.952 3.952 0 00-.494 3.8 3.953 3.953 0 002.947 2.449l.633.121v1.086z">
               </path>
@@ -51,6 +59,11 @@ export default {
       this.selected = item;
     },
   },
+  computed: {
+    isDarkMode() {
+      return this.$store.state.isDarkMode;
+    }
+  }
 };
 </script>
 
@@ -58,4 +71,6 @@ export default {
 ul {
   padding-left: 0;
 }
+
+
 </style>

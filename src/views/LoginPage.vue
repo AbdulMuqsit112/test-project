@@ -52,22 +52,7 @@ export default {
   },
   methods: {
     login() {
-      if (this.isFakeServer) {
-        this.fakeLogin();
-      } else {
-        this.loginToServer();
-      }
-    },
-    fakeLogin() {
-      const user = userData.find(user => user.email === this.email && user.password === this.password);
-      if (user) {
-        localStorage.setItem('token', user.token);
-        this.$store.commit('setUserToken', user.token);
-        this.$store.commit("setIsAuthenticated", true);
-        this.$router.push({ path: '/dashboard', query: { token: user.token } });
-      } else {
-        this.error = 'Invalid email or password. Please try again.';
-      }
+      this.loginToServer();
     },
     async loginToServer() {
       let userObj = {
@@ -90,9 +75,6 @@ export default {
     },
   },
   computed: {
-    isFakeServer() {
-      return this.$store.getters.getServer;
-    },
     isDarkMode(){
       return this.$store.getters.getIsDarkMode;
     }

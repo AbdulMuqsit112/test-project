@@ -44,7 +44,7 @@
         </div>
       </div>
       <div class="header-account-real header-account">
-        <img src="" class="icon-xlg icon-round mr-sm" alt="" /><b>User - &nbsp;
+        <img src="src/assets/default-avatar.png" class="icon-xlg icon-round mr-sm" alt="" /><b>User - &nbsp;
         </b>
         <span class="header-account-id">460187473</span>
       </div>
@@ -58,7 +58,7 @@
           <div class="dropdown-content" v-show="showMenu" @click.stop
             :class="{ 'dark-dropdown': isDarkMode, 'light-dropdown': !isDarkMode }">
             <ul class="menu-list">
-              <router-link to="/dashboard">
+              <router-link class="router-link" :class="{ 'light-text': isDarkMode, 'dark-text': !isDarkMode }" to="/dashboard">
 
                 <li class="menu-item">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
@@ -70,7 +70,7 @@
                 Trading
               </li>
             </router-link>
-              <router-link to="/profile">
+              <router-link class="router-link" :class="{ 'light-text': isDarkMode, 'dark-text': !isDarkMode }" to="/profile">
                 <li class="menu-item">
                   <svg height="800" width="800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
                     <path
@@ -83,7 +83,7 @@
                   My account
                 </li>
               </router-link>
-              <router-link to="/settings">
+              <router-link class="router-link" :class="{ 'light-text': isDarkMode, 'dark-text': !isDarkMode }" to="/settings">
                 <li class="menu-item">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 57 57">
                     <path

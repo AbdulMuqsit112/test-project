@@ -5651,3 +5651,30 @@ input[type="radio"]:checked + .sbxTableRadioField__radio:after {
 .light-mode-text{
   color: black !important;
 }
+.setting {
+  color: #d1d5d8;
+  font-weight: bolder;
+  font-size:x-large
+}
+.light-settings {
+  font-weight: bolder;
+  font-size: x-large !important;
+}
+.adjust {
+  color: #96a4aa;
+}
+.light-adjust {
+  color: #3d4353;
+}
+.adj-settings {
+  font-size: smaller;
+}
+.light-text {
+  color: #c4c9c9;
+}
+.dark-text {
+  color: black;
+}
+.router-link {
+  text-decoration: none;
+}

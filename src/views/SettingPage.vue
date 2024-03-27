@@ -1,76 +1,68 @@
 <template>
   <div class="main__grid">
-    <div class="mainBlock" style="width: 100%; height: 17%; top: 0; left: 0;">
+    <div class="mainBlock" style="width: 100%; height: 12%; top: 0; left: 0;">
       <div class="mainBlock__content">
-        <div class="d-flex gap-1 flex-column p-3">
-          <span class="h6">
-            <router-link to="/dashboard" class="d-flex align-items-center gap-1">
-                <svg class="back" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="inherit" stroke="inherit"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="inherit" d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"></path><path fill="inherit" d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"></path></g></svg>
-                Go Back
-              </router-link> 
-            </span>
-          <span class="h3" :class="{ 'setting': isDarkMode, 'light-settings': !isDarkMode }">Settings</span>
-          <span class="h6" :class="{ 'adjust': isDarkMode, 'light-adjust': !isDarkMode }">Adjust Platform To your need</span>
+        <div class="d-flex flex-column mt-1 mx-2 px-2 gap-0">
+          <span :class="{ 'setting': isDarkMode, 'light-settings': !isDarkMode }">Settings</span>
+          <p class="adj-settings" :class="{ 'adjust': isDarkMode, 'light-adjust': !isDarkMode }">Adjust platform to your need</p>
         </div>
       </div>
     </div>
-    <div class="mainBlock" style="width: 100%; height: 83%; top: 17%; left: 0;">
+    <div class="mainBlock" style="width: 100%; height: 88.5%; top: 11.5%; left: 0;">
       <div class="mainBlock__content p-4">
-        <div class="d-flex gap-4 w-100">
-          <div class="d-flex p-5 flex-column gap-5 w-100">
-            <div class="d-flex flex-column gap-3">
-              <label for="language">Languages</label>
+        <div class="d-flex gap-4 w-100 px-5" :class="{ 'light-text': isDarkMode, 'dark-text': !isDarkMode }">
+          <div class="d-flex p-5 flex-column gap-5 w-50">
+            <div class="d-flex flex-column gap-3 px-4">
+              <label for="language" :class="{ 'adjust': isDarkMode, 'light-adjust': !isDarkMode }">Languages</label>
               <select name="languages" class="dropdown" v-model="selectedLang" @change="changeLanguage">
                 <option value="en">English</option>
                 <option value="es">Spanish</option>
               </select>
             </div>
-            <div class="form-check form-switch d-flex justify-content-between p-0">
+            <div class="form-check form-switch d-flex justify-content-between px-4">
               <label class="form-check-label" for="">Profit on tab</label>
               <input class="form-check-input" type="checkbox" id="">
             </div>
-            <div class="form-check form-switch d-flex justify-content-between p-0">
-              <label class="form-check-label" for="">Test Mode</label>
-              <input class="form-check-input" type="checkbox" @click="toggleTestMode" v-model="testMode">
-            </div>
           </div>
-          <div class="d-flex p-5 flex-column gap-5 w-100">
-            <div class="d-flex flex-column gap-3">
-              <label for="language">Time Zone</label>
+          <div class="d-flex p-5 flex-column gap-5 w-50">
+            <div class="d-flex flex-column gap-3 px-4">
+              <label for="timezone" :class="{ 'adjust': isDarkMode, 'light-adjust': !isDarkMode }">Time Zone</label>
               <select name="timezone" class="dropdown">
                 <option value="English" selected>(GMT+ 3)Europe,Tirane</option>
               </select>
             </div>
-            <div class="form-check form-switch d-flex justify-content-between p-0">
+            <div class="form-check form-switch d-flex justify-content-between px-4">
               <label class="form-check-label" for="">Hide account bar value</label>
               <input class="form-check-input" type="checkbox" @click="toggleShowAccountBar" v-model="showAccountBar">
             </div>
-            <div class="form-check form-switch d-flex justify-content-between p-0">
+            <div class="form-check form-switch d-flex justify-content-between px-4">
               <label class="form-check-label" for="">Multi Trade Pannel</label>
               <input class="form-check-input" type="checkbox">
             </div>
-            <div class="form-check form-switch d-flex justify-content-between p-0">
+            <div class="form-check form-switch d-flex justify-content-between px-4">
               <label class="form-check-label" for="">Multi Chart</label>
               <input class="form-check-input" type="checkbox">
             </div>
           </div>
-          <div class="d-flex p-5 flex-column gap-5 w-100">
-            <div class="d-flex flex-column gap-3" id="imageOptions">
-              <span>skin</span>
+          <div class="d-flex p-5 flex-column gap-5 w-50">
+            <div class="d-flex flex-column gap-3 px-4" id="imageOptions">
+              <span :class="{ 'adjust': isDarkMode, 'light-adjust': !isDarkMode }">Skin</span>
               <div class="d-flex gap-2">
-                <div :class="`${imgClass}`" @click="selectOption(1)">
-                  <img src="image_url_1.jpg" alt="graph">
+                <div :class="!isDarkMode ?  'border border-primary' : ''" @click="changeTheme()" class="cursor-pointer p-1">
+                  <img src="src/assets/light-theme.png"  class="w-100 h-100" alt="graph">
                 </div>
-                <div :class="`${secondImgClass}`" @click="selectOption(2)">
-                  <img src="image_url_2.jpg" alt="graph">
+                <div :class="isDarkMode ?  'border border-primary' : ''" @click="changeTheme()" class="cursor-pointer p-1">
+                  <img src="src/assets/dark-theme.png"  class="w-100 h-100" alt="graph">
                 </div>
               </div>
             </div>
-            <div class="form-check form-switch d-flex justify-content-between p-0">
+            <div class="form-check form-switch d-flex justify-content-between px-4">
               <label class="form-check-label" for="">Restore Default Platform Settings</label>
               <input class="form-check-input" type="checkbox" id="">
             </div>
-            <button class="btn btn-primary">Reset Settings</button>
+            <div class="w-100 px-4">
+              <button class="btn btn-primary w-100">Reset Settings</button>
+            </div>
           </div>
         </div>
       </div>
@@ -83,9 +75,6 @@ export default {
   name: 'SettingPage',
   data() {
     return {
-      testMode: this.$store.getters.getServer,
-      secondImgClass :'',
-      imgClass: '',
       selectedLang: this.$i18n.locale,
     };
   },
@@ -96,23 +85,14 @@ export default {
     toggleShowAccountBar(){
       this.$store.commit('toggleShowAccountBar');
     },
-    selectOption(opt){
-      if (opt === 1){
-        this.imgClass = ''
-        this.secondImgClass = '';
-      } else {
-        this.secondImgClass = '';
-        this.imgClass = ''
-      }
+    changeTheme(){
+      this.$store.commit('toggleIsDarkMode');
     },
     changeLanguage() {
       this.$i18n.locale = this.selectedLang;
     },
   },
   computed: {
-    isTestMode(){
-      return this.$store.getters.getServer;
-    },
     showAccountBar(){
       return this.$store.getters.getShowAccountBar;
     },
@@ -128,27 +108,22 @@ export default {
   width: 16px;
   height: 16px;
 }
-.setting {
-  color: #d1d5d8;
-}
-.light-setting {
-  color: #2a2e39;
-}
-.adjust {
-  color: #96a4aa;
-}
-.light-adjust {
-  color: #3d4353;
-}
 .dropdown {
   background-color: transparent;
   padding-block: 8px;
-  color: #96a4aa;
-  border: 1px solid #96a4aa;
+  color: inherit;
+  border: 0.2px solid #3d4e57 !important;
+  font-size: smaller;
+  padding: 12px;
 }
-
+.dark-text {
+  color: #2a2e39;
+}
+.light-text {
+  color: white;
+}
 .form-check-input {
-  padding-block: 10px;
-  padding-inline: 20px;
+  padding-block: 7px;
+  padding-inline: 14px;
 }
 </style>

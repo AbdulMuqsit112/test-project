@@ -3,6 +3,7 @@
     <div id="root">
       <div class="document" v-if="isAuthenticated">
         <HeaderComponent />
+        <AlertComponent v-if="isShowAlert"/>
         <main class="app-main">
           <leftBar />
           <section class="app-section">
@@ -19,6 +20,7 @@
 </template>
 
 <script>
+import AlertComponent from "./components/layouts/AlertComponent.vue";
 import HeaderComponent from "./components/layouts/HeaderComponent.vue";
 import leftBar from "./components/layouts/leftBar.vue";
 import FooterComponent from "./components/layouts/FooterComponent.vue"
@@ -28,7 +30,8 @@ export default {
   components: {
     HeaderComponent,
     leftBar,
-    FooterComponent
+    FooterComponent,
+    AlertComponent
   },
   async created() {
     this.getUser();
@@ -58,6 +61,9 @@ export default {
     isDarkMode() {
       return this.$store.getters.getIsDarkMode;
     },
+    isShowAlert() {
+      return this.$store.getters.getShowAlert;
+    }
   },
 };
 </script>

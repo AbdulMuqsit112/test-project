@@ -99,7 +99,6 @@
                   <input type="password" class="form-control" v-model="confirmPassword" :class="{'dark-input': isDarkMode, 'light-input': !isDarkMode }">
                 </div>
                 <button class="btn confirm-btn" @click="changePassword">Confirm</button>
-                <span :class="msgClass">{{ message }}</span>
               </div>
             </div>
           </div>
@@ -118,8 +117,6 @@ export default {
       transactions: [],
       newPassword: '',
       confirmPassword: '',
-      message: '',
-      msgClass: ''
     };
   },
   methods: {
@@ -142,17 +139,19 @@ export default {
           login: 'user2@email.com',
           password: this.newPassword
         };
-        const response = await this.$http.put('accounts/change-password', pwChangePaload);
-        if (response.status == 200) {
-          this.message = 'Password changed successfully';
-          this.msgClass = 'text-success'
-        } else {
-          this.message = 'Something Went Wrong';
-          this.msgClass = 'text-danger'
+        try {
+          const response = await this.$http.put('accounts/change-password', pwChangePaload);
+          if (response && response.status == 200) {
+            this.$store.dispatch('setAlertVal', { color: 'success', text: 'Password changed successfully' });
+          } else {
+            this.$store.dispatch('setAlertVal', { color: 'error', text: 'Something Went Wrong' });
+          }
+        } catch(error) {
+          this.$store.dispatch('setAlertVal', { color: 'error', text: error });
         }
+        
       } else {
-        this.message = 'Password mismatch';
-        this.msgClass = 'text-danger'
+        this.$store.dispatch('setAlertVal', { color: 'error', text: 'Password mismatch' });
       }
       this.newPassword = '';
       this.confirmPassword = '';

@@ -7,7 +7,7 @@
     </div>
     <div class="app-header-section" :class="{ 'dark-mode-text': isDarkMode, 'light-mode-text': !isDarkMode }">
       <div class="app-header-box">
-        <div class="header-balances" v-if="isAccountBar">
+        <div class="header-balances" v-if="!isAccountBar">
           <div class="header-wrap">
             <span class="header-balances-item">
               <div class="">Balance:</div>

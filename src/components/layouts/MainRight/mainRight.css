@@ -50,7 +50,7 @@
 }
 
 .buySellSpan {
-  font-size: x-small;
+  font-size: 25%;
   font-weight: 400;
 }
 
@@ -59,7 +59,7 @@
   padding: 4px 8px;
   border-radius: 4px;
   background-color: inherit;
-  font-size: smaller;
+  font-size: 65% !important;
 }
 
 .inpbox {

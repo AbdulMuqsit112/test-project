@@ -111,22 +111,22 @@
                           Sell
                           <img src="src/assets/down.png" class="arrowIcon" alt="icon" />
                         </div>
-                        <span class="buySellSpan d-flex justify-content-start">{{ assetVal(asset.p, 'low') }}</span>
+                        <span class="buySellSpan d-flex justify-content-start">{{ assetVal(asset.p, 'low').slice(0, -2) }}<span class="text-sm">{{ assetVal(asset.p, 'low').slice(-2) }}</span></span>
                       </div>
                       <div class="bg-success d-flex flex-column gap-3 w-100 p-2" @click="generateOrder(asset, 'buy')">
                         <div class="d-flex justify-content-between">
                           <img src="src/assets/up.png" class="arrowIcon" alt="icon" />
                           Buy
                         </div>
-                        <span class="buySellSpan d-flex justify-content-end">{{ assetVal(asset.p, 'high') }}</span>
+                        <span class="buySellSpan d-flex justify-content-end">{{ assetVal(asset.p, 'high').slice(0, -2) }}<span class="text-sm">{{ assetVal(asset.p, 'high').slice(-2) }}</span></span>
                       </div>
                     </div>
                     <div class="d-flex justify-content-between">
                       <button class="text-danger buySellBtn">
-                        Low {{ assetVal(asset.p, 'low') }}
+                        Low {{ assetVal(asset.p, 'low').slice(0, -2)}} <span class="text-sm">{{ assetVal(asset.p, 'low').slice(-2) }}</span>
                       </button>
                       <button class="text-success buySellBtn">
-                        High {{ assetVal(asset.p, 'high') }}
+                        High {{ assetVal(asset.p, 'high').slice(0, -2)}} <span class="text-sm">{{ assetVal(asset.p, 'high').slice(-2) }}</span>
                       </button>
                     </div>
                     <div class="inpbox" @click.stop>
@@ -245,7 +245,9 @@ export default {
       isInfoSection: false,
       showFav: false,
       currentAsset: null,
-      isShowSearchBar: false
+      isShowSearchBar: false,
+      bid: 0,
+      ask: 0
     };
   },
   mounted() {
@@ -341,8 +343,12 @@ export default {
       this.isModalOpen = true;
     },
     assetVal(price, type) {
-      if (type == 'high') return price + 0.01
-      return price - 0.01
+      if (type == 'high') {
+        price += 0.01;
+      } else {
+        price -= 0.01
+      }
+      return price.toString();
     },
     closeModal() {
       this.isModalOpen = false;

@@ -354,7 +354,6 @@ export default {
     closeModal() {
       this.isModalOpen = false;
       this.volume = 0.01;
-      this.$store.commit('setSelctedData', this.currentAsset);
       this.currentAsset = null;
     },
     showSearchBar() {

@@ -55,13 +55,13 @@ export default {
   methods: {
     setGraphTheme(){
       if(!this.isDarkMode){
-        colors = {
+        this.colors = {
           colorBack: "#fff",
           colorGrid: "#eee",
           colorText: "#333",
         };
       } else {
-        colors = {
+        this.colors = {
           colorBack: "",
           colorGrid: "",
           colorText: "",

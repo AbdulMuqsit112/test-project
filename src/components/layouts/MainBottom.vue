@@ -2,9 +2,9 @@
   <div class="mainBlock" :style="getMainBlockStyle">
     <div class="mainBlock__tabs">
       <div class="mainBlock__tabsItem mainBlock__tabsItem_add">+</div>
-      <button class="tab-buttons" :class="{ 'dark-theme': isDarkMode }" @click="switchTabs('stocks')">Open
+      <button class="tab-buttons" :class="{ 'dark-theme': isDarkMode, 'text-primary px-4': activeTab == 'stocks' }" @click="switchTabs('stocks')">Open
         Positions</button>
-      <button class="tab-buttons" :class="{ 'dark-theme': isDarkMode }" @click="switchTabs('history')">
+      <button class="tab-buttons" :class="{ 'dark-theme': isDarkMode, 'text-primary px-4': activeTab == 'history'  }" @click="switchTabs('history')">
         History
       </button>
     </div>
@@ -14,23 +14,23 @@
           <table class="w-100">
             <thead class="sticky-top">
               <tr :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }">
-                <th>
+                <th class="header-border">
                   Ticker
                   <input class="p-1 ml-1 rounded" type="text" v-model="searchTerm" placeholder="Search Ticker"
                     @input="filterStocks" />
                 </th>
-                <th class="px-2">Price</th>
-                <th class="px-2">Chg</th>
-                <th class="px-2">Chg%</th>
-                <th class="px-2">Technical Rating</th>
-                <th class="px-2">Vol</th>
-                <th class="px-2">Volume Price</th>
-                <th class="px-2">Mkt Cap</th>
-                <th class="px-2">P/E</th>
-                <th class="px-2">EPS (TTM)</th>
-                <th class="px-2">Employees</th>
-                <th class="px-2">Sector</th>
-                <th class="px-2">close Order</th>
+                <th class="px-2 header-border">PRICE</th>
+                <th class="px-2 header-border">CHG</th>
+                <th class="px-2 header-border">CHG%</th>
+                <th class="px-2 header-border">TECHNICAL RATING</th>
+                <th class="px-2 header-border">VOL</th>
+                <th class="px-2 header-border">VOLUME PRICE</th>
+                <th class="px-2 header-border">MKT CAP</th>
+                <th class="px-2 header-border">P/E</th>
+                <th class="px-2 header-border">EPS (TTM)</th>
+                <th class="px-2 header-border">EMPLOYEES</th>
+                <th class="px-2 header-border">SECTOR</th>
+                <th class="px-2">CLOSE ORDER</th>
               </tr>
             </thead>
             <tbody>
@@ -118,8 +118,6 @@
 </template>
 
 <script>
-import stocksData from "../../assets/stocks.json";
-import historyData from "../../assets/history.json";
 export default {
   name: "MainBottom",
   data() {
@@ -154,11 +152,13 @@ export default {
         if (response.status == 200) {
           this.fetchStockTableData()
           this.fetchHistoryData();
+          this.$store.dispatch('setAlertVal', { color: 'success', text: 'Order Closed Successfully' });
         } else {
           console.log('something went wrong', response.message);
+          this.$store.dispatch('setAlertVal', { color: 'error', text: 'Something went wrong' });
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        this.$store.dispatch('setAlertVal', { color: 'error', text: 'Something went wrong' });
       }
       this.hideModal();
     },
@@ -277,7 +277,7 @@ td {
 }
 
 .dark-tr:hover {
-  background-color: #212529;
+  background-color: #030404;
 }
 
 .light-tr:hover {
@@ -288,9 +288,12 @@ th {
   vertical-align: middle;
   border-bottom: 2px solid #2c2e33 !important;
   border-bottom-width: 1px;
-  font-size: 75%
+  font-size: 70%;
+  font-weight: 300 !important;
 }
-
+.header-border {
+  border-right: 0.1px solid #48575e;
+}
 .tab-buttons {
   border-inline: 0.5px solid #48575e;
   border-bottom: 0.3px solid #48575e;

@@ -1,5 +1,5 @@
 body {
-  font-family: 'Roboto', 'ubuntu', 'sans-serif';
+  font-family: 'Roboto', 'ubuntu', 'sans-serif' !important;
 }
 @import url("./src/assets/css/bundle.css");
 
@@ -5640,7 +5640,7 @@ input[type="radio"]:checked + .sbxTableRadioField__radio:after {
   background-color: var(--grey-75) !important;
 }
 .dark-header {
-  background-color: #0b0d0e !important;
+  background-color: #22252e !important;
 }
 .dark-symbol-table {
   background-color: #191c24 !important;

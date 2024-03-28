@@ -11,13 +11,17 @@ const store = new Vuex.Store({
     selectedData: [],
     userToken: null,
     isAuthenticated: false,
-    showAccountBar: true,
+    showAccountBar: false,
     isDarkMode: true,
     symbolsData: [],
     user: {
       loginId: "",
     },
     stocks: [],
+    showAlert: false,
+    alertColor: "red",
+    alertText: "",
+    assetCategories: []
   },
   mutations: {
     changeLayout(state, newLayoutType) {
@@ -31,11 +35,15 @@ const store = new Vuex.Store({
         state.selectedData.splice(selectedIndex, 1);
       } else {
         if (state.selectedData.length < 4) {
+          state.selectedData = [],
           state.selectedData.push(asset);
         } else {
           console.log("You can only select up to 4 assets.");
         }
       }
+    },
+    setSelctedDataEmpty(state) {
+      state.selectedData = [];
     },
     setUserToken(state, token) {
       state.userToken = token;
@@ -64,8 +72,25 @@ const store = new Vuex.Store({
     setStocks(state, payload) {
       state.stocks = payload;
     },
+    toggleShowAlert(state) {
+      state.showAlert = !state.showAlert;
+    },
+    setAlertColor(state, color) {
+      state.alertColor = color;
+    },
+    setAlertText(state, text) {
+      state.alertText = text;
+    },
+    setAssetCategories(state, categories){
+      state.assetCategories = categories;
+    },
   },
   actions: {
+    setAlertVal({ commit }, { color, text }) {
+      commit("setAlertColor", color);
+      commit("setAlertText", text);
+      commit("toggleShowAlert",);
+    },
     setAppTheme({ state }) {
       if (state.isDarkMode) {
         document.body.classList.add("dark");
@@ -160,7 +185,7 @@ const store = new Vuex.Store({
         console.error("Error fetching data:", error);
       }
     },
-    async createOrder({state }, { asset }) {
+    async createOrder({state, commit }, { asset }) {
       try {
         const response = await state.$http.post('orders', asset);
         if (response.status == 200) {
@@ -169,14 +194,29 @@ const store = new Vuex.Store({
             offset: 1
           }
           this.dispatch('fetchStockTableData', { limits });
+          this.dispatch('setAlertVal', { color: 'success', text: 'Order Placed Successfully' });
         } else {
           console.log("Something went Wrong", response.message);
+          this.dispatch('setAlertVal', { color: 'error', text: 'Could Not Place Order' });
         }
       } catch (error) {
         console.error("Error fetching data:", error);
+        this.dispatch('setAlertVal', { color: 'error', text: 'Could Not Place Order' });
       }
-      
-    }
+    },
+    async fetchAssetCategory({state, commit}) {
+      try {
+        const response = await state.$http.get('symbols');
+        if (response.status == 200) {
+          commit("setAssetCategories", response.data);
+        } else {
+          console.log("Something went wrong");
+        }
+      }
+      catch (error) {
+        console.error('Error fetching Categories:', error);
+      }
+    },
   },
   getters: {
     getSelectedData: (state) => state.selectedData,
@@ -187,6 +227,10 @@ const store = new Vuex.Store({
     getSymbolsData: (state) => state.symbolsData,
     getUser: (state) => state.user,
     getStocks: (state) => state.stocks,
+    getShowAlert: (state) => state.showAlert,
+    getAlertColor: (state) => state.alertColor,
+    getAlertText: (state) => state.alertText,
+    getAssetCategories: (state) => state.assetCategories,
   },
 });
 

@@ -6,69 +6,8 @@
     </div>
     <div class="mainBlock__content">
       <div class="mainBlock__tabsEmpty p-0" ref="Modal">
-        <div class="modal-wrapper" v-if="isModalOpen" :style="modalDimensions">
-          <div class="modal-content gap-4" :class="{ 'dark-mode-text': isDarkMode, 'light-mode-text': !isDarkMode }">
-            <div class="modal-header d-flex justify-content-between">
-              <h5 class="varaible-font">Trade Pannel</h5>
-              <button type="button" class="btn varaible-font" @click="closeModal" aria-label="Close">
-                X
-              </button>
-            </div>
-            <div class="modal-body d-flex flex-column gap-5">
-              <div class="d-flex flex-column gap-2">
-                <div class="d-flex justify-content-between">
-                  <span>Bid: {{ bid }}</span>
-                  <span>Ask: {{ ask }}</span>
-                </div>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span>Volume:</span>
-                  <input type="number" step="0.01" @input="handleInput($event, 'vol')" @blur="handleBlur('vol')"
-                    v-model="volume" class="vol" :class="{ 'dark-vol': isDarkMode }" />
-                </div>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span>Stop Loss:</span>
-                  <input type="checkbox" v-model="stopLoss" />
-                </div>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span>Take Profit:</span>
-                  <input type="checkbox" v-model="takeProfit" />
-                </div>
-              </div>
-              <div class="d-flex flex-column quantity-grp py-4 gap-1">
-                <div class="d-flex justify-content-between align-items-center">
-                  <span>Quantity:</span>
-                  <span>{{ volume }} Units</span>
-                </div>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span>Required margin:</span>
-                  <span>0.01 Units</span>
-                </div>
-                <div class="d-flex justify-content-between align-items-center w-100">
-                  <div class="d-flex justify-content-between w-50">
-                    <span>Spread:</span>
-                    <span>-0.00 EUR</span>
-                  </div>
-                  <span>6.0 pips</span>
-                </div>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span>Commission:</span>
-                  <span>0 pips</span>
-                </div>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span>Pip value:</span>
-                  <span>0.00001 EUR</span>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn p-0 w-100 footer-font" :class="`${btnClass}`" @click="createOrder">
-                {{ btnVal }}
-                <br />
-                {{ bid }}
-              </button>
-            </div>
-          </div>
-        </div>
+        <ModalComponent v-if="isModalOpen" :currentAsset="currentAsset" :btnVal="btnVal" :bid="bid" :ask="ask" :volume="volume"
+          :btnClass="btnClass" :modalDimensions="modalDimensions" @closeModal="closeModal" @handleInput="handleInput" @handleBlur="handleBlur"/>
         <div class="d-flex gap-2 w-100 p-2" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }"
           v-if="!isModalOpen">
           <select class="category p-1" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }"
@@ -95,7 +34,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(asset, index) in filteredAssets" :key="asset.s" @click.stop="toggleRowContent(asset)">
+              <tr v-for="(asset, index) in filteredAssets" :key="asset.id" @click.stop="toggleRowContent(asset)">
                 <td :colspan="4" v-if="isSelected(asset)" :class="{ 'dark-symbol-table': isDarkMode }">
                   <div class="buySell d-flex flex-column" :class="{ 'dark-symbol-table': isDarkMode }">
                     <div class="fw-semibold d-flex justify-content-between" :class="{ 'text-white': isDarkMode }">
@@ -282,11 +221,13 @@
 </template>
 
 <script>
-import { onMounted } from "vue";
-import symblRow from "../../../assets/symbolRow.json";
 import socketMixin from "../../../mixins/socketMixin";
+import ModalComponent from "../ModalComponent.vue";
 export default {
   mixins: [socketMixin],
+  components: {
+    ModalComponent
+  },
   data() {
     return {
       sellVal: 0.01,
@@ -294,23 +235,18 @@ export default {
       volume: 0.01,
       btnClass: "",
       btnVal: "",
-      categories: [],
       favArr: [],
       selectedCategory: "all",
       searchQuery: "",
       isInfoSection: false,
       showFav: false,
-      bid: 0,
-      ask: 0,
-      cureentAsset: null,
-      takeProfit: false,
-      stopLoss: false
+      currentAsset: null,
     };
   },
   mounted() {
-      this.fetchAssetCategory();
-      this.fetchTableData();
-      this.$on("symbolDataUpdated", this.handleDataUpdated);
+    this.$store.dispatch('fetchAssetCategory');
+    this.fetchTableData();
+    this.$on("symbolDataUpdated", this.handleDataUpdated);
   },
   methods: {
     fetchTableData() {
@@ -319,62 +255,6 @@ export default {
         offset: 1
       }
       this.$store.dispatch('fetchSymbolsData', { limits });
-    },
-    async fetchAssetCategory() {
-      try {
-        const response = await this.$http.get('symbols');
-        if (response.status == 200) {
-          this.categories = response.data;
-        } else {
-          console.log("Something went wrong");
-        }
-      }
-      catch (error) {
-        console.error('Error fetching Categories:', error);
-      }
-    },
-    async createOrder() {
-      const asset = this.generateOrderPayload();
-      this.$store.dispatch('createOrder', { asset });
-      this.closeModal();
-    },
-    generateOrderPayload() {
-      const { change, changePercentage, p, symbolId } = this.cureentAsset;
-      const percentageNumber = parseFloat(changePercentage.replace('%', ''));
-      const orderType = this.btnVal == 'Buy' ? 1 : 2;
-      const matchingObject = this.categories.find(obj => obj.id === symbolId);
-      let name = '';
-      if (matchingObject) name = matchingObject.name;
-      return {
-        price: p,
-        chg: change,
-        chgPercentage: percentageNumber,
-        type: orderType,
-        volume: this.volume,
-        volumePrice: 0,
-        mktCap: 0,
-        pe: 0,
-        epsTim: 0,
-        employees: 0,
-        sector: 'someSector',
-        position: 0,
-        slPrice: 0,
-        tpPrice: 0,
-        openPrice: 0,
-        marketPrice: 0,
-        commission: 0,
-        swaps: 0,
-        grossProfit: 0,
-        bid: this.bid,
-        ask: this.ask,
-        stopLoss: this.stopLoss,
-        takeProfit: this.takeProfit,
-        spread: 0,
-        spread_Pips: 0,
-        pipValue: 0,
-        symbolId: symbolId,
-        symbolName: name
-      }
     },
     toggleShoFav() {
       this.showFav = !this.showFav
@@ -389,6 +269,7 @@ export default {
     },
     isSelected(asset) {
       return this.selectedData.some(selectedAsset => selectedAsset.id === asset.id)
+      
     },
     toggleInfoSection() {
       this.isInfoSection = !this.isInfoSection;
@@ -442,7 +323,7 @@ export default {
       }
     },
     generateOrder(asset, type) {
-      this.cureentAsset = asset;
+      this.currentAsset = asset;
       if (type == 'buy') {
         this.btnClass = "btn-success";
         this.btnVal = "Buy";
@@ -454,16 +335,15 @@ export default {
       this.ask = this.assetVal(asset.p, 'low')
       this.isModalOpen = true;
     },
-    closeModal() {
-      this.$emit("graph-data-change", false);
-      this.selectedRow = null;
-      this.isModalOpen = !this.isModalOpen;
-      this.volume = 0.01;
-      this.cureentAsset = null;
-    },
     assetVal(price, type) {
       if (type == 'high') return price + 0.01
       return price - 0.01
+    },
+    closeModal() {
+      this.isModalOpen = false;
+      this.volume = 0.01;
+      this.$store.commit('setSelctedData', this.currentAsset);
+      this.currentAsset = null;
     },
   },
   computed: {
@@ -537,6 +417,9 @@ export default {
     symbolsData() {
       return this.$store.getters.getSymbolsData;
     },
+    categories() {
+      return this.$store.getters.getAssetCategories;
+    }
   },
 };
 </script>

@@ -76,12 +76,10 @@ export default {
   data() {
     return {
       selectedLang: this.$i18n.locale,
+      showAccountBar: this.$store.getters.getShowAccountBar
     };
   },
   methods: {
-    toggleTestMode() {
-      this.$store.commit('toggleTestMode');
-    },
     toggleShowAccountBar(){
       this.$store.commit('toggleShowAccountBar');
     },
@@ -93,9 +91,7 @@ export default {
     },
   },
   computed: {
-    showAccountBar(){
-      return this.$store.getters.getShowAccountBar;
-    },
+  
     isDarkMode(){
       return this.$store.getters.getIsDarkMode;
     }

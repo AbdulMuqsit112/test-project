@@ -5643,7 +5643,7 @@ input[type="radio"]:checked + .sbxTableRadioField__radio:after {
   background-color: #22252e !important;
 }
 .dark-symbol-table {
-  background-color: #191c24 !important;
+  background-color: inherit !important;
 }
 .dark-mode-text {
   color: #c4c9c9 !important;
@@ -5683,7 +5683,4 @@ input[type="radio"]:checked + .sbxTableRadioField__radio:after {
 }
 .router-link {
   text-decoration: none;
-}
-.header-border {
-  border-right: 0.1px solid #48575e;
 }

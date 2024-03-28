@@ -298,7 +298,9 @@ th {
   padding: 0px 10px;
   transition: background-color 0.3s ease;
 }
-
+.header-border {
+  border-right: 0.1px solid #48575e;
+}
 @media screen and (max-width: 1024px) {
   td {
     padding: 2px;

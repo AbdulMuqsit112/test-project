@@ -31,10 +31,10 @@
           <table class="table table-hover">
             <thead class="sticky-top">
               <tr>
-                <th class="p-2 header-border fw-semibold" :class="{ 'dark-header text-white': isDarkMode }">Symbol</th>
-                <th class="p-2 header-border text-end" :class="{ 'dark-header': isDarkMode }">Last</th>
-                <th class="p-2 header-border text-end" :class="{ 'dark-header': isDarkMode }">Change</th>
-                <th class="p-2 text-end" :class="{ 'dark-header': isDarkMode }">Change %</th>
+                <th class="p-2 header-border text-start" :class="{ 'dark-header': isDarkMode }">SYMBOL</th>
+                <th class="p-2 header-border" :class="{ 'dark-header': isDarkMode }">LAST</th>
+                <th class="p-2 header-border" :class="{ 'dark-header': isDarkMode }">CHANGE</th>
+                <th class="p-2" :class="{ 'dark-header': isDarkMode }">CHANGE %</th>
               </tr>
             </thead>
             <tbody>

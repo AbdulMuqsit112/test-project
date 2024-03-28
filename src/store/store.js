@@ -58,6 +58,10 @@ const store = new Vuex.Store({
       state.isDarkMode = !state.isDarkMode;
       this.dispatch("setAppTheme");
     },
+    setAppTheme(state, val) {
+      state.isDarkMode = val;
+      this.dispatch("setAppTheme");
+    },
     setSymbolsData(state, data) {
       state.symbolsData = data;
     },
@@ -99,6 +103,7 @@ const store = new Vuex.Store({
         document.body.classList.add("light");
         document.body.classList.remove("dark");
       }
+      localStorage.setItem("isDarkMode", state.isDarkMode);
     },
     getUserDetails({ commit }) {
       let token = localStorage.getItem("token");

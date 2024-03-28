@@ -19,13 +19,13 @@
       </div>
       <div class="app-footer-box">
         <div class="app-footer-icon" @click="toggleDropdown">
-          <svg v-if="layout != 3" xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 32 30" width="23" height="21" @blur="toggleDropdown">
+          <svg v-if="layout != 3" xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 32 30" width="23" height="21">
             <g fill="none" :stroke="isDarkMode ? '#c4c9c9': 'black'" transform="translate(.5 .5)">
               <rect width="22" height="20" rx="2"></rect>
               <path d="M0 10h11m0-10v20"></path>
             </g>
           </svg>
-          <svg v-if="layout == 3" xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 32 30" width="23" height="21" @blur="toggleDropdown">
+          <svg v-if="layout == 3" xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 32 30" width="23" height="21">
             <g fill="none" :stroke="isDarkMode ? '#c4c9c9': 'black'" transform="translate(.5 .5)">
               <rect width="22" height="20" rx="2"></rect>
               <path d="M0 10h22M11 0v20"></path>

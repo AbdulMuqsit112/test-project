@@ -36,7 +36,7 @@ export default {
   async created() {
     this.getUser();
     if (!this.isAuthenticated) this.$router.push('/login');
-    this.$store.dispatch('setAppTheme');
+    this.setAppTheme();
   },
   mounted() {
     this.setLayout();
@@ -53,6 +53,14 @@ export default {
       }
       this.$store.commit('changeLayout', 1);
     },
+    setAppTheme() {
+      let isDarkMode = localStorage.getItem('isDarkMode');
+      if (isDarkMode == 'false' || isDarkMode == 'true') {
+        isDarkMode = isDarkMode == "true" ? true : isDarkMode == "false" ? false : undefined;
+        this.$store.commit('setAppTheme', isDarkMode);
+        return;
+      }
+    }
   },
   computed: {
     isAuthenticated() {

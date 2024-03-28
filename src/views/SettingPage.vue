@@ -48,10 +48,10 @@
             <div class="d-flex flex-column gap-3 px-4" id="imageOptions">
               <span :class="{ 'adjust': isDarkMode, 'light-adjust': !isDarkMode }">Skin</span>
               <div class="d-flex gap-2">
-                <div :class="!isDarkMode ?  'border border-primary' : ''" @click="changeTheme()" class="cursor-pointer p-1">
+                <div :class="!isDarkMode ?  'border border-primary' : ''" @click="changeTheme(false)" class="cursor-pointer p-1">
                   <img src="src/assets/light-theme.png"  class="w-100 h-100" alt="graph">
                 </div>
-                <div :class="isDarkMode ?  'border border-primary' : ''" @click="changeTheme()" class="cursor-pointer p-1">
+                <div :class="isDarkMode ?  'border border-primary' : ''" @click="changeTheme(true)" class="cursor-pointer p-1">
                   <img src="src/assets/dark-theme.png"  class="w-100 h-100" alt="graph">
                 </div>
               </div>
@@ -83,15 +83,14 @@ export default {
     toggleShowAccountBar(){
       this.$store.commit('toggleShowAccountBar');
     },
-    changeTheme(){
-      this.$store.commit('toggleIsDarkMode');
+    changeTheme(val){
+      this.$store.commit('setAppTheme', val);
     },
     changeLanguage() {
       this.$i18n.locale = this.selectedLang;
     },
   },
   computed: {
-  
     isDarkMode(){
       return this.$store.getters.getIsDarkMode;
     }

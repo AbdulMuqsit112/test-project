@@ -112,19 +112,22 @@
 
 .table thead th {
   border-top: 0;
-  border-bottom-width: 1px;
+  border-bottom-width: 0.1px;
   font-weight: 500;
   color: #6c7293;
+  padding-block: 14px !important;
+  padding-inline: 4px;
+  text-align: center !important;
 }
 
 .table tbody td {
+  padding-block: 10px;
   color: #6c7293;
   font-weight: 300;
 }
 
 .table thead th {
   vertical-align: middle;
-  border-bottom: 2px solid #2c2e33;
 }
 
 .table tr {
@@ -186,7 +189,9 @@
   border: 0.2px solid #39404b;
   border-radius: 4px;
 }
-
+.custom-text-color{
+  color: #007BFF !important;
+}
 @media screen and (max-width: 4500px) {
   .varaible-font {
     font-size: xx-large !important;

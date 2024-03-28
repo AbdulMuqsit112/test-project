@@ -5684,3 +5684,6 @@ input[type="radio"]:checked + .sbxTableRadioField__radio:after {
 .router-link {
   text-decoration: none;
 }
+.header-border {
+  border-right: 0.1px solid #48575e;
+}

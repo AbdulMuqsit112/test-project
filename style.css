@@ -5641,6 +5641,7 @@ input[type="radio"]:checked + .sbxTableRadioField__radio:after {
 }
 .dark-header {
   background-color: #22252e !important;
+  color: #787b86 !important;
 }
 .dark-symbol-table {
   background-color: inherit !important;

@@ -2,19 +2,21 @@
   <div class="mainBlock" :style="getMainBlockStyle">
     <div class="mainBlock__tabs">
       <div class="mainBlock__tabsItem mainBlock__tabsItem_add">+</div>
-      <button class="tab-buttons" :class="{ 'dark-theme': isDarkMode, 'text-primary px-4': activeTab == 'stocks' }" @click="switchTabs('stocks')">Open
+      <button class="tab-buttons" :class="{ 'dark-theme': isDarkMode, 'text-primary px-4': activeTab == 'stocks' }"
+        @click="switchTabs('stocks')">Open
         Positions</button>
-      <button class="tab-buttons" :class="{ 'dark-theme': isDarkMode, 'text-primary px-4': activeTab == 'history'  }" @click="switchTabs('history')">
+      <button class="tab-buttons" :class="{ 'dark-theme': isDarkMode, 'text-primary px-4': activeTab == 'history' }"
+        @click="switchTabs('history')">
         History
       </button>
     </div>
     <div class="mainBlock__content">
-      <div class="mainBlock__tabsEmpty p-0">
-        <div v-show="activeTab === 'stocks'" class="w-100 h-100 overflow-auto">
-          <table class="w-100">
+      <div class="mainBlock__tabsEmpty p-0" ref="tableCont">
+        <div v-show="activeTab === 'stocks'" class="w-100 h-100">
+          <table class="w-100 fixed_header">
             <thead class="sticky-top">
-              <tr :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }">
-                <th class="header-border">
+              <tr :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }" class="w-100">
+                <th class="header-border" style="width: 300px !important">
                   Ticker
                   <input class="p-1 ml-1 rounded" type="text" v-model="searchTerm" placeholder="Search Ticker"
                     @input="filterStocks" />
@@ -22,7 +24,7 @@
                 <th class="px-2 header-border">PRICE</th>
                 <th class="px-2 header-border">CHG</th>
                 <th class="px-2 header-border">CHG%</th>
-                <th class="px-2 header-border">TECHNICAL RATING</th>
+                <th class="px-2 header-border" style="width: 240px !important">TECHNICAL RATING</th>
                 <th class="px-2 header-border">VOL</th>
                 <th class="px-2 header-border">VOLUME PRICE</th>
                 <th class="px-2 header-border">MKT CAP</th>
@@ -33,10 +35,10 @@
                 <th class="px-2">CLOSE ORDER</th>
               </tr>
             </thead>
-            <tbody >
-              <tr v-for="stock in filteredStocks" :key="stock.id"
-                :class="{ 'dark-tr': isDarkMode, 'light-tr': !isDarkMode }">
-                <td class="px-2">{{ stock.symbolName }}</td>
+            <tbody :style="{'height': tbodyHeight}">
+              <tr v-for=" stock  in  filteredStocks " :key=" stock.id "
+                :class=" { 'dark-tr': isDarkMode, 'light-tr': !isDarkMode } ">
+                <td class="px-2" style="width: 300px !important">{{ stock.symbolName }}</td>
                 <td class="px-2">{{ stock.price }}</td>
                 <td class="px-2">{{ stock.chg }}</td>
                 <td class="px-2">{{ stock.chgPercent }}</td>
@@ -53,12 +55,12 @@
                     <span class="cursor-pointer" @click="showModal(stock.id)">
                       <i class="fas fa-times"></i>
                     </span>
-                    <div v-if="isModalVisible && stock.id === selectedStockSymbol"
+                    <div v-if=" isModalVisible && stock.id === selectedStockSymbol "
                       class="tooltip-content d-flex flex-column gap-1 text-sm"
-                      :class="{ 'dark-bg': isDarkMode, 'light-bg': !isDarkMode }">
+                      :class=" { 'dark-bg': isDarkMode, 'light-bg': !isDarkMode } ">
                       <p>Are you sure?</p>
                       <span class="d-flex gap-2">
-                        <button class="btn bg-danger btn-danger text-xs px-2" @click="hideModal">Cancel</button>
+                        <button class="btn bg-danger btn-danger text-xs px-2" @click=" hideModal ">Cancel</button>
                         <button class="btn btn-success text-xs px-3"
                           @click="confirmDelete(stock.id, stock.closePrice)">Ok</button>
                       </span>
@@ -69,10 +71,10 @@
             </tbody>
           </table>
         </div>
-        <div v-show="activeTab === 'history'" class="overflow-auto  w-100 h-100">
-          <table class="w-100">
-            <thead class="sticky-top">
-              <tr :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }">
+        <div v-show=" activeTab === 'history' " class="w-100 h-100">
+          <table class="w-100 fixed_header">
+            <thead>
+              <tr class="sticky-top" :class=" { 'dark-header': isDarkMode, 'light-header': !isDarkMode } ">
                 <th class="px-3 header-border">Positions</th>
                 <th class="px-3 header-border">Open Date</th>
                 <th class="px-3 header-border">Type</th>
@@ -86,16 +88,16 @@
                 <th class="px-3">Gross Profit</th>
               </tr>
             </thead>
-            <tbody>
-              <tr :class="{ 'dark-tr': isDarkMode, 'light-tr': !isDarkMode }" v-for="(item, index) in histData"
-                :key="index">
+            <tbody :style="{'height': tbodyHeight}">
+              <tr :class=" { 'dark-tr': isDarkMode, 'light-tr': !isDarkMode } " v-for="( item, index ) in  histData "
+                :key=" index ">
                 <td class="px-3">{{ item.position }}</td>
                 <td class="px-3">{{ item.openDate }}</td>
                 <td class="px-3">
-                  <span class="text-danger py-1 px-2" v-if="item.type == 2">
+                  <span class="text-danger py-1 px-2" v-if=" item.type == 2 ">
                     Sell
                   </span>
-                  <span class="text-success py-1 px-2" v-if="item.type == 1">
+                  <span class="text-success py-1 px-2" v-if=" item.type == 1 ">
                     Buy
                   </span>
                 </td>
@@ -113,7 +115,7 @@
         </div>
       </div>
     </div>
-    <div v-if="layout != 1" class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"></div>
+    <div v-if=" layout != 1 " class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"></div>
   </div>
 </template>
 
@@ -128,10 +130,12 @@ export default {
       histData: [],
       selectedStockSymbol: null,
       isModalVisible: false,
+      tbodyHeight: "auto",
     };
   },
   mounted() {
     this.fetchStockTableData();
+    this.setTableBodyHeight();
   },
   methods: {
     showModal(symbolName) {
@@ -187,6 +191,13 @@ export default {
         this.fetchHistoryData();
       }
       this.activeTab = tab;
+    },
+    setTableBodyHeight() {
+      this.$nextTick(() => {
+        const tableContainer = this.$refs.tableCont;
+        const dimensions = tableContainer.getBoundingClientRect();
+        this.tbodyHeight = `${dimensions.height}px`;
+      });
     },
   },
   computed: {
@@ -262,44 +273,56 @@ table {
   color: #6c7293;
   font-size: medium;
 }
+.header-border {
+  border-right: 1px solid #2a2e39;
+  position: sticky;
+  top: 0;
+}
 
+.fixed_header thead tr {
+  display: block;
+}
+tbody {
+  display: block;
+  overflow: auto;
+}
 th,
 td {
   border-bottom: 0.1px ridge;
   border-color: #39404b;
-  text-align: left;
-  padding: 8px;
-  color: #6c7293;
+  padding-inline: 8px;
   border-left: none;
   border-right: none;
-  font-size: 60%;
+  text-align: center;
+  vertical-align: middle;
+  width: 200px;
 }
-
+td {
+  color: #6c7293;
+  font-size: 60%;
+  padding-block: 12px;
+}
+th {
+  border-bottom: 2px solid #2c2e33 !important;
+  border-bottom-width: 1px;
+  font-size: 60%;
+  font-weight: 300 !important;
+  padding-block: 10px;
+}
 .dark-tr:hover {
   background-color: #030404;
 }
-
 .light-tr:hover {
   background-color: #eff0f1;
 }
 
-th {
-  vertical-align: middle;
-  border-bottom: 2px solid #2c2e33 !important;
-  border-bottom-width: 1px;
-  font-size: 70%;
-  font-weight: 300 !important;
-}
 .tab-buttons {
   border-inline: 0.5px solid #48575e;
   border-bottom: 0.3px solid #48575e;
-  border-radius: 4px;
+  border-radius: 3px;
   cursor: pointer;
   padding: 0px 10px;
   transition: background-color 0.3s ease;
-}
-.header-border {
-  border-right: 0.1px solid #48575e;
 }
 @media screen and (max-width: 1024px) {
   td {

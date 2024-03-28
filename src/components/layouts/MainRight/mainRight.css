@@ -50,7 +50,7 @@
 }
 
 .buySellSpan {
-  font-size: 25%;
+  font-size: 68%;
   font-weight: 400;
 }
 
@@ -64,7 +64,7 @@
 
 .inpbox {
   position: relative;
-  bottom: 46px;
+  bottom: 45px;
   display: flex;
   justify-content: center;
 }
@@ -115,7 +115,7 @@
   border-bottom-width: 0.1px;
   font-weight: 500;
   color: #6c7293;
-  padding-block: 15px !important;
+  padding-block: 10px !important;
   padding-inline: 4px;
   font-size: 85%;
   vertical-align: middle;
@@ -129,6 +129,9 @@
   padding-block: 11px;
   color: #6c7293;
   font-weight: 300;
+  vertical-align: middle;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .table thead th {
@@ -144,40 +147,10 @@
   background-color: #030404;
   
 }
-
-.table td {
-  vertical-align: middle;
-  line-height: 1;
-  white-space: nowrap;
-}
-
 .symIcon {
   width: 8px;
   height: 8px;
 }
-
-.modal-wrapper {
-  overflow-y: auto;
-  padding: 15px;
-  border: 1px solid;
-  border-color: #39404b;
-  background-color: inherit;
-}
-
-.modal-header {
-  border: none;
-}
-
-.modal-header button {
-  color: inherit;
-  border: none;
-}
-
-.modal-footer {
-  justify-content: center;
-  border: none;
-}
-
 .quantity-grp {
   border-block: 2px solid #39404b;
   color: #6c7293;
@@ -192,7 +165,7 @@
   color: #007BFF !important;
 }
 .header-border {
-  border-right: 0.1px solid #48575e;
+  border-right: 1px solid #2a2e39;
 }
 @media screen and (max-width: 4500px) {
   .varaible-font {

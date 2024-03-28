@@ -5,14 +5,14 @@
       <div class="mainBlock__tabsItem mainBlock__tabsItem_add">+</div>
     </div>
     <div class="mainBlock__content">
-      <div class="mainBlock__tabsEmpty p-0" ref="Modal">
+      <div class="mainBlock__tabsEmpty p-0">
         <ModalComponent v-if="isModalOpen" :currentAsset="currentAsset" :btnVal="btnVal" :bid="bid" :ask="ask" :volume="volume"
-          :btnClass="btnClass" :modalDimensions="modalDimensions" @closeModal="closeModal" @handleInput="handleInput" @handleBlur="handleBlur"/>
+          :btnClass="btnClass" @closeModal="closeModal" @handleInput="handleInput" @handleBlur="handleBlur"/>
           
           <input type="text" class="w-100 p-2" :class="{ 'dark-symbol-table': isDarkMode }" v-if="isShowSearchBar"
             v-model="searchQuery" placeholder="Search...">
           <div class="d-flex justify-content-between align-items-center w-100 p-2"
-          v-if="!isModalOpen">
+          >
           <div class="d-flex gap-2">
             <select class="category w-25 p-1" :class="{ 'dark-symbol-table': isDarkMode}"
               v-model="selectedCategory">
@@ -27,14 +27,14 @@
           </div>
           <i class="fa fa-search cursor-pointer" :class="{'custom-text-color': isShowSearchBar, 'text-white': isDarkMode}" @click="showSearchBar()"></i>
         </div>
-        <div class="w-100 h-100 overflow-auto" v-if="!isModalOpen">
+        <div class="w-100 h-100 overflow-auto">
           <table class="table table-hover">
             <thead class="sticky-top">
               <tr>
-                <th class="p-2 header-border text-start" :class="{ 'dark-header': isDarkMode }">SYMBOL</th>
-                <th class="p-2 header-border" :class="{ 'dark-header': isDarkMode }">LAST</th>
-                <th class="p-2 header-border" :class="{ 'dark-header': isDarkMode }">CHANGE</th>
-                <th class="p-2" :class="{ 'dark-header': isDarkMode }">CHANGE %</th>
+                <th class=" header-border text-start" :class="{ 'dark-header': isDarkMode }">SYMBOL</th>
+                <th class=" header-border" :class="{ 'dark-header': isDarkMode }">LAST</th>
+                <th class=" header-border" :class="{ 'dark-header': isDarkMode }">CHANGE</th>
+                <th :class="{ 'dark-header': isDarkMode }">CHANGE %</th>
               </tr>
             </thead>
             <tbody>
@@ -204,13 +204,13 @@
                     {{ asset.s }}
                   </div>
                 </td>
-                <td v-if="!isSelected(asset)" class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">
-                  {{ asset.p }}
+                <td v-if="!isSelected(asset)" class="text-end text-xs" :class="{ 'dark-symbol-table text-white': isDarkMode }">
+                  {{ assetVal(asset.p, 'normal').slice(0, -2)  }} <span class="text-md">{{assetVal(asset.p, 'low').slice(-2) }}</span>
                 </td>
-                <td v-if="!isSelected(asset)" class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">
+                <td v-if="!isSelected(asset)" class="text-end text-sm" :class="{ 'dark-symbol-table text-white': isDarkMode }">
                   {{ asset.v }}
                 </td>
-                <td v-if="!isSelected(asset)" class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">
+                <td v-if="!isSelected(asset)" class="text-end text-sm" :class="{ 'dark-symbol-table text-white': isDarkMode }">
                   {{ asset.changePercentage }}
                 </td>
               </tr>
@@ -345,9 +345,10 @@ export default {
     assetVal(price, type) {
       if (type == 'high') {
         price += 0.01;
-      } else {
-        price -= 0.01
+      } else if (type == 'low') {
+        price -= 0.01;
       }
+      price = price.toFixed(4)
       return price.toString();
     },
     closeModal() {
@@ -389,14 +390,6 @@ export default {
           left: '80%',
         };
       }
-    },
-    modalDimensions() {
-      const Modal = this.$refs.Modal;
-      const dimensions = Modal.getBoundingClientRect();
-      return {
-        width: `${dimensions.width}px`,
-        maxHeight: `${dimensions.height}px`,
-      };
     },
     filteredAssets() {
       const lowerCaseQuery = this.searchQuery.toLowerCase();

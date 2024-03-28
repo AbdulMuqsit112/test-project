@@ -1,10 +1,10 @@
 <template>
-  <div class="modal-wrapper" :style="modalDimensions">
+  <div class="modal-wrapper w-25 p-4" :class="{ 'dark-theme': isDarkMode, 'bg-white': !isDarkMode }">
     <div class="modal-content gap-4" :class="{ 'dark-mode-text': isDarkMode, 'light-mode-text': !isDarkMode }">
       <div class="modal-header d-flex justify-content-between">
         <h5 class="varaible-font">Trade Pannel</h5>
         <button type="button" class="btn varaible-font" @click="closeModal()" aria-label="Close">
-          X
+          <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <div class="modal-body d-flex flex-column gap-5">
@@ -65,7 +65,7 @@
 </template>
 <script>
 export default {
-  props: ['currentAsset', 'btnVal', 'btnClass', 'bid', 'ask', 'modalDimensions', 'volume'],
+  props: ['currentAsset', 'btnVal', 'btnClass', 'bid', 'ask', 'volume'],
   data() {
     return {
       takeProfit: false,
@@ -136,3 +136,28 @@ export default {
   }
 }
 </script>
+<style>
+.modal-wrapper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid;
+  border-color: #39404b;
+  z-index: 4000;
+}
+
+.modal-header {
+  border: none;
+}
+
+.modal-header button {
+  color: inherit;
+  border: none;
+}
+
+.modal-footer {
+  justify-content: center;
+  border: none;
+}
+</style>

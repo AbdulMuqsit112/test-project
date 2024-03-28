@@ -112,19 +112,27 @@
 
 .table thead th {
   border-top: 0;
-  border-bottom-width: 1px;
+  border-bottom-width: 0.1px;
   font-weight: 500;
   color: #6c7293;
+  padding-block: 15px !important;
+  padding-inline: 4px;
+  font-size: 85%;
+  vertical-align: middle;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: auto;
+  font-weight: 300 !important;
 }
 
 .table tbody td {
+  padding-block: 11px;
   color: #6c7293;
   font-weight: 300;
 }
 
 .table thead th {
   vertical-align: middle;
-  border-bottom: 2px solid #2c2e33;
 }
 
 .table tr {
@@ -133,14 +141,8 @@
 }
 
 .table tr:hover {
-  background-color: #212529;
-}
-
-.table th {
-  vertical-align: middle;
-  line-height: 1;
-  white-space: nowrap;
-  cursor: auto;
+  background-color: #030404;
+  
 }
 
 .table td {
@@ -186,7 +188,12 @@
   border: 0.2px solid #39404b;
   border-radius: 4px;
 }
-
+.custom-text-color{
+  color: #007BFF !important;
+}
+.header-border {
+  border-right: 0.1px solid #48575e;
+}
 @media screen and (max-width: 4500px) {
   .varaible-font {
     font-size: xx-large !important;

@@ -10,7 +10,7 @@
     </div>
     <div class="mainBlock__content">
       <div class="mainBlock__tabsEmpty p-0">
-        <div v-show="activeTab === 'stocks'" class="overflow-auto w-100 h-100">
+        <div v-show="activeTab === 'stocks'" class="w-100 h-100 overflow-auto">
           <table class="w-100">
             <thead class="sticky-top">
               <tr :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }">
@@ -33,7 +33,7 @@
                 <th class="px-2">CLOSE ORDER</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody >
               <tr v-for="stock in filteredStocks" :key="stock.id"
                 :class="{ 'dark-tr': isDarkMode, 'light-tr': !isDarkMode }">
                 <td class="px-2">{{ stock.symbolName }}</td>
@@ -73,16 +73,16 @@
           <table class="w-100">
             <thead class="sticky-top">
               <tr :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }">
-                <th class="px-3">Positions</th>
-                <th class="px-3">Open Date</th>
-                <th class="px-3">Type</th>
-                <th class="px-3">Volume</th>
-                <th class="px-3">SL Price</th>
-                <th class="px-3">TP Price</th>
-                <th class="px-3">Open Price</th>
-                <th class="px-3">Market Price</th>
-                <th class="px-3">Commission</th>
-                <th class="px-3">Swaps</th>
+                <th class="px-3 header-border">Positions</th>
+                <th class="px-3 header-border">Open Date</th>
+                <th class="px-3 header-border">Type</th>
+                <th class="px-3 header-border">Volume</th>
+                <th class="px-3 header-border">SL Price</th>
+                <th class="px-3 header-border">TP Price</th>
+                <th class="px-3 header-border">Open Price</th>
+                <th class="px-3 header-border">Market Price</th>
+                <th class="px-3 header-border">Commission</th>
+                <th class="px-3 header-border">Swaps</th>
                 <th class="px-3">Gross Profit</th>
               </tr>
             </thead>
@@ -260,7 +260,6 @@ input {
 table {
   border-collapse: collapse;
   color: #6c7293;
-  overflow-y: scroll;
   font-size: medium;
 }
 
@@ -291,9 +290,6 @@ th {
   font-size: 70%;
   font-weight: 300 !important;
 }
-.header-border {
-  border-right: 0.1px solid #48575e;
-}
 .tab-buttons {
   border-inline: 0.5px solid #48575e;
   border-bottom: 0.3px solid #48575e;
@@ -302,7 +298,9 @@ th {
   padding: 0px 10px;
   transition: background-color 0.3s ease;
 }
-
+.header-border {
+  border-right: 0.1px solid #48575e;
+}
 @media screen and (max-width: 1024px) {
   td {
     padding: 2px;

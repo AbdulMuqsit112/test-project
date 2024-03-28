@@ -8,29 +8,33 @@
       <div class="mainBlock__tabsEmpty p-0" ref="Modal">
         <ModalComponent v-if="isModalOpen" :currentAsset="currentAsset" :btnVal="btnVal" :bid="bid" :ask="ask" :volume="volume"
           :btnClass="btnClass" :modalDimensions="modalDimensions" @closeModal="closeModal" @handleInput="handleInput" @handleBlur="handleBlur"/>
-        <div class="d-flex gap-2 w-100 p-2" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }"
-          v-if="!isModalOpen">
-          <select class="category p-1" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }"
-            v-model="selectedCategory">
-            <option value="all">All</option>
-            <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
-          </select>
-          <div class="fav-grp d-flex align-items-center gap-1 p-1"
-            :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }" @click="toggleShoFav()">
-            <input type="checkbox" v-model="showFav">
-            <label for="checkbox">favourites</label>
-          </div>
-          <input type="text" class="w-100" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }"
+          
+          <input type="text" class="w-100 p-2" :class="{ 'dark-symbol-table': isDarkMode }" v-if="isShowSearchBar"
             v-model="searchQuery" placeholder="Search...">
+          <div class="d-flex justify-content-between align-items-center w-100 p-2"
+          v-if="!isModalOpen">
+          <div class="d-flex gap-2">
+            <select class="category w-25 p-1" :class="{ 'dark-symbol-table': isDarkMode}"
+              v-model="selectedCategory">
+              <option value="all">All</option>
+              <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
+            </select>
+            <div class="fav-grp d-flex align-items-center gap-1 p-1"
+              :class="{ 'dark-symbol-table': isDarkMode}" @click="toggleShoFav()">
+              <input type="checkbox" v-model="showFav">
+              <label for="checkbox">favourites</label>
+            </div>
+          </div>
+          <i class="fa fa-search cursor-pointer" :class="{'custom-text-color': isShowSearchBar, 'text-white': isDarkMode}" @click="showSearchBar()"></i>
         </div>
         <div class="w-100 h-100 overflow-auto" v-if="!isModalOpen">
           <table class="table table-hover">
             <thead class="sticky-top">
               <tr>
-                <th class="fw-semibold" :class="{ 'dark-symbol-table text-white': isDarkMode }">Symbol</th>
-                <th class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">Last</th>
-                <th class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">Change</th>
-                <th class="text-end" :class="{ 'dark-symbol-table': isDarkMode }">Change %</th>
+                <th class="p-2 header-border text-start" :class="{ 'dark-header': isDarkMode }">SYMBOL</th>
+                <th class="p-2 header-border" :class="{ 'dark-header': isDarkMode }">LAST</th>
+                <th class="p-2 header-border" :class="{ 'dark-header': isDarkMode }">CHANGE</th>
+                <th class="p-2" :class="{ 'dark-header': isDarkMode }">CHANGE %</th>
               </tr>
             </thead>
             <tbody>
@@ -241,6 +245,7 @@ export default {
       isInfoSection: false,
       showFav: false,
       currentAsset: null,
+      isShowSearchBar: false
     };
   },
   mounted() {
@@ -345,6 +350,9 @@ export default {
       this.$store.commit('setSelctedData', this.currentAsset);
       this.currentAsset = null;
     },
+    showSearchBar() {
+      this.isShowSearchBar = !this.isShowSearchBar
+    }
   },
   computed: {
     layout() {

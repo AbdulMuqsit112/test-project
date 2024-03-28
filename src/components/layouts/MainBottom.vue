@@ -42,7 +42,7 @@
                 <td class="px-2">{{ stock.price }}</td>
                 <td class="px-2">{{ stock.chg }}</td>
                 <td class="px-2">{{ stock.chgPercent }}</td>
-                <td class="px-2">{{ stock.technicalRating }}</td>
+                <td class="px-2" style="width: 240px !important">{{ stock.technicalRating }}</td>
                 <td class="px-2">{{ stock.vol }}</td>
                 <td class="px-2">{{ stock.volumePrice }}</td>
                 <td class="px-2">{{ stock.mktCap }}</td>
@@ -207,6 +207,7 @@ export default {
       );
     },
     layout() {
+      this.setTableBodyHeight()
       return this.$store.state.layoutType;
     },
     getMainBlockStyle() {

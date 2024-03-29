@@ -21,7 +21,7 @@ const store = new Vuex.Store({
     showAlert: false,
     alertColor: "red",
     alertText: "",
-    assetCategories: []
+    assetCategories: [],
   },
   mutations: {
     changeLayout(state, newLayoutType) {
@@ -35,7 +35,6 @@ const store = new Vuex.Store({
         state.selectedData.splice(selectedIndex, 1);
       } else {
         if (state.selectedData.length < 4) {
-          state.selectedData = [],
           state.selectedData.push(asset);
         } else {
           console.log("You can only select up to 4 assets.");
@@ -85,7 +84,7 @@ const store = new Vuex.Store({
     setAlertText(state, text) {
       state.alertText = text;
     },
-    setAssetCategories(state, categories){
+    setAssetCategories(state, categories) {
       state.assetCategories = categories;
     },
   },
@@ -93,7 +92,7 @@ const store = new Vuex.Store({
     setAlertVal({ commit }, { color, text }) {
       commit("setAlertColor", color);
       commit("setAlertText", text);
-      commit("toggleShowAlert",);
+      commit("toggleShowAlert");
     },
     setAppTheme({ state }) {
       if (state.isDarkMode) {
@@ -173,7 +172,7 @@ const store = new Vuex.Store({
         console.error("Error fetching symbols data:", error);
       }
     },
-    async fetchStockTableData({state, commit }, { limits }) {
+    async fetchStockTableData({ state, commit }, { limits }) {
       try {
         const response = await state.$http.get("orders", {
           params: {
@@ -190,36 +189,44 @@ const store = new Vuex.Store({
         console.error("Error fetching data:", error);
       }
     },
-    async createOrder({state, commit }, { asset }) {
+    async createOrder({ state, commit }, { asset }) {
       try {
-        const response = await state.$http.post('orders', asset);
+        const response = await state.$http.post("orders", asset);
         if (response.status == 200) {
           const limits = {
             limit: 1,
-            offset: 1
-          }
-          this.dispatch('fetchStockTableData', { limits });
-          this.dispatch('setAlertVal', { color: 'success', text: 'Order Placed Successfully' });
+            offset: 1,
+          };
+          this.dispatch("fetchStockTableData", { limits });
+          this.dispatch("setAlertVal", {
+            color: "success",
+            text: "Order Placed Successfully",
+          });
         } else {
           console.log("Something went Wrong", response.message);
-          this.dispatch('setAlertVal', { color: 'error', text: 'Could Not Place Order' });
+          this.dispatch("setAlertVal", {
+            color: "error",
+            text: "Could Not Place Order",
+          });
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-        this.dispatch('setAlertVal', { color: 'error', text: 'Could Not Place Order' });
+        this.dispatch("setAlertVal", {
+          color: "error",
+          text: "Could Not Place Order",
+        });
       }
     },
-    async fetchAssetCategory({state, commit}) {
+    async fetchAssetCategory({ state, commit }) {
       try {
-        const response = await state.$http.get('symbols');
+        const response = await state.$http.get("symbols");
         if (response.status == 200) {
           commit("setAssetCategories", response.data);
         } else {
           console.log("Something went wrong");
         }
-      }
-      catch (error) {
-        console.error('Error fetching Categories:', error);
+      } catch (error) {
+        console.error("Error fetching Categories:", error);
       }
     },
   },

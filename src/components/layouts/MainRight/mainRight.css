@@ -115,9 +115,9 @@
   border-bottom-width: 0.1px;
   font-weight: 500;
   color: #6c7293;
-  padding-block: 10px !important;
-  padding-inline: 4px;
-  font-size: 85%;
+  padding-block: 14px !important;
+  padding-inline: 3px;
+  font-size: 72%;
   vertical-align: middle;
   line-height: 1;
   white-space: nowrap;
@@ -127,11 +127,11 @@
 
 .table tbody td {
   padding-block: 11px;
-  color: #6c7293;
   font-weight: 300;
   vertical-align: middle;
   line-height: 1;
   white-space: nowrap;
+  font-size: 70%;
 }
 
 .table thead th {
@@ -140,10 +140,10 @@
 
 .table tr {
   border-color: #39404b;
-  cursor: pointer;
 }
 
 .table tr:hover {
+  cursor: pointer;
   background-color: #030404;
   
 }

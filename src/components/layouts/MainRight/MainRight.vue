@@ -38,20 +38,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(asset, index) in filteredAssets" :key="asset.id" @click.stop="toggleRowContent(asset)">
+              <tr v-for="(asset, index) in filteredAssets" :key="asset.id" @click.stop="toggleRowContent(asset)" class="cursor-pointer">
                 <td :colspan="4" v-if="isSelected(asset)" :class="{ 'dark-symbol-table': isDarkMode }">
                   <div class="buySell d-flex flex-column" :class="{ 'dark-symbol-table': isDarkMode }">
                     <div class="fw-semibold d-flex justify-content-between" :class="{ 'text-white': isDarkMode }">
                       <div class="d-flex gap-2 align-items-center">
-                        <!-- <img
-                          class="symIcon"
-                          :src="
-                            item.symbolIcon
-                              ? require(`src/assets/${item.symbolIcon}`)
-                              : ''
-                          "
-                          alt="icon"
-                        /> -->
                         {{ asset.s }}
                       </div>
                       <div class="icons-group d-flex gap-2 p-2">
@@ -192,15 +183,13 @@
                 <td v-if="!isSelected(asset)" class="fw-semibold"
                   :class="{ 'dark-symbol-table text-white': isDarkMode }">
                   <div class="d-flex gap-2 align-items-center">
-                    <!-- <img
+                    <img
                       class="symIcon"
-                      :src="
-                        item.symbolIcon
-                          ? require(`src/assets/${item.symbolIcon}`)
-                          : ''
-                      "
+                      src="src/assets/gold.png"
                       alt="icon"
-                    /> -->
+                      @dblclick.stop="handleSelectedAssetGraph(asset)"
+                      @click.stop="$event.stopPropagation()"
+                    />
                     {{ asset.s }}
                   </div>
                 </td>
@@ -275,15 +264,22 @@ export default {
       }
     },
     isSelected(asset) {
-      return this.selectedData.some(selectedAsset => selectedAsset.id === asset.id)
-      
+      if (this.currentAsset != null) return this.currentAsset.id === asset.id;
+      return false
     },
     toggleInfoSection() {
       this.isInfoSection = !this.isInfoSection;
     },
     toggleRowContent(asset) {
-      this.$store.commit('setSelctedData', asset);
+      if (this.currentAsset != null && this.currentAsset.id == asset.id) {
+        this.currentAsset = null;
+      } else {
+        this.currentAsset = asset;
+      }
       this.isInfoSection = false;
+    },
+    handleSelectedAssetGraph(asset) {
+      this.$store.commit('setSelctedData', asset);
     },
     handleDataUpdated(data) {
       const processedData = JSON.parse(data).data;

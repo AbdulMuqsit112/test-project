@@ -16,7 +16,7 @@
           <div class="d-flex justify-content-between align-items-center">
             <span>Volume:</span>
             <input type="number" step="0.01" @input="handleInput($event, 'vol')" @blur="handleBlur('vol')"
-              v-model="volume" class="vol" :class="{ 'dark-vol': isDarkMode }" />
+              v-model="vol" class="vol" :class="{ 'dark-vol': isDarkMode }" />
           </div>
           <div class="d-flex justify-content-between align-items-center">
             <span>Stop Loss:</span>
@@ -30,7 +30,7 @@
         <div class="d-flex flex-column quantity-grp py-4 gap-1">
           <div class="d-flex justify-content-between align-items-center">
             <span>Quantity:</span>
-            <span>{{ volume }} Units</span>
+            <span>{{ vol }} Units</span>
           </div>
           <div class="d-flex justify-content-between align-items-center">
             <span>Required margin:</span>
@@ -69,7 +69,8 @@ export default {
   data() {
     return {
       takeProfit: false,
-      stopLoss: false
+      stopLoss: false,
+      vol: this.volume
     }
   },
   methods: {
@@ -90,7 +91,7 @@ export default {
         chg: change,
         chgPercentage: percentageNumber,
         type: orderType,
-        volume: this.volume,
+        volume: this.vol,
         volumePrice: 0,
         mktCap: 0,
         pe: 0,

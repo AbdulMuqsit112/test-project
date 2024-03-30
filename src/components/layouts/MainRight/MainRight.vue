@@ -126,7 +126,7 @@
                         -
                       </button>
                       <input class="sell-val" :class="{ 'sel-val-dark': isDarkMode }" type="text"
-                        @input="handleInput($event, 'sellVal')" @blur="handleBlur('sellVal')" v-model="sellVal" />
+                        @input="handleInput" @blur="handleBlur" v-model="volume" />
                       <button @click.stop="handleSum('Increment')" class="inc-dec-btn rounded-end-1"
                         :class="{ 'inc-dec-dark': isDarkMode }">
                         +
@@ -223,7 +223,6 @@ export default {
   },
   data() {
     return {
-      sellVal: 0.01,
       isModalOpen: false,
       volume: 0.01,
       btnClass: "",
@@ -286,7 +285,7 @@ export default {
       const processedData = JSON.parse(data).data;
       if (processedData && processedData.length > 0) this.$store.dispatch('updateSymbolsData', { receivedData: processedData });
     },
-    handleInput(event, val) {
+    handleInput(event) {
       let value = event.target.value;
       value = value.replace(/[^\d.]/g, "");
       const decimalCount = (value.match(/\./g) || []).length;
@@ -294,36 +293,23 @@ export default {
         value = value.substr(0, value.lastIndexOf("."));
       }
       event.target.value = value;
-      if (val == "vol") {
-        this.volume = value;
-      } else {
-        this.sellVal = value;
-      }
+      this.volume = value;
     },
-    handleBlur(val) {
-      if (val === "vol") {
-        let volume = parseFloat(this.volume);
-        if (isNaN(volume) || volume <= 0) {
-          this.volume = "0.01";
-        } else {
-          this.volume = volume.toString();
-        }
+    handleBlur() {
+      let volume = parseFloat(this.volume);
+      if (isNaN(volume) || volume <= 0) {
+        this.volume = "0.01";
       } else {
-        let sellVal = parseFloat(this.sellVal);
-        if (isNaN(sellVal) || sellVal <= 0) {
-          this.sellVal = "0.01";
-        } else {
-          this.sellVal = sellVal.toString();
-        }
+        this.volume = volume.toString();
       }
     },
     handleSum(type) {
       if (type == 'Increment') {
-        this.sellVal = (parseFloat(this.sellVal) + 0.01).toFixed(2);
+        this.volume = (parseFloat(this.volume) + 0.01).toFixed(2);
         return;
       }
-      if (parseFloat(this.sellVal) > 0.01) {
-        this.sellVal = (parseFloat(this.sellVal) - 0.01).toFixed(2);
+      if (parseFloat(this.volume) > 0.01) {
+        this.volume = (parseFloat(this.volume) - 0.01).toFixed(2);
       }
     },
     generateOrder(asset, type) {

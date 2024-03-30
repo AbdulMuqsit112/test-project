@@ -12,7 +12,8 @@
                 d="M31 31.36H1A.36.36 0 01.64 31V1h.72v29.64H31v.72zM24.36 26h-.72v-2.64H21v-.72h2.64V7h.721v1.64H27v.72h-2.64V26zm-8 0h-.72v-6.64H13v-.72h2.64V7h.72v5.64H19v.72h-2.64V26zm-8 0h-.72v-4.64H5v-.72h2.64V7h.72v3.64H11v.72H8.36V26z">
               </path>
               <path fill="none" d="M0 0h32v32H0z"></path>
-            </svg></i><span>Trading</span></router-link>
+            </svg></i>
+            <span>Trading</span></router-link>
       </li>
       <li class="menu-list-item">
         <router-link class="router-link" to="/profile" :class="{
@@ -71,6 +72,10 @@ export default {
 ul {
   padding-left: 0;
 }
-
-
+.icon-xlg {
+  margin-bottom: 5px !important;
+}
+.router-link {
+  padding: 8.8px 6px;
+}
 </style>

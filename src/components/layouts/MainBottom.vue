@@ -24,7 +24,7 @@
                   <i class="fa fa-search p-0 cursor-pointer" :class="{'custom-text-color': isShowSearchBar, 'text-inherit': isDarkMode}" @click="showSearchBar()"></i>
                   POSITIONS
                 </th>
-                <th class="header-border" style="width: 170px !important">OPEN DATE</th>
+                <th class="header-border p-0" style="width: 12%">OPEN DATE</th>
                 <th class="header-border">TYPE</th>
                 <th class="header-border">VOLUME</th>
                 <th class="header-border">SL PRICE</th>
@@ -38,10 +38,10 @@
               </tr>
             </thead>
             <tbody :style="{ 'height': tbodyHeight }">
-              <tr v-for=" stock  in  filteredStocks " :key="stock.id"
+              <tr class="w-100" v-for=" stock  in  filteredStocks " :key="stock.id"
                 :class="{ 'dark-tr': isDarkMode, 'light-tr': !isDarkMode }">
                 <td>{{ stock.symbolName }}</td>
-                <td>{{ formatDate(stock.createdOn) }}</td>
+                <td style="width: 12%">{{ formatDate(stock.createdOn) }}</td>
                 <td>{{ stock.type }}</td>
                 <td>{{ stock.volume }}</td>
                 <td>{{ stock.slPrice }}</td>
@@ -298,7 +298,8 @@ td {
   text-align: center;
   border-left: none;
   border-right: none;
-  width: 120px;
+  width: 10%;
+  min-width: 80px;
 }
 
 
@@ -337,15 +338,4 @@ th {
   transition: background-color 0.3s ease;
 }
 
-@media screen and (max-width: 1024px) {
-  td {
-    padding: 2px;
-  }
-
-  input {
-    margin-left: 2px !important;
-    padding: 2px !important;
-    border-radius: 2px !important;
-  }
-}
 </style>

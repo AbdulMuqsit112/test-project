@@ -16,7 +16,7 @@
           <div class="d-flex justify-content-between align-items-center">
             <span>Volume:</span>
             <input type="number" step="0.01" @input="handleInput($event, 'vol')" @blur="handleBlur('vol')"
-              v-model="vol" class="vol" :class="{ 'dark-vol': isDarkMode }" />
+              v-model="vol" class="vol" :class="{ 'dark-vol': isDarkMode }" :disabled="isValuesDisabled" />
           </div>
           <div class="d-flex justify-content-between align-items-center">
             <span>Stop Loss:</span>
@@ -65,16 +65,20 @@
 </template>
 <script>
 export default {
-  props: ['currentAsset', 'btnVal', 'btnClass', 'bid', 'ask', 'volume'],
+  props: ['currentAsset', 'btnVal', 'btnClass', 'bid', 'ask', 'volume', 'isValuesDisabled', 'sLoss', 'tProfit'],
   data() {
     return {
-      takeProfit: false,
-      stopLoss: false,
+      takeProfit: this.tProfit,
+      stopLoss: this.sLoss,
       vol: this.volume
     }
   },
   methods: {
     async createOrder() {
+      if (this.btnVal == 'Modify Buy' || this.btnVal == 'Modify Sell') {
+        this.closeModal();
+        return;
+      }
       const asset = this.generateOrderPayload();
       this.$store.dispatch('createOrder', { asset });
       this.closeModal();

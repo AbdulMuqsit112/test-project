@@ -73,7 +73,7 @@ ul {
   padding-left: 0;
 }
 .icon-xlg {
-  margin-bottom: 5px !important;
+  margin-bottom: 4.5px !important;
 }
 .router-link {
   padding: 8.8px 6px;

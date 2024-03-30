@@ -7,7 +7,7 @@
     <div class="mainBlock__content">
       <div class="mainBlock__tabsEmpty p-0">
         <ModalComponent v-if="isModalOpen" :currentAsset="currentAsset" :btnVal="btnVal" :bid="bid" :ask="ask" :volume="volume"
-          :btnClass="btnClass" @closeModal="closeModal" @handleInput="handleInput" @handleBlur="handleBlur"/>
+          :btnClass="btnClass" :sLoss="false" :tProfit="false" :isValuesDisabled="false" @closeModal="closeModal" @handleInput="handleInput" @handleBlur="handleBlur"/>
           
           <input type="text" class="w-100 p-2" :class="{ 'dark-symbol-table': isDarkMode }" v-if="isShowSearchBar"
             v-model="searchQuery" placeholder="Search...">
@@ -97,14 +97,14 @@
                       </div>
                     </div>
                     <div class="d-flex text-white">
-                      <div class="bg-danger d-flex flex-column gap-3 w-100 p-2" @click="generateOrder(asset, 'sell')">
+                      <div class="bg-danger d-flex flex-column gap-3 w-100 p-2" @click.stop="generateOrder(asset, 'sell')">
                         <div class="d-flex justify-content-between">
                           Sell
                           <img src="src/assets/down.png" class="arrowIcon" alt="icon" />
                         </div>
                         <span class="buySellSpan d-flex justify-content-start">{{ assetVal(asset.p, 'low').slice(0, -2) }}<span class="text-sm">{{ assetVal(asset.p, 'low').slice(-2) }}</span></span>
                       </div>
-                      <div class="bg-success d-flex flex-column gap-3 w-100 p-2" @click="generateOrder(asset, 'buy')">
+                      <div class="bg-success d-flex flex-column gap-3 w-100 p-2" @click.stop="generateOrder(asset, 'buy')">
                         <div class="d-flex justify-content-between">
                           <img src="src/assets/up.png" class="arrowIcon" alt="icon" />
                           Buy

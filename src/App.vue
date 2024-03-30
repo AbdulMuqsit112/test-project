@@ -40,6 +40,7 @@ export default {
   },
   mounted() {
     this.setLayout();
+    this.$store.dispatch('setDefaultComonentsDimensions');
   },
   methods: {
     getUser() {

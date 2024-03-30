@@ -7,15 +7,18 @@
       <div class="mainBlock__tabsEmpty p-0" ref="Graph">
         <div v-if="selectedData.length > 0" class="d-flex w-100 gap-2" :class="`${multiGraphs}`">
           <div v-for="(asset, index) in selectedData" :key="index" :class="`${graphClass}`">
-            <trading-vue :width="setMultiChartWidths()" :height="setMultiChartHeight()" :data="handleData(asset)" :font="graphFont" :titleTxt="asset.s"
-              :toolbar="true" :color-back="colors.colorBack" :color-grid="colors.colorGrid" :color-text="colors.colorText"></trading-vue>
+            <trading-vue :width="setMultiChartWidths()" :height="setMultiChartHeight()" :data="handleData(asset)"
+              :font="graphFont" :titleTxt="asset.s" :toolbar="true" :color-back="colors.colorBack"
+              :color-grid="colors.colorGrid" :color-text="colors.colorText"></trading-vue>
           </div>
         </div>
-        <trading-vue v-else :width="width" :height="height" :data="chart" :toolbar="true" :font="graphFont" :color-back="colors.colorBack" :color-grid="colors.colorGrid" :color-text="colors.colorText"></trading-vue>
+        <trading-vue v-else :width="width" :height="height" :data="chart" :toolbar="true" :font="graphFont"
+          :color-back="colors.colorBack" :color-grid="colors.colorGrid" :color-text="colors.colorText"></trading-vue>
       </div>
     </div>
-    <div v-if="layout == 1" class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"></div>
-    <div v-else class="mainBlock__split mainBlock__split_v mainBlock__split_right"></div>
+    <div v-if="layout == 1" class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"
+      @mousedown="resizeGraph"></div>
+    <div v-else class="mainBlock__split mainBlock__split_v mainBlock__split_right" @mousedown="resizeGraph"></div>
   </div>
 </template>
 
@@ -25,8 +28,10 @@ import TradingVue from "../../TradingVue.vue";
 import Data from "../../../data/data.json";
 import updatedData from "../../../data/updatedData.json";
 import DataCube from "../../helpers/datacube.js";
+import resizeMixin from '../../mixins/resizeMixin'
 export default {
   name: "GraphComponent",
+  mixins: [resizeMixin],
   components: { TradingVue },
   data() {
     return {
@@ -53,8 +58,8 @@ export default {
     window.removeEventListener('resize', this.setChartDimensions)
   },
   methods: {
-    setGraphTheme(){
-      if(!this.isDarkMode){
+    setGraphTheme() {
+      if (!this.isDarkMode) {
         this.colors = {
           colorBack: "#fff",
           colorGrid: "#eee",
@@ -69,14 +74,15 @@ export default {
       }
     },
     handleData(asset) {
-      let chartData = 
+      let chartData =
       {
         ...updatedData,
         onchart: [{
           type: asset.category,
           name: asset.s,
           data: []
-        }],}
+        }],
+      }
       chartData = new DataCube(chartData);
       return chartData;
     },
@@ -110,42 +116,21 @@ export default {
       }
       return this.height;
     },
+    resizeGraph(event) {
+      this.initResize(event, 'graph');
+    }
   },
   computed: {
     layout() {
-      return this.$store.state.layoutType;
+      return this.$store.getters.getLayoutType;
     },
     getMainBlockStyle() {
-      let layoutType = this.layout;
-      if (layoutType == 2) {
-        return {
-          width: '75%',
-          height: '50%',
-          top: '50%',
-          left: '0%',
-        };
-      } else if (layoutType == 3) {
-        return {
-          width: '45.6032%',
-          height: '50%',
-          top: '50%',
-          left: '0%',
-        };
-
-      }
-      else {
-        return {
-          width: '80%',
-          height: '75%',
-          top: '0%',
-          left: '0%',
-        };
-      }
+      return this.$store.getters.getLayoutDimensions.graphComponent;
     },
     selectedData() {
       return this.$store.getters.getSelectedData;
     },
-    isDarkMode(){
+    isDarkMode() {
       return this.$store.getters.getIsDarkMode;
     },
   },
@@ -157,9 +142,12 @@ export default {
         this.chart = new DataCube(Data);
       }
     },
-    layout(newVal) {
-      this.setChartDimensions();
-    },
+    getMainBlockStyle: {
+      handler(newVal) {
+        this.setChartDimensions();
+      },
+      deep: true
+    }
   },
 };
 </script>

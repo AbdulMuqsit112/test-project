@@ -11,56 +11,57 @@
       </button>
     </div>
     <div class="mainBlock__content">
+      <div class="p-2" v-if="isShowSearchBar">
+        <input class="p-1 ml-1 rounded" type="text" v-model="searchTerm" placeholder="Search Ticker"
+          @input="filterStocks" />
+      </div>
       <div class="mainBlock__tabsEmpty p-0" ref="tableCont">
-        <div v-show="activeTab === 'stocks'" class="w-100 h-100">
+        <div v-show="activeTab === 'stocks'" class="w-100 h-100 overflow-x-auto">
           <table class="w-100 fixed_header">
             <thead class="sticky-top">
               <tr :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }" class="w-100">
-                <th class="header-border" style="width: 300px !important">
-                  Ticker
-                  <input class="p-1 ml-1 rounded" type="text" v-model="searchTerm" placeholder="Search Ticker"
-                    @input="filterStocks" />
+                <th class="header-border">
+                  <i class="fa fa-search p-0 cursor-pointer" :class="{'custom-text-color': isShowSearchBar, 'text-inherit': isDarkMode}" @click="showSearchBar()"></i>
+                  POSITIONS
                 </th>
-                <th class="px-2 header-border">PRICE</th>
-                <th class="px-2 header-border">CHG</th>
-                <th class="px-2 header-border">CHG%</th>
-                <th class="px-2 header-border" style="width: 240px !important">TECHNICAL RATING</th>
-                <th class="px-2 header-border">VOL</th>
-                <th class="px-2 header-border">VOLUME PRICE</th>
-                <th class="px-2 header-border">MKT CAP</th>
-                <th class="px-2 header-border">P/E</th>
-                <th class="px-2 header-border">EPS (TTM)</th>
-                <th class="px-2 header-border">EMPLOYEES</th>
-                <th class="px-2 header-border">SECTOR</th>
-                <th class="px-2">CLOSE ORDER</th>
+                <th class="header-border" style="width: 170px !important">OPEN DATE</th>
+                <th class="header-border">TYPE</th>
+                <th class="header-border">VOLUME</th>
+                <th class="header-border">SL PRICE</th>
+                <th class="header-border">TP PRICE</th>
+                <th class="header-border">OPEN PRICE</th>
+                <th class="header-border">MARKET PRICE</th>
+                <th class="header-border">COMMISION</th>
+                <th class="header-border">SWAPS</th>
+                <th class="header-border">GROSS PROFIT</th>
+                <th>CLOSE ORDER</th>
               </tr>
             </thead>
-            <tbody :style="{'height': tbodyHeight}">
-              <tr v-for=" stock  in  filteredStocks " :key=" stock.id "
-                :class=" { 'dark-tr': isDarkMode, 'light-tr': !isDarkMode } ">
-                <td class="px-2" style="width: 300px !important">{{ stock.symbolName }}</td>
-                <td class="px-2">{{ stock.price }}</td>
-                <td class="px-2">{{ stock.chg }}</td>
-                <td class="px-2">{{ stock.chgPercent }}</td>
-                <td class="px-2" style="width: 240px !important">{{ stock.technicalRating }}</td>
-                <td class="px-2">{{ stock.vol }}</td>
-                <td class="px-2">{{ stock.volumePrice }}</td>
-                <td class="px-2">{{ stock.mktCap }}</td>
-                <td class="px-2">{{ stock.pe }}</td>
-                <td class="px-2">{{ stock.epsTim }}</td>
-                <td class="px-2">{{ stock.employees }}</td>
-                <td class="px-2">{{ stock.sector }}</td>
-                <td class="px-2 text-center text-danger">
+            <tbody :style="{ 'height': tbodyHeight }">
+              <tr v-for=" stock  in  filteredStocks " :key="stock.id"
+                :class="{ 'dark-tr': isDarkMode, 'light-tr': !isDarkMode }">
+                <td>{{ stock.symbolName }}</td>
+                <td>{{ formatDate(stock.createdOn) }}</td>
+                <td>{{ stock.type }}</td>
+                <td>{{ stock.volume }}</td>
+                <td>{{ stock.slPrice }}</td>
+                <td>{{ stock.tpPrice }}</td>
+                <td>{{ stock.openPrice }}</td>
+                <td>{{ stock.marketPrice }}</td>
+                <td>{{ stock.commission }}</td>
+                <td>{{ stock.swaps }}</td>
+                <td>{{ stock.grossProfit }}</td>
+                <td class="  text-center text-danger">
                   <div class="position-relative">
                     <span class="cursor-pointer" @click="showModal(stock.id)">
                       <i class="fas fa-times"></i>
                     </span>
-                    <div v-if=" isModalVisible && stock.id === selectedStockSymbol "
+                    <div v-if="isModalVisible && stock.id === selectedStockSymbol"
                       class="tooltip-content d-flex flex-column gap-1 text-sm"
-                      :class=" { 'dark-bg': isDarkMode, 'light-bg': !isDarkMode } ">
+                      :class="{ 'dark-bg': isDarkMode, 'light-bg': !isDarkMode }">
                       <p>Are you sure?</p>
                       <span class="d-flex gap-2">
-                        <button class="btn bg-danger btn-danger text-xs px-2" @click=" hideModal ">Cancel</button>
+                        <button class="btn bg-danger btn-danger text-xs px-2" @click="hideModal">Cancel</button>
                         <button class="btn btn-success text-xs px-3"
                           @click="confirmDelete(stock.id, stock.closePrice)">Ok</button>
                       </span>
@@ -71,10 +72,10 @@
             </tbody>
           </table>
         </div>
-        <div v-show=" activeTab === 'history' " class="w-100 h-100">
+        <div v-show="activeTab === 'history'" class="w-100 h-100 overflow-x-auto">
           <table class="w-100 fixed_header">
             <thead>
-              <tr class="sticky-top" :class=" { 'dark-header': isDarkMode, 'light-header': !isDarkMode } ">
+              <tr class="sticky-top" :class="{ 'dark-header': isDarkMode, 'light-header': !isDarkMode }">
                 <th class="px-3 header-border">Positions</th>
                 <th class="px-3 header-border">Open Date</th>
                 <th class="px-3 header-border">Type</th>
@@ -88,16 +89,16 @@
                 <th class="px-3">Gross Profit</th>
               </tr>
             </thead>
-            <tbody :style="{'height': tbodyHeight}">
-              <tr :class=" { 'dark-tr': isDarkMode, 'light-tr': !isDarkMode } " v-for="( item, index ) in  histData "
-                :key=" index ">
+            <tbody :style="{ 'height': tbodyHeight }">
+              <tr :class="{ 'dark-tr': isDarkMode, 'light-tr': !isDarkMode }" v-for="( item, index ) in  histData "
+                :key="index">
                 <td class="px-3">{{ item.position }}</td>
                 <td class="px-3">{{ item.openDate }}</td>
                 <td class="px-3">
-                  <span class="text-danger py-1 px-2" v-if=" item.type == 2 ">
+                  <span class="text-danger py-1 px-2" v-if="item.type == 2">
                     Sell
                   </span>
-                  <span class="text-success py-1 px-2" v-if=" item.type == 1 ">
+                  <span class="text-success py-1 px-2" v-if="item.type == 1">
                     Buy
                   </span>
                 </td>
@@ -115,13 +116,16 @@
         </div>
       </div>
     </div>
-    <div v-if=" layout != 1 " class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"></div>
+    <div v-if="layout != 1" class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"
+      @mousedown="resizeBottom"></div>
   </div>
 </template>
 
 <script>
+import resizeMixin from '../../mixins/resizeMixin'
 export default {
   name: "MainBottom",
+  mixins: [resizeMixin],
   data() {
     return {
       activeTab: "stocks",
@@ -131,13 +135,26 @@ export default {
       selectedStockSymbol: null,
       isModalVisible: false,
       tbodyHeight: "auto",
+      isShowSearchBar: false
     };
+  },
+  created() {
+    this.$on("BottomComponentUpdated", this.setTableBodyHeight);
   },
   mounted() {
     this.fetchStockTableData();
     this.setTableBodyHeight();
   },
   methods: {
+    showSearchBar() {
+      this.isShowSearchBar = !this.isShowSearchBar
+    },
+    formatDate(dateString) {
+      const options = { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', options).replace(/([AaPp]M)$/, '');
+    },
+
     showModal(symbolName) {
       this.selectedStockSymbol = symbolName;
       this.isModalVisible = true;
@@ -196,9 +213,12 @@ export default {
       this.$nextTick(() => {
         const tableContainer = this.$refs.tableCont;
         const dimensions = tableContainer.getBoundingClientRect();
-        this.tbodyHeight = `${dimensions.height}px`;
+        this.tbodyHeight = `${dimensions.height - 50}px`;
       });
     },
+    resizeBottom(event) {
+      this.initResize(event, 'bottomComponent');
+    }
   },
   computed: {
     filteredStocks() {
@@ -207,34 +227,10 @@ export default {
       );
     },
     layout() {
-      this.setTableBodyHeight()
-      return this.$store.state.layoutType;
+      return this.$store.getters.getLayoutType;
     },
     getMainBlockStyle() {
-      let layoutType = this.layout;
-      if (layoutType == 2) {
-        return {
-          width: '75%',
-          height: '50%',
-          top: '0%',
-          left: '25%',
-        };
-      } else if (layoutType == 3) {
-        return {
-          width: '54.4532%',
-          height: '50%',
-          top: '0%',
-          left: '45.5468%',
-        };
-      }
-      else {
-        return {
-          width: '80%',
-          height: '25%',
-          top: '75%',
-          left: '0%',
-        };
-      }
+      return this.$store.getters.getLayoutDimensions.bottomComponent;
     },
     isDarkMode() {
       return this.$store.getters.getIsDarkMode;
@@ -243,6 +239,14 @@ export default {
       return this.$store.getters.getStocks;
     }
   },
+  watch: {
+    getMainBlockStyle: {
+      handler(newVal) {
+        this.setTableBodyHeight();
+      },
+      deep: true
+    }
+  }
 };
 </script>
 
@@ -255,8 +259,6 @@ export default {
   padding: 8px;
   z-index: 1;
 }
-
-
 input {
   border: 0.2px solid #39404b;
 }
@@ -271,9 +273,9 @@ input {
 
 table {
   border-collapse: collapse;
-  color: #6c7293;
   font-size: medium;
 }
+
 .header-border {
   border-right: 1px solid #2a2e39;
   position: sticky;
@@ -283,36 +285,45 @@ table {
 .fixed_header thead tr {
   display: block;
 }
+
 tbody {
   display: block;
   overflow: auto;
 }
+
 th,
+td {
+  vertical-align: middle;
+  padding: 12px 6px;
+  text-align: center;
+  border-left: none;
+  border-right: none;
+  width: 120px;
+}
+
+
 td {
   border-bottom: 0.1px ridge;
   border-color: #39404b;
-  padding-inline: 8px;
-  border-left: none;
-  border-right: none;
-  text-align: center;
-  vertical-align: middle;
-  width: 200px;
+  font-size: 60%;  
+  font-weight: 400;
 }
-td {
-  color: #6c7293;
-  font-size: 60%;
-  padding-block: 12px;
-}
+
 th {
-  border-bottom: 2px solid #2c2e33 !important;
+  border-bottom: 1px solid #2c2e33 !important;
   border-bottom-width: 1px;
-  font-size: 60%;
+  font-size: 70%;
   font-weight: 300 !important;
-  padding-block: 10px;
+  padding-block: 8px;
+}
+
+.dark-tr {
+  color: #dde2e5;
 }
 .dark-tr:hover {
-  background-color: #030404;
+  background-color: #1c2222;
 }
+
 .light-tr:hover {
   background-color: #eff0f1;
 }
@@ -325,6 +336,7 @@ th {
   padding: 0px 10px;
   transition: background-color 0.3s ease;
 }
+
 @media screen and (max-width: 1024px) {
   td {
     padding: 2px;

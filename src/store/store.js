@@ -22,6 +22,32 @@ const store = new Vuex.Store({
     alertColor: "red",
     alertText: "",
     assetCategories: [],
+    layoutDimensions: {
+      graphComponent: {
+        width: "",
+        height: "",
+        top: "",
+        left: "",
+      },
+      bottomComponent: {
+        width: "",
+        height: "",
+        top: "",
+        left: "",
+      },
+      rightComponent: {
+        width: "",
+        height: "",
+        top: "",
+        left: "",
+      },
+      lastComponent: {
+        width: "",
+        height: "",
+        top: "",
+        left: "",
+      },
+    },
   },
   mutations: {
     changeLayout(state, newLayoutType) {
@@ -87,8 +113,135 @@ const store = new Vuex.Store({
     setAssetCategories(state, categories) {
       state.assetCategories = categories;
     },
+    setLayoutDimensions(state, dimensions) {
+      state.layoutDimensions = dimensions;
+    },
+    setComponentLayout(state, { component, dimensions }) {
+      if (dimensions.height)
+        state.layoutDimensions[component].height = dimensions.height;
+      if (dimensions.width)
+        state.layoutDimensions[component].width = dimensions.width;
+      if (dimensions.top)
+        state.layoutDimensions[component].top = dimensions.top;
+      if (dimensions.left)
+        state.layoutDimensions[component].left = dimensions.left;
+    },
   },
   actions: {
+    async setDefaultComonentsDimensions({ commit }) {
+      const graphComponentLayout = await this.dispatch(
+        "setDefaultGraphDimensions"
+      );
+      const bottomComponentLayout = await this.dispatch(
+        "setDefaultBottomComponentDimensions"
+      );
+      const rightComponentLayout = await this.dispatch(
+        "setDefaultRightComponentDimensions"
+      );
+      const lastComponentLayout = await this.dispatch(
+        "setDefaultLastComponentDimensions"
+      );
+      const dimensions = {
+        graphComponent: graphComponentLayout,
+        bottomComponent: bottomComponentLayout,
+        rightComponent: rightComponentLayout,
+        lastComponent: lastComponentLayout,
+      };
+      commit("setLayoutDimensions", dimensions);
+    },
+    setDefaultGraphDimensions({ state }) {
+      let layoutType = state.layoutType;
+      if (layoutType == 2) {
+        return {
+          width: "75%",
+          height: "50%",
+          top: "50%",
+          left: "0%",
+        };
+      } else if (layoutType == 3) {
+        return {
+          width: "45.6032%",
+          height: "50%",
+          top: "50%",
+          left: "0%",
+        };
+      } else {
+        return {
+          width: "80%",
+          height: "75%",
+          top: "0%",
+          left: "0%",
+        };
+      }
+    },
+    setDefaultBottomComponentDimensions({ state }) {
+      let layoutType = state.layoutType;
+      if (layoutType == 2) {
+        return {
+          width: "75%",
+          height: "50%",
+          top: "0%",
+          left: "25%",
+        };
+      } else if (layoutType == 3) {
+        return {
+          width: "54.4532%",
+          height: "50%",
+          top: "0%",
+          left: "45.5468%",
+        };
+      } else {
+        return {
+          width: "80%",
+          height: "25%",
+          top: "75%",
+          left: "0%",
+        };
+      }
+    },
+    setDefaultRightComponentDimensions({ state }) {
+      let layoutType = state.layoutType;
+      if (layoutType == 2) {
+        return {
+          width: "25%",
+          height: "50%",
+          top: "50%",
+          left: "75%",
+        };
+      } else if (layoutType == 3) {
+        return {
+          width: "54.3968%",
+          height: "50%",
+          top: "50%",
+          left: "45.6032%",
+        };
+      } else {
+        return {
+          width: "20%",
+          height: "100%",
+          top: "0%",
+          left: "80%",
+        };
+      }
+    },
+    setDefaultLastComponentDimensions({ state }) {
+      let layoutType = state.layoutType;
+      if (layoutType == 2) {
+        return {
+          width: "25%",
+          height: "50%",
+          top: "0%",
+          left: "0%",
+        };
+      } else {
+        return {
+          width: "45.5468%",
+          height: "50%",
+          top: "0%",
+          left: "0%",
+        };
+      }
+    },
     setAlertVal({ commit }, { color, text }) {
       commit("setAlertColor", color);
       commit("setAlertText", text);
@@ -243,6 +396,8 @@ const store = new Vuex.Store({
     getAlertColor: (state) => state.alertColor,
     getAlertText: (state) => state.alertText,
     getAssetCategories: (state) => state.assetCategories,
+    getLayoutDimensions: (state) => state.layoutDimensions,
+    getLayoutType: (state) => state.layoutType,
   },
 });
 

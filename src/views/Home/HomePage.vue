@@ -12,9 +12,8 @@
           <p>Please add a module by pressing "+".</p>
         </div>
       </div>
-      <div class="mainBlock__split mainBlock__split_v mainBlock__split_right"></div>
-      <div class="mainBlock__split mainBlock__split_h mainBlock__split_bottom">
-      </div>
+      <div class="mainBlock__split mainBlock__split_v mainBlock__split_right"  @mousedown="resizeLastComponentRight"></div>
+      <div class="mainBlock__split mainBlock__split_h mainBlock__split_bottom" @mousedown="resizeLastComponentBottom"></div>
     </div>
     <MainGraphic />
     <MainBottom />
@@ -29,6 +28,7 @@ import HeaderComponent from "../../components/layouts/HeaderComponent.vue";
 import MainGraphic from "../../components/layouts/MainGraphic.vue";
 import MainBottom from "../../components/layouts/MainBottom.vue";
 import MainRight from "../../components/layouts/MainRight/MainRight.vue";
+import resizeMixin from "../../mixins/resizeMixin";
 export default {
   name: "HomePage2",
   components: {
@@ -39,37 +39,21 @@ export default {
     MainBottom,
     MainRight
   },
-  data() {
-    return {
-      isGraphDataChanged: false,
-    };
-  },
+  mixins: [resizeMixin],
   methods: {
-    handleGraphData(val) {
-      this.isGraphDataChanged = val;
+    resizeLastComponentBottom(event) {
+      this.initResize(event, "lastComponentBottom");
+    },
+    resizeLastComponentRight(event) {
+      this.initResize(event, "lastComponentRight");
     },
   },
   computed: {
     layout() {
-      return this.$store.state.layoutType;
+      return this.$store.getters.getLayoutType;
     },
     getMainBlockStyle() {
-      let layoutType = this.layout;
-      if (layoutType === 2) {
-        return {
-          width: '25%',
-          height: '50%',
-          top: '0%',
-          left: '0%',
-        };
-      } else {
-        return {
-          width: '45.5468%',
-          height: '50%',
-          top: '0%',
-          left: '0%',
-        };
-      }
+      return this.$store.getters.getLayoutDimensions.lastComponent;
     },
   }
 };

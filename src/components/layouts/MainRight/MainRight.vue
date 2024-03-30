@@ -1,6 +1,6 @@
 <template>
   <div class="mainBlock" :style="getMainBlockStyle">
-    <div class="mainBlock__split mainBlock__split_v mainBlock__split_left"></div>
+    <div class="mainBlock__split mainBlock__split_v mainBlock__split_left" @mousedown="resizeTable"></div>
     <div class="mainBlock__tabs">
       <div class="mainBlock__tabsItem mainBlock__tabsItem_add">+</div>
     </div>
@@ -206,7 +206,6 @@
             </tbody>
           </table>
         </div>
-
       </div>
     </div>
     <div v-if="layout == 2" class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"></div>
@@ -215,9 +214,10 @@
 
 <script>
 import socketMixin from "../../../mixins/socketMixin";
+import resizeMixin from "../../../mixins/resizeMixin";
 import ModalComponent from "../ModalComponent.vue";
 export default {
-  mixins: [socketMixin],
+  mixins: [socketMixin, resizeMixin],
   components: {
     ModalComponent
   },
@@ -276,6 +276,7 @@ export default {
       } else {
         this.currentAsset = asset;
       }
+      this.volume = 0.01;
       this.isInfoSection = false;
     },
     handleSelectedAssetGraph(asset) {
@@ -354,37 +355,17 @@ export default {
     },
     showSearchBar() {
       this.isShowSearchBar = !this.isShowSearchBar
+    },
+    resizeTable(event) {
+      this.initResize(event, 'rightComponent');
     }
   },
   computed: {
     layout() {
-      return this.$store.state.layoutType;
+      return this.$store.getters.getLayoutType;
     },
     getMainBlockStyle() {
-      let layoutType = this.layout;
-      if (layoutType == 2) {
-        return {
-          width: '25%',
-          height: '50%',
-          top: '50%',
-          left: '75%',
-        };
-      } else if (layoutType == 3) {
-        return {
-          width: '54.3968%',
-          height: '50%',
-          top: '50%',
-          left: '45.6032%',
-        };
-      }
-      else {
-        return {
-          width: '20%',
-          height: '100%',
-          top: '0%',
-          left: '80%',
-        };
-      }
+    return this.$store.getters.getLayoutDimensions.rightComponent;
     },
     filteredAssets() {
       const lowerCaseQuery = this.searchQuery.toLowerCase();

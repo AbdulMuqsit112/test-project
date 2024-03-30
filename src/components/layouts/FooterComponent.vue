@@ -87,6 +87,7 @@ export default {
     },
     changeLayout(val){
       this.$store.commit('changeLayout', val);
+      this.$store.dispatch('setDefaultComonentsDimensions');
       localStorage.setItem('layout', val);
       this.toggleDropdown();
     }
@@ -101,7 +102,7 @@ export default {
       return `${month} ${day}, ${year} ${time}`;
     },
     layout() {
-      return this.$store.state.layoutType;
+      return this.$store.getters.getLayoutType;
     },
     isDarkMode() {
       return this.$store.getters.getIsDarkMode;

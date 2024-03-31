@@ -6,26 +6,26 @@
     </div>
     <div class="mainBlock__content">
       <div class="mainBlock__tabsEmpty p-0">
-        <ModalComponent v-if="isModalOpen" :currentAsset="currentAsset" :btnVal="btnVal" :bid="bid" :ask="ask" :volume="volume"
-          :btnClass="btnClass" :sLoss="false" :tProfit="false" :isValuesDisabled="false" @closeModal="closeModal" @handleInput="handleInput" @handleBlur="handleBlur"/>
-          
-          <input type="text" class="w-100 p-2" :class="{ 'dark-symbol-table': isDarkMode }" v-if="isShowSearchBar"
-            v-model="searchQuery" placeholder="Search...">
-          <div class="d-flex justify-content-between align-items-center w-100 p-2"
-          >
+        <ModalComponent v-if="isModalOpen" :currentAsset="currentAsset" :btnVal="btnVal" :bid="bid" :ask="ask"
+          :volume="volume" :btnClass="btnClass" :sLoss="false" :tProfit="false" :isValuesDisabled="false"
+          @closeModal="closeModal" @handleInput="handleInput" @handleBlur="handleBlur" />
+
+        <input type="text" class="w-100 p-2" :class="{ 'dark-symbol-table': isDarkMode }" v-if="isShowSearchBar"
+          v-model="searchQuery" placeholder="Search...">
+        <div class="d-flex justify-content-between align-items-center w-100 p-2">
           <div class="d-flex gap-2">
-            <select class="category w-25 p-1" :class="{ 'dark-symbol-table': isDarkMode}"
-              v-model="selectedCategory">
+            <select class="category w-25 p-1" :class="{ 'dark-symbol-table': isDarkMode }" v-model="selectedCategory">
               <option value="all">All</option>
               <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
             </select>
-            <div class="fav-grp d-flex align-items-center gap-1 p-1"
-              :class="{ 'dark-symbol-table': isDarkMode}" @click="toggleShoFav()">
+            <div class="fav-grp d-flex align-items-center gap-1 p-1" :class="{ 'dark-symbol-table': isDarkMode }"
+              @click="toggleShoFav()">
               <input type="checkbox" v-model="showFav">
               <label for="checkbox">favourites</label>
             </div>
           </div>
-          <i class="fa fa-search cursor-pointer" :class="{'custom-text-color': isShowSearchBar, 'text-white': isDarkMode}" @click="showSearchBar()"></i>
+          <i class="fa fa-search cursor-pointer"
+            :class="{ 'custom-text-color': isShowSearchBar, 'text-white': isDarkMode }" @click="showSearchBar()"></i>
         </div>
         <div class="w-100 h-100 overflow-auto">
           <table class="table table-hover">
@@ -38,7 +38,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(asset, index) in filteredAssets" :key="asset.id" @click.stop="toggleRowContent(asset)" class="cursor-pointer">
+              <tr v-for="(asset, index) in filteredAssets" :key="asset.id" @click.stop="toggleRowContent(asset)"
+                class="cursor-pointer">
                 <td :colspan="4" v-if="isSelected(asset)" :class="{ 'dark-symbol-table': isDarkMode }">
                   <div class="buySell d-flex flex-column" :class="{ 'dark-symbol-table': isDarkMode }">
                     <div class="fw-semibold d-flex justify-content-between" :class="{ 'text-white': isDarkMode }">
@@ -97,27 +98,33 @@
                       </div>
                     </div>
                     <div class="d-flex text-white">
-                      <div class="bg-danger d-flex flex-column gap-3 w-100 p-2" @click.stop="generateOrder(asset, 'sell')">
+                      <div class="bg-danger d-flex flex-column gap-3 w-100 p-2"
+                        @click.stop="generateOrder(asset, 'sell')">
                         <div class="d-flex justify-content-between">
                           Sell
                           <img src="src/assets/down.png" class="arrowIcon" alt="icon" />
                         </div>
-                        <span class="buySellSpan d-flex justify-content-start">{{ assetVal(asset.p, 'low').slice(0, -2) }}<span class="text-sm">{{ assetVal(asset.p, 'low').slice(-2) }}</span></span>
+                        <span class="buySellSpan d-flex justify-content-start">{{ assetVal(asset.p, 'low').slice(0, -2)
+                          }}<span class="text-sm">{{ assetVal(asset.p, 'low').slice(-2) }}</span></span>
                       </div>
-                      <div class="bg-success d-flex flex-column gap-3 w-100 p-2" @click.stop="generateOrder(asset, 'buy')">
+                      <div class="bg-success d-flex flex-column gap-3 w-100 p-2"
+                        @click.stop="generateOrder(asset, 'buy')">
                         <div class="d-flex justify-content-between">
                           <img src="src/assets/up.png" class="arrowIcon" alt="icon" />
                           Buy
                         </div>
-                        <span class="buySellSpan d-flex justify-content-end">{{ assetVal(asset.p, 'high').slice(0, -2) }}<span class="text-sm">{{ assetVal(asset.p, 'high').slice(-2) }}</span></span>
+                        <span class="buySellSpan d-flex justify-content-end">{{ assetVal(asset.p, 'high').slice(0, -2)
+                          }}<span class="text-sm">{{ assetVal(asset.p, 'high').slice(-2) }}</span></span>
                       </div>
                     </div>
                     <div class="d-flex justify-content-between">
                       <button class="text-danger buySellBtn">
-                        Low {{ assetVal(asset.p, 'low').slice(0, -2)}} <span class="text-sm">{{ assetVal(asset.p, 'low').slice(-2) }}</span>
+                        Low {{ assetVal(asset.p, 'low').slice(0, -2) }} <span class="text-sm">{{ assetVal(asset.p,
+    'low').slice(-2) }}</span>
                       </button>
                       <button class="text-success buySellBtn">
-                        High {{ assetVal(asset.p, 'high').slice(0, -2)}} <span class="text-sm">{{ assetVal(asset.p, 'high').slice(-2) }}</span>
+                        High {{ assetVal(asset.p, 'high').slice(0, -2) }} <span class="text-sm">{{ assetVal(asset.p,
+    'high').slice(-2) }}</span>
                       </button>
                     </div>
                     <div class="inpbox" @click.stop>
@@ -125,8 +132,8 @@
                         :class="{ 'inc-dec-dark': isDarkMode }">
                         -
                       </button>
-                      <input class="sell-val" :class="{ 'sel-val-dark': isDarkMode }" type="text"
-                        @input="handleInput" @blur="handleBlur" v-model="volume" />
+                      <input class="sell-val" :class="{ 'sel-val-dark': isDarkMode }" type="text" @input="handleInput($event, 'vol')"
+                        @blur="handleBlur" v-model="volume" />
                       <button @click.stop="handleSum('Increment')" class="inc-dec-btn rounded-end-1"
                         :class="{ 'inc-dec-dark': isDarkMode }">
                         +
@@ -183,23 +190,22 @@
                 <td v-if="!isSelected(asset)" class="fw-semibold"
                   :class="{ 'dark-symbol-table text-white': isDarkMode }">
                   <div class="d-flex gap-2 align-items-center">
-                    <img
-                      class="symIcon"
-                      src="src/assets/gold.png"
-                      alt="icon"
-                      @dblclick.stop="handleSelectedAssetGraph(asset)"
-                      @click.stop="$event.stopPropagation()"
-                    />
+                    <img class="symIcon" src="src/assets/gold.png" alt="icon"
+                      @dblclick.stop="handleSelectedAssetGraph(asset)" @click.stop="$event.stopPropagation()" />
                     {{ asset.s }}
                   </div>
                 </td>
-                <td v-if="!isSelected(asset)" class="text-end text-xs" :class="{ 'dark-symbol-table text-white': isDarkMode }">
-                  {{ assetVal(asset.p, 'normal').slice(0, -2)  }} <span class="text-md">{{assetVal(asset.p, 'low').slice(-2) }}</span>
+                <td v-if="!isSelected(asset)" class="text-end text-xs"
+                  :class="{ 'dark-symbol-table text-white': isDarkMode }">
+                  {{ assetVal(asset.p, 'normal').slice(0, -2) }} <span class="text-md">{{ assetVal(asset.p,
+    'low').slice(-2) }}</span>
                 </td>
-                <td v-if="!isSelected(asset)" class="text-end text-sm" :class="{ 'dark-symbol-table text-white': isDarkMode }">
+                <td v-if="!isSelected(asset)" class="text-end text-sm"
+                  :class="{ 'dark-symbol-table text-white': isDarkMode }">
                   {{ asset.v }}
                 </td>
-                <td v-if="!isSelected(asset)" class="text-end text-sm" :class="{ 'dark-symbol-table text-white': isDarkMode }">
+                <td v-if="!isSelected(asset)" class="text-end text-sm"
+                  :class="{ 'dark-symbol-table text-white': isDarkMode }">
                   {{ asset.changePercentage }}
                 </td>
               </tr>
@@ -235,7 +241,7 @@ export default {
       currentAsset: null,
       isShowSearchBar: false,
       bid: 0,
-      ask: 0
+      ask: 0,
     };
   },
   mounted() {
@@ -285,16 +291,20 @@ export default {
       const processedData = JSON.parse(data).data;
       if (processedData && processedData.length > 0) this.$store.dispatch('updateSymbolsData', { receivedData: processedData });
     },
-    handleInput(event) {
+    handleInput(event, type) {
       let value = event.target.value;
       value = value.replace(/[^\d.]/g, "");
       const decimalCount = (value.match(/\./g) || []).length;
       if (decimalCount > 1) {
         value = value.substr(0, value.lastIndexOf("."));
       }
+      if (parseFloat(value) < 0.01) {
+        value = "0.01";
+      }
       event.target.value = value;
-      this.volume = value;
+      if (type == 'vol') this.volume = value;
     },
+
     handleBlur() {
       let volume = parseFloat(this.volume);
       if (isNaN(volume) || volume <= 0) {
@@ -351,7 +361,7 @@ export default {
       return this.$store.getters.getLayoutType;
     },
     getMainBlockStyle() {
-    return this.$store.getters.getLayoutDimensions.rightComponent;
+      return this.$store.getters.getLayoutDimensions.rightComponent;
     },
     filteredAssets() {
       const lowerCaseQuery = this.searchQuery.toLowerCase();

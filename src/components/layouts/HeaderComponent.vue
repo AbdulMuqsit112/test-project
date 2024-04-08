@@ -15,11 +15,11 @@
             </span>
             <span class="header-balances-item">
               <div class="">Credit:</div>
-              <span class="balance">0.00</span>
+              <span class="balance">{{ User.credit }}</span>
             </span>
             <span class="header-balances-item">
               <div class="">Equity:</div>
-              <span class="balance">0.00</span>
+              <span class="balance">{{ User.equity }}</span>
             </span>
             <div class="header-margin">
               <span class="header-balances-item">
@@ -30,8 +30,9 @@
                 <div class="margin-bar-inner"></div>
               </div>
               <span class="header-balances-item">
-                <span class="balance">0.00</span>
-                <span class="balance">0.00</span></span>
+                <span class="balance">{{ User.margin }}</span>
+                <span class="balance">{{ User.freeMargin }}</span>
+              </span>
             </div>
             <span class="header-balances-item header-balances-item__margin-level">
               <div class="">Margin level:</div>
@@ -39,7 +40,7 @@
             </span>
           </div>
           <div class="header-profit">
-            P/L: &nbsp;<span class="">€ 0.00</span>
+            P/L: &nbsp;<span class="">€ {{ User.pl }}</span>
           </div>
         </div>
       </div>

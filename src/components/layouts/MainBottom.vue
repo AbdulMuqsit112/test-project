@@ -245,7 +245,7 @@ export default {
       };
     },
     getAssetCurrentPrice(asset) {
-      const matchedObject = this.symbolsData.find(obj => obj.id === asset.id);
+      const matchedObject = this.symbolsData.find(obj => obj.id === asset.symbolId);
       if (!matchedObject) {
         return asset.marketPrice;
       }

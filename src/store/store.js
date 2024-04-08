@@ -32,7 +32,7 @@ const store = new Vuex.Store({
     showAlert: false,
     alertColor: "red",
     alertText: "",
-    assetCategories: [],
+    assetCategories: [ 'Stock', 'Currency', 'Commodity', 'Bond', 'Cryptocurrency', 'Index', 'Option', 'Future', 'ETF' ],
     layoutDimensions: {
       graphComponent: {
         width: "",

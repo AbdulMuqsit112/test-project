@@ -16,7 +16,7 @@
           <div class="d-flex gap-2">
             <select class="category w-25 p-1" :class="{ 'dark-symbol-table': isDarkMode }" v-model="selectedCategory">
               <option value="all">All</option>
-              <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
+              <option v-for="category in categories" :value="category">{{ category }}</option>
             </select>
             <div class="fav-grp d-flex align-items-center gap-1 p-1" :class="{ 'dark-symbol-table': isDarkMode }"
               @click="toggleShoFav()">
@@ -357,16 +357,16 @@ export default {
       const lowerCaseQuery = this.searchQuery.toLowerCase();
       if (this.showFav) {
         return this.favArr.filter(asset => {
-          return (this.selectedCategory === 'all' || asset.category === this.selectedCategory) && asset.s.toLowerCase().includes(lowerCaseQuery);
+          return (this.selectedCategory == 'all' || asset.type == this.selectedCategory) && asset.s.toLowerCase().includes(lowerCaseQuery);
         });
       } else {
-        if (this.selectedCategory === 'all') {
+        if (this.selectedCategory == 'all') {
           return this.symbolsData.filter(asset => {
             return asset.s.toLowerCase().includes(lowerCaseQuery);
           });
         } else {
           return this.symbolsData.filter(asset => {
-            return asset.symbolId === this.selectedCategory && asset.s.toLowerCase().includes(lowerCaseQuery);
+            return asset.type == this.selectedCategory && asset.s.toLowerCase().includes(lowerCaseQuery);
           });
         }
       }

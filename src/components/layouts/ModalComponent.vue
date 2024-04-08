@@ -151,54 +151,43 @@ export default {
       tpPrice: this.ask,
       tpProfit: 0.01,
       tpPoints: 1,
+      orderType: 'Buy'
     };
   },
   methods: {
     async createOrder() {
+      this.setOrderType()
+      let asset = this.generateOrderPayload();
       if (this.btnVal == "Modify Buy" || this.btnVal == "Modify Sell") {
-        this.closeModal();
-        return;
+        asset = { ...asset, id: this.currentAsset.id };
+        this.$store.dispatch("modifyOrder", { asset });
+      } else {
+        this.$store.dispatch("createOrder", { asset });
       }
-      const asset = this.generateOrderPayload();
-      this.$store.dispatch("createOrder", { asset });
       this.closeModal();
     },
+    setOrderType() {
+      if (this.btnVal == "Modify Buy" || this.btnVal == "Modify Sell") {
+        this.orderType = this.btnVal.split(' ')[1];
+      } else {
+        this.orderType = this.btnVal;
+      }
+    },
+
     generateOrderPayload() {
-      const { change, changePercentage, p, symbolId } = this.currentAsset;
-      const percentageNumber = parseFloat(changePercentage.replace("%", ""));
-      const orderType = this.btnVal == "Buy" ? 1 : 2;
-      const matchingObject = this.categories.find((obj) => obj.id === symbolId);
-      let name = "";
-      if (matchingObject) name = matchingObject.name;
+      const { id, symbolId } = this.currentAsset;
+      const stopLossVal = parseFloat(this.stopLossType == 'points' ? this.stPoints : this.stopLossType == 'price' ? this.stPrice : this.stLoss);
+      const takeProfitVal = parseFloat(this.takeProfitType == 'points' ? this.tpPoints : this.takeProfitType == 'price' ? this.tpPrice : this.tpProfit);
       return {
-        price: p,
-        chg: change,
-        chgPercentage: percentageNumber,
-        type: orderType,
         volume: this.vol,
-        volumePrice: 0,
-        mktCap: 0,
-        pe: 0,
-        epsTim: 0,
-        employees: 0,
-        sector: "someSector",
-        position: 0,
-        slPrice: this.stPrice,
-        tpPrice: this.tpPrice,
-        openPrice: 0,
-        marketPrice: 0,
-        commission: 0,
-        swaps: 0,
-        grossProfit: 0,
-        bid: this.bid,
-        ask: this.ask,
         stopLoss: this.stopLoss,
+        stopLossType: this.stopLossType,
+        stopLossValue: stopLossVal,
         takeProfit: this.takeProfit,
-        spread: 0,
-        spread_Pips: 0,
-        pipValue: 0,
-        symbolId: symbolId,
-        symbolName: name,
+        takeProfitType: this.takeProfitType,
+        takeProfitValue: takeProfitVal,
+        symbolId: symbolId != null ? symbolId : id,
+        type: this.orderType,
       };
     },
     closeModal() {
@@ -208,7 +197,7 @@ export default {
       if (type == "vol") {
         this.$emit("handleInput", e, type);
       }
-      if (type == 'stPrice') {
+      else if (type == 'stPrice') {
         this.stLoss = this.setStopLoss('loss');
         this.stPoints = this.setStopLoss('points');
       } else if (type == 'stLoss') {

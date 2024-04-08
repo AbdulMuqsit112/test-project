@@ -104,8 +104,8 @@
                           Sell
                           <img src="src/assets/down.png" class="arrowIcon" alt="icon" />
                         </div>
-                        <span class="buySellSpan d-flex justify-content-start">{{ assetVal(asset.p, 'low').slice(0, -2)
-                          }}<span class="text-sm">{{ assetVal(asset.p, 'low').slice(-2) }}</span></span>
+                        <span class="buySellSpan d-flex justify-content-start">{{ assetVal(asset.p).slice(0, -2)
+                          }}<span class="text-sm">{{ assetVal(asset.p).slice(-2) }}</span></span>
                       </div>
                       <div class="bg-success d-flex flex-column gap-3 w-100 p-2"
                         @click.stop="generateOrder(asset, 'buy')">
@@ -113,18 +113,16 @@
                           <img src="src/assets/up.png" class="arrowIcon" alt="icon" />
                           Buy
                         </div>
-                        <span class="buySellSpan d-flex justify-content-end">{{ assetVal(asset.p, 'high').slice(0, -2)
-                          }}<span class="text-sm">{{ assetVal(asset.p, 'high').slice(-2) }}</span></span>
+                        <span class="buySellSpan d-flex justify-content-end">{{ assetVal(asset.p).slice(0, -2)
+                          }}<span class="text-sm">{{ assetVal(asset.p).slice(-2) }}</span></span>
                       </div>
                     </div>
                     <div class="d-flex justify-content-between">
                       <button class="text-danger buySellBtn">
-                        Low {{ assetVal(asset.p, 'low').slice(0, -2) }} <span class="text-sm">{{ assetVal(asset.p,
-    'low').slice(-2) }}</span>
+                        Low {{ assetVal(asset.p).slice(0, -2) }} <span class="text-sm">{{ assetVal(asset.p).slice(-2) }}</span>
                       </button>
                       <button class="text-success buySellBtn">
-                        High {{ assetVal(asset.p, 'high').slice(0, -2) }} <span class="text-sm">{{ assetVal(asset.p,
-    'high').slice(-2) }}</span>
+                        High {{ assetVal(asset.p).slice(0, -2) }} <span class="text-sm">{{ assetVal(asset.p).slice(-2) }}</span>
                       </button>
                     </div>
                     <div class="inpbox" @click.stop>
@@ -140,49 +138,51 @@
                       </button>
                     </div>
                     <div v-if="isInfoSection"
-                      class="d-flex flex-column w-100 align-items-start info-block gap-2 px-2 py-4">
+                      class="d-flex flex-column align-items-start info-block gap-2 px-2 py-4"
+                      :class="{ 'text-white': isDarkMode }"
+                      >
                       <span class="h5">Basic Info:</span>
                       <div class="d-flex justify-content-between w-100">
                         <span>
                           Asset class:
                         </span>
-                        <span>{{ asset.category }}</span>
+                        <span>{{ asset.type }}</span>
                       </div>
                       <div class="d-flex justify-content-between w-100">
                         <span>
                           Pip Value:
                         </span>
-                        <span>0.0914</span>
+                        <span>{{ asset.pip_value }}</span>
                       </div>
                       <div class="d-flex justify-content-between w-100">
                         <span>
                           Currency:
                         </span>
-                        <span>USD</span>
+                        <span>{{ asset.cyrrency }}</span>
                       </div>
                       <div class="d-flex justify-content-between w-100">
                         <span>
                           Contract size:
                         </span>
-                        <span>1000</span>
+                        <span>{{ asset.contact_size }}</span>
                       </div>
                       <div class="d-flex justify-content-between w-100">
                         <span>
                           Min position size:
                         </span>
-                        <span>0.01</span>
+                        <span>{{ asset.min_position }}</span>
                       </div>
                       <div class="d-flex justify-content-between w-100">
                         <span>
                           Max position size:
                         </span>
-                        <span>1000</span>
+                        <span>{{ asset.max_position }}</span>
                       </div>
                       <div class="d-flex justify-content-between w-100">
                         <span>
                           Daily swap by intrest:
                         </span>
-                        <span>Long:-0.056%/Short:-0.028%</span>
+                        <span>Long:{{asset.daily_swap_long}}%/Short:{{asset.daily_swap_short}}%</span>
                       </div>
                     </div>
                   </div>
@@ -197,8 +197,7 @@
                 </td>
                 <td v-if="!isSelected(asset)" class="text-end text-xs"
                   :class="{ 'dark-symbol-table text-white': isDarkMode }">
-                  {{ assetVal(asset.p, 'normal').slice(0, -2) }} <span class="text-md">{{ assetVal(asset.p,
-    'low').slice(-2) }}</span>
+                  {{ assetVal(asset.p).slice(0, -2) }} <span class="text-md">{{ assetVal(asset.p).slice(-2) }}</span>
                 </td>
                 <td v-if="!isSelected(asset)" class="text-end text-sm"
                   :class="{ 'dark-symbol-table text-white': isDarkMode }">
@@ -245,17 +244,13 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch('fetchAssetCategory');
+    // this.$store.dispatch('fetchAssetCategory');
     this.fetchTableData();
     this.$on("symbolDataUpdated", this.handleDataUpdated);
   },
   methods: {
     fetchTableData() {
-      const limits = {
-        limit: 1,
-        offset: 1
-      }
-      this.$store.dispatch('fetchSymbolsData', { limits });
+      this.$store.dispatch('fetchSymbolsData');
     },
     toggleShoFav() {
       this.showFav = !this.showFav
@@ -331,16 +326,11 @@ export default {
         this.btnClass = "btn-danger bg-danger";
         this.btnVal = "Sell";
       }
-      this.bid = this.assetVal(asset.p, 'high')
-      this.ask = this.assetVal(asset.p, 'low')
+      this.bid = this.assetVal(asset.p)
+      this.ask = this.assetVal(asset.p)
       this.isModalOpen = true;
     },
-    assetVal(price, type) {
-      if (type == 'high') {
-        price += 0.01;
-      } else if (type == 'low') {
-        price -= 0.01;
-      }
+    assetVal(price) {
       price = price.toFixed(4)
       return price.toString();
     },

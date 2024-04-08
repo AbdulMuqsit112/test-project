@@ -34,7 +34,7 @@ export default {
     AlertComponent
   },
   async created() {
-    this.getUser();
+    await this.getUser();
     if (!this.isAuthenticated) this.$router.push('/login');
     this.setAppTheme();
   },
@@ -43,8 +43,8 @@ export default {
     this.$store.dispatch('setDefaultComonentsDimensions');
   },
   methods: {
-    getUser() {
-      this.$store.dispatch('getUserDetails');
+    async getUser() {
+      await this.$store.dispatch('getUserDetails');
     },
     setLayout() {
       let layout = localStorage.getItem('layout');
@@ -57,7 +57,7 @@ export default {
     setAppTheme() {
       let isDarkMode = localStorage.getItem('isDarkMode');
       if (isDarkMode == 'false' || isDarkMode == 'true') {
-        isDarkMode = isDarkMode == "true" ? true : isDarkMode == "false" ? false : undefined;
+        isDarkMode = isDarkMode == "true" ? true : isDarkMode == "false" ? false : true;
         this.$store.commit('setAppTheme', isDarkMode);
         return;
       }

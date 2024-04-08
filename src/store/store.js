@@ -9,13 +9,24 @@ const store = new Vuex.Store({
     $http: Vue.prototype.$http,
     layoutType: 1,
     selectedData: [],
-    userToken: null,
     isAuthenticated: false,
     showAccountBar: false,
     isDarkMode: true,
     symbolsData: [],
     user: {
-      loginId: "",
+      token: "",
+      groupId: 0,
+      group: "",
+      balance: 0,
+      leverage: 0,
+      currencyId: 0,
+      currency: "",
+      id: 0,
+      language: "",
+      timeZone: "",
+      hideAccountBarValue: true,
+      multiTradePannel: true,
+      restoreDefaultPlatformSettings: true,
     },
     stocks: [],
     showAlert: false,
@@ -70,9 +81,6 @@ const store = new Vuex.Store({
     setSelctedDataEmpty(state) {
       state.selectedData = [];
     },
-    setUserToken(state, token) {
-      state.userToken = token;
-    },
     setIsAuthenticated(state, val) {
       state.isAuthenticated = val;
     },
@@ -96,7 +104,7 @@ const store = new Vuex.Store({
       state.symbolsData[index].v = item.v;
     },
     setUser(state, payload) {
-      state.user.loginId = payload;
+      state.user = payload;
     },
     setStocks(state, payload) {
       state.stocks = payload;
@@ -257,7 +265,7 @@ const store = new Vuex.Store({
       }
       localStorage.setItem("isDarkMode", state.isDarkMode);
     },
-    getUserDetails({ commit }) {
+    async getUserDetails({ state, commit }) {
       let token = localStorage.getItem("token");
       if (!token) {
         const urlParams = new URLSearchParams(window.location.search);
@@ -265,9 +273,13 @@ const store = new Vuex.Store({
       }
       if (token != "" && token != null && token != "null") {
         localStorage.setItem("token", token);
-        commit("setUserToken", token);
-        commit("setIsAuthenticated", true);
-        return;
+        const response = await state.$http.get("user");
+        if (response.status == 200) {
+          const data = response.data.payload;
+          commit("setUser", data);
+          commit("setIsAuthenticated", true);
+          return;
+        }
       }
       commit("setIsAuthenticated", false);
     },
@@ -285,11 +297,10 @@ const store = new Vuex.Store({
       try {
         const response = await state.$http.post("user/login", { ...userObj });
         if (response.status == 200) {
-          let data = response.data;
-          let token = data.token;
+          const data = response.data;
+          const token = data.token;
+          commit("setUser", data);
           localStorage.setItem("token", token);
-          commit("setUserToken", token);
-          commit("setUser", data.login);
           commit("setIsAuthenticated", true);
           return { success: true, token: token };
         } else {
@@ -308,16 +319,12 @@ const store = new Vuex.Store({
         };
       }
     },
-    async fetchSymbolsData({ state, commit }, { limits }) {
+    async fetchSymbolsData({ state, commit }) {
       try {
-        const response = await state.$http.get("symbols/history", {
-          params: {
-            limit: limits.limit,
-            offset: limits.offset,
-          },
-        });
+        const response = await state.$http.get("symbols");
         if (response.status == 200) {
-          commit("setSymbolsData", response.data);
+          const data = response.data.payload;
+          commit("setSymbolsData", data);
         } else {
           console.log("Something went Wrong", response.message);
         }
@@ -334,7 +341,8 @@ const store = new Vuex.Store({
           },
         });
         if (response.status == 200) {
-          commit("setStocks", response.data.orders);
+          const data = response.data.payload;
+          commit("setStocks", data);
         } else {
           console.log("Something went Wrong", response.message);
         }
@@ -342,12 +350,12 @@ const store = new Vuex.Store({
         console.error("Error fetching data:", error);
       }
     },
-    async createOrder({ state, commit }, { asset }) {
+    async createOrder({ state }, { asset }) {
       try {
         const response = await state.$http.post("orders", asset);
         if (response.status == 200) {
           const limits = {
-            limit: 1,
+            limit: 20,
             offset: 1,
           };
           this.dispatch("fetchStockTableData", { limits });
@@ -374,12 +382,41 @@ const store = new Vuex.Store({
       try {
         const response = await state.$http.get("symbols");
         if (response.status == 200) {
-          commit("setAssetCategories", response.data);
+          const data = response.data.payload;
+          commit("setAssetCategories", data);
         } else {
           console.log("Something went wrong");
         }
       } catch (error) {
         console.error("Error fetching Categories:", error);
+      }
+    },
+    async modifyOrder({ state }, { asset }) {
+      try {
+        const response = await state.$http.put(`orders`, asset);
+        if (response.status == 200) {
+          const limits = {
+            limit: 20,
+            offset: 1,
+          };
+          this.dispatch("fetchStockTableData", { limits });
+          this.dispatch("setAlertVal", {
+            color: "success",
+            text: "Order Modified Successfully",
+          });
+        } else {
+          console.log("Something went Wrong", response.message);
+          this.dispatch("setAlertVal", {
+            color: "error",
+            text: "Could Not Modify Order",
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        this.dispatch("setAlertVal", {
+          color: "error",
+          text: "Could Not Modify Order",
+        });
       }
     },
   },

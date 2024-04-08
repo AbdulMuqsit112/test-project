@@ -11,7 +11,7 @@
           <div class="header-wrap">
             <span class="header-balances-item">
               <div class="">Balance:</div>
-              <span class="balance">0.00</span>
+              <span class="balance">{{ User.balance }}</span>
             </span>
             <span class="header-balances-item">
               <div class="">Credit:</div>
@@ -137,6 +137,9 @@ export default {
     },
     isDarkMode() {
       return this.$store.getters.getIsDarkMode;
+    },
+    User() {
+      return this.$store.getters.getUser;
     }
   },
 };

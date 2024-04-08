@@ -81,10 +81,10 @@
                   <td style="width: 12%">{{ formatDate(stockEntry.createdOn) }}</td>
                   <td>{{ stockEntry.type }}</td>
                   <td>{{ stockEntry.volume }}</td>
-                  <td>{{ stockEntry.slPrice }}</td>
-                  <td>{{ stockEntry.tpPrice }}</td>
+                  <td>{{ stockEntry.sl }}</td>
+                  <td>{{ stockEntry.tp }}</td>
                   <td>{{ stockEntry.openPrice }}</td>
-                  <td>{{ stockEntry.marketPrice }}</td>
+                  <td>{{ getAssetCurrentPrice(stockEntry) }}</td>
                   <td>{{ stockEntry.commission }}</td>
                   <td>{{ stockEntry.swaps }}</td>
                   <td>{{ stockEntry.grossProfit }}</td>
@@ -109,7 +109,11 @@
                         </svg>
                       </span>
                       <span class="cursor-pointer" title="Double up position" @click="reversePosition(stockEntry)">
-                        <svg viewBox="0 0 551.127 551.127" xmlns="http://www.w3.org/2000/svg" class="icon-sm"><path d="M482.21 378.9h-62.607c-21.882 0-42.754-8.208-58.749-23.143l-85.906-80.179 85.939-80.208c15.978-14.935 36.851-23.143 58.749-23.143h62.601v34.446l68.889-51.668-68.889-51.668v34.446h-62.601c-30.661 0-59.876 11.504-82.262 32.427L138.622 355.723c-16.029 14.935-36.868 23.177-58.716 23.177H.032v34.378l79.74.034h.151c30.577 0 59.758-11.504 82.195-32.427l87.592-81.752 87.63 81.785c22.403 20.923 51.618 32.427 82.262 32.427h62.607v34.446l68.889-51.666-68.889-51.671.001 34.446zM79.908 172.26c21.831 0 42.67 8.208 58.665 23.143l60.652 56.609 25.237-23.553-62.376-58.217c-22.403-20.923-51.584-32.427-82.161-32.427h-.151L0 137.848v34.378h79.79c.051.001.084.034.118.034z"></path></svg>
+                        <svg viewBox="0 0 551.127 551.127" xmlns="http://www.w3.org/2000/svg" class="icon-sm">
+                          <path
+                            d="M482.21 378.9h-62.607c-21.882 0-42.754-8.208-58.749-23.143l-85.906-80.179 85.939-80.208c15.978-14.935 36.851-23.143 58.749-23.143h62.601v34.446l68.889-51.668-68.889-51.668v34.446h-62.601c-30.661 0-59.876 11.504-82.262 32.427L138.622 355.723c-16.029 14.935-36.868 23.177-58.716 23.177H.032v34.378l79.74.034h.151c30.577 0 59.758-11.504 82.195-32.427l87.592-81.752 87.63 81.785c22.403 20.923 51.618 32.427 82.262 32.427h62.607v34.446l68.889-51.666-68.889-51.671.001 34.446zM79.908 172.26c21.831 0 42.67 8.208 58.665 23.143l60.652 56.609 25.237-23.553-62.376-58.217c-22.403-20.923-51.584-32.427-82.161-32.427h-.151L0 137.848v34.378h79.79c.051.001.084.034.118.034z">
+                          </path>
+                        </svg>
                       </span>
                       <span class="cursor-pointer" @click="showModal(stockEntry.id)">
                         <i class="fas fa-times"></i>
@@ -120,8 +124,7 @@
                         <p>Are you sure?</p>
                         <span class="d-flex gap-2">
                           <button class="btn bg-danger btn-danger text-xs px-2" @click="hideModal">Cancel</button>
-                          <button class="btn btn-success text-xs px-3"
-                            @click="confirmDelete(stockEntry.id, stockEntry.closePrice)">Ok</button>
+                          <button class="btn btn-success text-xs px-3" @click="confirmDelete(stockEntry.id)">Ok</button>
                         </span>
                       </div>
                     </div>
@@ -157,20 +160,17 @@
                 <td class="px-3">{{ formatDate(item.createdOn) }}</td>
                 <td class="px-3">{{ formatDate(item.closedOn) }}</td>
                 <td class="px-3">
-                  <span class="text-danger py-1 px-2" v-if="item.type == 2">
-                    Sell
-                  </span>
-                  <span class="text-success py-1 px-2" v-if="item.type == 1">
-                    Buy
+                  <span :class="`badge p-1 ${item.type == 'Sell' ? 'bg-danger' : 'bg-success'}`">
+                    {{ item.type }}
                   </span>
                 </td>
                 <td class="px-3">{{ item.volume }}</td>
                 <td class="px-3">{{ item.openPrice }}</td>
                 <td class="px-3">{{ item.closePrice }}</td>
-                <td class="px-3">{{ item.tpPrice }}</td>
-                <td class="px-3">{{ item.slPrice }}</td>
+                <td class="px-3">{{ item.tp }}</td>
+                <td class="px-3">{{ item.sl }}</td>
                 <td class="px-3">{{ item.commission }}</td>
-                <td class="px-3">-</td>
+                <td class="px-3">{{ item.pl }}</td>
               </tr>
             </tbody>
           </table>
@@ -215,89 +215,67 @@ export default {
       }
     };
   },
-  created() {
-    this.$on("BottomComponentUpdated", this.setTableBodyHeight);
-  },
   mounted() {
     this.fetchStockTableData();
     this.setTableBodyHeight();
   },
   methods: {
-    generateOrderPayload(currentAsset, type) {
+    generateOrderPayload(currentAsset) {
       const {
-        chg,
-        chgPercentage,
         volume,
-        volumePrice,
-        mktCap,
-        pe,
-        epsTim,
-        employees,
-        sector,
-        position,
-        symbolId,
-        symbolName,
-        commission,
-        swaps,
-        grossProfit,
         stopLoss,
+        stopLossType,
+        stopLossValue,
         takeProfit,
-        spread,
-        spread_Pips,
-        pipValue,
+        takeProfitType,
+        takeProfitValue,
+        symbolId,
+        type
       } = currentAsset;
-      const price = this.getAssetCurrentPrice(symbolId);
       return {
-        price,
-        chg,
-        chgPercentage,
-        type,
         volume,
-        volumePrice,
-        mktCap,
-        pe,
-        epsTim,
-        employees,
-        sector,
-        position,
-        slPrice: price,
-        tpPrice: price,
-        openPrice: price,
-        marketPrice: price,
-        commission,
-        swaps,
-        grossProfit,
-        bid: price,
-        ask: price,
         stopLoss,
+        stopLossType,
+        stopLossValue,
         takeProfit,
-        spread,
-        spread_Pips,
-        pipValue,
+        takeProfitType,
+        takeProfitValue,
         symbolId,
-        symbolName,
+        type
       };
     },
-    getAssetCurrentPrice(idToMatch) {
-      const matchedObject = this.symbolsData.find(obj => obj.id === idToMatch);
+    getAssetCurrentPrice(asset) {
+      const matchedObject = this.symbolsData.find(obj => obj.id === asset.id);
+      if (!matchedObject) {
+        return asset.marketPrice;
+      }
       const price = matchedObject ? matchedObject.p : null;
       return price;
     },
     reversePosition(orderDetails) {
-      
+      let asset = {
+        ...this.generateOrderPayload(orderDetails),
+        id: orderDetails.id
+      };
+      if (orderDetails.type == 'Buy') {
+        asset.type = 'Sell';
+      } else {
+        asset.type = 'Buy';
+      }
+      this.$store.dispatch("modifyOrder", { asset });
     },
     doubleUpPosition(orderDetails) {
-      const asset = this.generateOrderPayload(orderDetails, 1);
+      const asset = this.generateOrderPayload(orderDetails);
       this.$store.dispatch('createOrder', { asset });
     },
     modifyOrder(orderDetails) {
-      const { bid, ask, type, volume, stopLoss, takeProfit } = orderDetails;
+      const { openPrice, marketPrice, type, volume, stopLoss, takeProfit } = orderDetails;
       this.modalData = {
         currentAsset: orderDetails,
         btnVal: `Modify ${type == 1 ? 'Buy' : 'Sell'}`,
         btnClass: type == 1 ? 'btn-success' : 'btn-danger bg-danger',
-        bid: bid,
-        ask: ask,
+        bid: openPrice,
+        ask: marketPrice,
         stopLoss: stopLoss,
         takeProfit: takeProfit,
         volume: volume,
@@ -330,14 +308,9 @@ export default {
     hideModal() {
       this.isModalVisible = false;
     },
-    async confirmDelete(id, price) {
+    async confirmDelete(id) {
       try {
-        const response = await this.$http.delete('orders/close', {
-          params: {
-            closePrice: price,
-            orderId: id,
-          }
-        });
+        const response = await this.$http.put(`orders/close/${id}`);
         if (response.status == 200) {
           this.fetchStockTableData()
           this.fetchHistoryData();
@@ -353,7 +326,7 @@ export default {
     },
     fetchStockTableData() {
       const limits = {
-        limit: 1,
+        limit: 20,
         offset: 1
       }
       this.$store.dispatch('fetchStockTableData', { limits });
@@ -361,7 +334,7 @@ export default {
     async fetchHistoryData() {
       try {
         const response = await this.$http.get('orders/history');
-        if (response.status == 200) this.histData = response.data.orders;
+        if (response.status == 200) this.histData = response.data.payload;
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -386,7 +359,7 @@ export default {
     },
     resizeBottom(event) {
       this.initResize(event, 'bottomComponent');
-    }
+    },
   },
   computed: {
     symbolsData() {
@@ -480,12 +453,14 @@ td {
   width: 10%;
   min-width: 80px;
 }
+
 td {
   border-bottom: 0.1px ridge;
   border-color: #39404b;
   font-size: 60%;
   font-weight: 400;
 }
+
 th {
   border-bottom: 1px solid #2c2e33 !important;
   border-bottom-width: 1px;
@@ -493,9 +468,11 @@ th {
   font-weight: 300 !important;
   padding-block: 8px;
 }
+
 .sub-row td {
   padding: 8px 6px;
 }
+
 .note_svg {
   width: 14px;
 }

@@ -56,11 +56,9 @@ export default {
     },
     setAppTheme() {
       let isDarkMode = localStorage.getItem('isDarkMode');
-      if (isDarkMode == 'false' || isDarkMode == 'true') {
-        isDarkMode = isDarkMode == "true" ? true : isDarkMode == "false" ? false : true;
-        this.$store.commit('setAppTheme', isDarkMode);
-        return;
-      }
+      isDarkMode = isDarkMode === "true" || isDarkMode == null ? true : false;
+      localStorage.setItem('isDarkMode', isDarkMode);
+      this.$store.commit('setAppTheme', isDarkMode);
     }
   },
   computed: {

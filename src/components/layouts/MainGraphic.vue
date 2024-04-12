@@ -13,7 +13,7 @@
           </div>
         </div>
         <trading-vue v-else :width="width" :height="height" :data="chart" :toolbar="true" :font="graphFont"
-          :color-back="colors.colorBack" :color-grid="colors.colorGrid" :color-text="colors.colorText"></trading-vue>
+          :color-back="colors.colorBack" :color-grid="colors.colorGrid" :color-text="colors.colorText" :title-txt="titleTxt"></trading-vue>
       </div>
     </div>
     <div v-if="layout == 1" class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"
@@ -28,10 +28,11 @@ import TradingVue from "../../TradingVue.vue";
 import Data from "../../../data/data.json";
 import updatedData from "../../../data/updatedData.json";
 import DataCube from "../../helpers/datacube.js";
-import resizeMixin from '../../mixins/resizeMixin'
+import resizeMixin from '../../mixins/resizeMixin';
+import socketMixin from "../../mixins/socketMixin";
 export default {
   name: "GraphComponent",
-  mixins: [resizeMixin],
+  mixins: [resizeMixin, socketMixin],
   components: { TradingVue },
   data() {
     return {
@@ -46,18 +47,61 @@ export default {
       height: 0,
       multiGraphs: '',
       graphClass: '',
-      graphFont: '6px Roboto'
+      graphFont: '6px Roboto',
+      titleTxt: 'BINANCE:BTCUSDT'
     };
   },
-  mounted() {
+  async mounted() {
     this.setChartDimensions();
     window.addEventListener('resize', this.setChartDimensions);
     this.setGraphTheme();
+    await this.setChartData();
+    this.$on("symbolDataUpdated", this.on_trades);
   },
+
   destroyed() {
     window.removeEventListener('resize', this.setChartDimensions)
   },
   methods: {
+    async setChartData() {
+      this.chart = new DataCube({
+        chart:{
+          type: "Candles",
+          data: [
+            [1712872000008, 41239.4, 41239.6, 40791.6, 40719.63478779, 29930],
+            [1712872000008, 41082.2, 41082.2, 40201.2, 40313.5, 32165],
+            [1712872000008, 41035.6, 41072.78348726, 39165, 40155.6, 21571],
+            [1712872000008, 41055.6, 41100, 40135, 40159.1719252, 16609],
+            [1712872000001, 41059.1, 41076.6, 41014.1, 41060, 10707]
+          ],
+          tf: 300000,
+        },
+
+        tools: Data.tools,
+        tool: Data.tool,
+      })
+    },
+    on_trades(trade) {
+      const processedData = JSON.parse(trade).data;
+      let filteredData = [];
+      if (processedData && processedData.length > 0) {
+        filteredData = processedData.filter(item => item.s == this.titleTxt);
+      }
+      if (filteredData.length > 0) {
+        filteredData.forEach(item => {
+          this.chart.update({
+            price: parseFloat(item.p),
+            volume: parseFloat(item.v),
+            [`datasets.${this.titleTxt}`]: [
+              item.t,
+              trade.m ? 0 : 1,
+              parseFloat(item.v),
+              parseFloat(item.p)
+            ],
+          })
+      })
+      }
+    },
     setGraphTheme() {
       if (!this.isDarkMode) {
         this.colors = {
@@ -135,13 +179,6 @@ export default {
     },
   },
   watch: {
-    dataChanged(newValue) {
-      if (newValue == true) {
-        this.chart = new DataCube(updatedData);
-      } else {
-        this.chart = new DataCube(Data);
-      }
-    },
     getMainBlockStyle: {
       handler(newVal) {
         this.setChartDimensions();

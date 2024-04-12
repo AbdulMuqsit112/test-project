@@ -32,7 +32,17 @@ const store = new Vuex.Store({
     showAlert: false,
     alertColor: "red",
     alertText: "",
-    assetCategories: [ 'Stock', 'Currency', 'Commodity', 'Bond', 'Cryptocurrency', 'Index', 'Option', 'Future', 'ETF' ],
+    assetCategories: [
+      "Stock",
+      "Currency",
+      "Commodity",
+      "Bond",
+      "Cryptocurrency",
+      "Index",
+      "Option",
+      "Future",
+      "ETF",
+    ],
     layoutDimensions: {
       graphComponent: {
         width: "",
@@ -273,12 +283,20 @@ const store = new Vuex.Store({
       }
       if (token != "" && token != null && token != "null") {
         localStorage.setItem("token", token);
-        const response = await state.$http.get("user");
-        if (response.status == 200) {
-          const data = response.data.payload;
-          commit("setUser", data);
-          commit("setIsAuthenticated", true);
-          return;
+        try {
+          const response = await state.$http.get("user");
+          if (response.status == 200) {
+            const data = response.data.payload;
+            commit("setUser", data);
+            commit("setIsAuthenticated", true);
+            return;
+          } else {
+            console.log("Something went Wrong", response.message);
+            localStorage.removeItem("token");
+          }
+        } catch (error) {
+          console.log("Something went Wrong");
+          localStorage.removeItem("token");
         }
       }
       commit("setIsAuthenticated", false);

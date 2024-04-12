@@ -7,12 +7,12 @@
       <div class="mainBlock__tabsEmpty p-0" ref="Graph">
         <div v-if="selectedData.length > 0" class="d-flex w-100 gap-2" :class="`${multiGraphs}`">
           <div v-for="(asset, index) in selectedData" :key="index" :class="`${graphClass}`">
-            <trading-vue :width="setMultiChartWidths()" :height="setMultiChartHeight()" :data="handleData(asset)"
+            <trading-vue :width="setMultiChartWidths()" :height="setMultiChartHeight()" :data="handleData(index + 1)"
               :font="graphFont" :titleTxt="asset.s" :toolbar="true" :color-back="colors.colorBack"
               :color-grid="colors.colorGrid" :color-text="colors.colorText"></trading-vue>
           </div>
         </div>
-        <trading-vue v-else :width="width" :height="height" :data="chart" :toolbar="true" :font="graphFont"
+        <trading-vue v-else :width="width" :height="height" :data="chart1" :toolbar="true" :font="graphFont"
           :color-back="colors.colorBack" :color-grid="colors.colorGrid" :color-text="colors.colorText" :title-txt="titleTxt"></trading-vue>
       </div>
     </div>
@@ -26,7 +26,6 @@
 <script>
 import TradingVue from "../../TradingVue.vue";
 import Data from "../../../data/data.json";
-import updatedData from "../../../data/updatedData.json";
 import DataCube from "../../helpers/datacube.js";
 import resizeMixin from '../../mixins/resizeMixin';
 import socketMixin from "../../mixins/socketMixin";
@@ -41,8 +40,11 @@ export default {
         colorGrid: "",
         colorText: "",
       },
-      chart: new DataCube(Data),
-      chart2: new DataCube(updatedData),
+      chart1: new DataCube(Data),
+      chart2: new DataCube(Data),
+      chart3: new DataCube(Data),
+      chart4: new DataCube(Data),
+      chart5: new DataCube(Data),
       width: 0,
       height: 0,
       multiGraphs: '',
@@ -55,7 +57,11 @@ export default {
     this.setChartDimensions();
     window.addEventListener('resize', this.setChartDimensions);
     this.setGraphTheme();
-    await this.setChartData();
+    this.chart1 = await this.setChartData();
+    this.chart2 = await this.setChartData();
+    this.chart3 = await this.setChartData();
+    this.chart4 = await this.setChartData();
+    this.chart5 = await this.setChartData();
     this.$on("symbolDataUpdated", this.on_trades);
   },
 
@@ -64,44 +70,57 @@ export default {
   },
   methods: {
     async setChartData() {
-      this.chart = new DataCube({
-        chart:{
-          type: "Candles",
-          data: [
-            [1712872000008, 41239.4, 41239.6, 40791.6, 40719.63478779, 29930],
-            [1712872000008, 41082.2, 41082.2, 40201.2, 40313.5, 32165],
-            [1712872000008, 41035.6, 41072.78348726, 39165, 40155.6, 21571],
-            [1712872000008, 41055.6, 41100, 40135, 40159.1719252, 16609],
-            [1712872000001, 41059.1, 41076.6, 41014.1, 41060, 10707]
-          ],
-          tf: 300000,
-        },
-
-        tools: Data.tools,
-        tool: Data.tool,
-      })
-    },
+      let chartData = new DataCube({
+          chart:{
+            type: "Candles",
+            data: [
+              [1712872000008, 51239.4, 51239.6, 50791.6, 50719.63478779, 59930],
+              [1712872000008, 51082.2, 51082.2, 50201.2, 50313.5, 52165],
+              [1712872000008, 51035.6, 51072.78348726, 59165, 40155.6, 51571],
+              [1712872000008, 51055.6, 51100, 50135, 50159.1719252, 56609],
+              [1712872000001, 51059.1, 51076.6, 51014.1, 51060, 50707]
+            ],
+            tf: 600000,
+          },
+          tools: Data.tools,
+          tool: Data.tool,
+        })
+        return chartData;
+      },
+    
     on_trades(trade) {
       const processedData = JSON.parse(trade).data;
       let filteredData = [];
       if (processedData && processedData.length > 0) {
-        filteredData = processedData.filter(item => item.s == this.titleTxt);
+        if (this.selectedData.length > 0) {
+          this.selectedData.forEach((asset, index) => {
+            filteredData = processedData.filter(item => item.s == asset.s);
+            this.updateChart(this.handleData(index + 1), filteredData, asset.s);
+          })
+        } else {
+          filteredData = processedData.filter(item => item.s == this.titleTxt);
+          this.updateChart(this.chart1, filteredData, this.titleTxt);
+        }
       }
+    },
+    async updateChart(chart, filteredData, dataSetTxt){
       if (filteredData.length > 0) {
-        filteredData.forEach(item => {
-          this.chart.update({
+        for (const item of filteredData) {
+          await chart.update({
             price: parseFloat(item.p),
             volume: parseFloat(item.v),
-            [`datasets.${this.titleTxt}`]: [
+            [`datasets.${dataSetTxt}`]: [
               item.t,
-              trade.m ? 0 : 1,
+              dataSetTxt,
+              filteredData.m ? 0 : 1,
               parseFloat(item.v),
               parseFloat(item.p)
             ],
           })
-      })
+      }
       }
     },
+
     setGraphTheme() {
       if (!this.isDarkMode) {
         this.colors = {
@@ -117,18 +136,8 @@ export default {
         };
       }
     },
-    handleData(asset) {
-      let chartData =
-      {
-        ...updatedData,
-        onchart: [{
-          type: asset.category,
-          name: asset.s,
-          data: []
-        }],
-      }
-      chartData = new DataCube(chartData);
-      return chartData;
+    handleData(index) {
+      return this[`chart${index + 1}`];
     },
     setChartDimensions() {
       this.$nextTick(() => {
@@ -142,7 +151,6 @@ export default {
       let selectedArr = this.selectedData;
       if (selectedArr.length >= 2) {
         this.graphClass = 'custom-graph';
-        0.4
       }
       if (selectedArr.length == 2) {
         return this.width / 2.1;

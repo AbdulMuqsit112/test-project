@@ -13,7 +13,8 @@
           </div>
         </div>
         <trading-vue v-else :width="width" :height="height" :data="chart1" :toolbar="true" :font="graphFont"
-          :color-back="colors.colorBack" :color-grid="colors.colorGrid" :color-text="colors.colorText" :title-txt="titleTxt"></trading-vue>
+          :color-back="colors.colorBack" :color-grid="colors.colorGrid" :color-text="colors.colorText"
+          :title-txt="titleTxt"></trading-vue>
       </div>
     </div>
     <div v-if="layout == 1" class="mainBlock__split mainBlock__split_h mainBlock__split_bottom"
@@ -41,11 +42,14 @@ export default {
         colorText: "",
       },
       chart1: new DataCube(Data),
+
       chart2: new DataCube(Data),
+
       chart3: new DataCube(Data),
+
       chart4: new DataCube(Data),
-      chart5: new DataCube(Data),
-      width: 0,
+
+      chart5: new DataCube(Data), width: 0,
       height: 0,
       multiGraphs: '',
       graphClass: '',
@@ -53,15 +57,15 @@ export default {
       titleTxt: 'BINANCE:BTCUSDT'
     };
   },
-  async mounted() {
+  mounted() {
     this.setChartDimensions();
     window.addEventListener('resize', this.setChartDimensions);
     this.setGraphTheme();
-    this.chart1 = await this.setChartData();
-    this.chart2 = await this.setChartData();
-    this.chart3 = await this.setChartData();
-    this.chart4 = await this.setChartData();
-    this.chart5 = await this.setChartData();
+    this.chart1 = this.setChartData();
+    this.chart2 = this.setChartData();
+    this.chart3 = this.setChartData();
+    this.chart4 = this.setChartData();
+    this.chart5 = this.setChartData();
     this.$on("symbolDataUpdated", this.on_trades);
   },
 
@@ -69,25 +73,24 @@ export default {
     window.removeEventListener('resize', this.setChartDimensions)
   },
   methods: {
-    async setChartData() {
-      let chartData = new DataCube({
-          chart:{
-            type: "Candles",
-            data: [
-              [1712872000008, 51239.4, 51239.6, 50791.6, 50719.63478779, 59930],
-              [1712872000008, 51082.2, 51082.2, 50201.2, 50313.5, 52165],
-              [1712872000008, 51035.6, 51072.78348726, 59165, 40155.6, 51571],
-              [1712872000008, 51055.6, 51100, 50135, 50159.1719252, 56609],
-              [1712872000001, 51059.1, 51076.6, 51014.1, 51060, 50707]
-            ],
-            tf: 600000,
-          },
-          tools: Data.tools,
-          tool: Data.tool,
-        })
-        return chartData;
-      },
-    
+    setChartData() {
+      return new DataCube({
+        chart: {
+          type: "Candles",
+          data: [
+            [1712872000008, 51239.4, 51239.6, 50791.6, 50719.63478779, 59930],
+            [1712872000008, 51082.2, 51082.2, 50201.2, 50313.5, 52165],
+            [1712872000008, 51035.6, 51072.78348726, 59165, 40155.6, 51571],
+            [1712872000008, 51055.6, 51100, 50135, 50159.1719252, 56609],
+            [1712872000001, 51059.1, 51076.6, 51014.1, 51060, 50707]
+          ],
+          tf: 600000,
+        },
+        tools: Data.tools,
+        tool: Data.tool,
+      })
+    },
+
     on_trades(trade) {
       const processedData = JSON.parse(trade).data;
       let filteredData = [];
@@ -103,10 +106,10 @@ export default {
         }
       }
     },
-    async updateChart(chart, filteredData, dataSetTxt){
+    updateChart(chart, filteredData, dataSetTxt) {
       if (filteredData.length > 0) {
         for (const item of filteredData) {
-          await chart.update({
+          chart.update({
             price: parseFloat(item.p),
             volume: parseFloat(item.v),
             [`datasets.${dataSetTxt}`]: [
@@ -117,7 +120,7 @@ export default {
               parseFloat(item.p)
             ],
           })
-      }
+        }
       }
     },
 

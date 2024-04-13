@@ -42,19 +42,17 @@ export default {
         colorText: "",
       },
       chart1: new DataCube(Data),
-
       chart2: new DataCube(Data),
-
       chart3: new DataCube(Data),
-
       chart4: new DataCube(Data),
-
-      chart5: new DataCube(Data), width: 0,
+      chart5: new DataCube(Data),
+      width: 0,
       height: 0,
       multiGraphs: '',
       graphClass: '',
       graphFont: '6px Roboto',
-      titleTxt: 'BINANCE:BTCUSDT'
+      titleTxt: 'BINANCE:BTCUSDT',
+      sampleData: Data.ohlcv,
     };
   },
   mounted() {
@@ -77,20 +75,13 @@ export default {
       return new DataCube({
         chart: {
           type: "Candles",
-          data: [
-            [1712872000008, 51239.4, 51239.6, 50791.6, 50719.63478779, 59930],
-            [1712872000008, 51082.2, 51082.2, 50201.2, 50313.5, 52165],
-            [1712872000008, 51035.6, 51072.78348726, 59165, 40155.6, 51571],
-            [1712872000008, 51055.6, 51100, 50135, 50159.1719252, 56609],
-            [1712872000001, 51059.1, 51076.6, 51014.1, 51060, 50707]
-          ],
-          tf: 600000,
+          data: this.sampleData,
+          tf: "1h",
         },
         tools: Data.tools,
         tool: Data.tool,
       })
     },
-
     on_trades(trade) {
       const processedData = JSON.parse(trade).data;
       let filteredData = [];

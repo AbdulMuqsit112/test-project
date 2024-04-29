@@ -21,7 +21,7 @@ export default {
     },
     createSignalRConnection() {
       this.socket = new HubConnectionBuilder()
-      .withUrl("http://185.177.59.169:8090/datahub", {
+      .withUrl("http://185.177.59.169:8090/centroidHub", {
         skipNegotiation: true,
         transport: HttpTransportType.WebSockets
       })
@@ -30,7 +30,7 @@ export default {
     },
     setSocketEvents(){
       this.socket.on("ReceiveMessage", (data) => {
-        // console.log("Received data update:", data);
+        console.log("Received data update:", data);
         this.$emit("symbolDataUpdated", data);
       });
       this.socket.onclose(() => this.startConnection());

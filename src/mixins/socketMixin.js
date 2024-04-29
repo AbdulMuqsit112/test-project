@@ -29,7 +29,7 @@ export default {
       .build();
     },
     setSocketEvents(){
-      this.socket.on("ReceiveMessage", (data) => {
+      this.socket.on("ReceiveMessageFromCentro", (data) => {
         console.log("Received data update:", data);
         this.$emit("symbolDataUpdated", data);
       });

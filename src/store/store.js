@@ -110,8 +110,8 @@ const store = new Vuex.Store({
     },
     setSymbolItemVal(state, payload) {
       const { item, index } = payload;
-      state.symbolsData[index].p = item.p;
-      state.symbolsData[index].v = item.v;
+      state.symbolsData[index].p = item.ask_price;
+      state.symbolsData[index].v = item.ask_volume;
     },
     setUser(state, payload) {
       state.user = payload;
@@ -304,7 +304,7 @@ const store = new Vuex.Store({
     updateSymbolsData({ state, commit }, { receivedData }) {
       if (state.symbolsData.length > 0) {
         for (const item of receivedData) {
-          const index = state.symbolsData.findIndex((d) => d.s === item.s);
+          const index = state.symbolsData.findIndex((d) => d.s === item.symbol);
           if (index !== -1) {
             commit("setSymbolItemVal", { item: item, index: index });
           }

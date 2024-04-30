@@ -76,7 +76,7 @@ export default {
         chart: {
           type: "Candles",
           data: this.sampleData,
-          tf: "1h",
+          tf: "1m",
         },
         tools: Data.tools,
         tool: Data.tool,

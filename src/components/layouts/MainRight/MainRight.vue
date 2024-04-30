@@ -283,7 +283,7 @@ export default {
       this.$store.commit('setSelctedData', asset);
     },
     handleDataUpdated(data) {
-      const processedData = JSON.parse(data).data;
+      const processedData = JSON.parse(data).feed_symbols;
       if (processedData && processedData.length > 0) this.$store.dispatch('updateSymbolsData', { receivedData: processedData });
     },
     handleInput(event, type) {

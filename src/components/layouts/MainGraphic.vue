@@ -51,7 +51,7 @@ export default {
       multiGraphs: '',
       graphClass: '',
       graphFont: '6px Roboto',
-      titleTxt: 'BINANCE:BTCUSDT',
+      titleTxt: 'BTCUSD',
       sampleData: Data.ohlcv,
     };
   },
@@ -83,16 +83,16 @@ export default {
       })
     },
     on_trades(trade) {
-      const processedData = JSON.parse(trade).data;
+      const processedData = JSON.parse(trade).feed_symbols;
       let filteredData = [];
       if (processedData && processedData.length > 0) {
         if (this.selectedData.length > 0) {
           this.selectedData.forEach((asset, index) => {
-            filteredData = processedData.filter(item => item.s == asset.s);
+            filteredData = processedData.filter(item => item.symbol == asset.s);
             this.updateChart(this.handleData(index + 1), filteredData, asset.s);
           })
         } else {
-          filteredData = processedData.filter(item => item.s == this.titleTxt);
+          filteredData = processedData.filter(item => item.symbol == this.titleTxt);
           this.updateChart(this.chart1, filteredData, this.titleTxt);
         }
       }
@@ -101,14 +101,14 @@ export default {
       if (filteredData.length > 0) {
         for (const item of filteredData) {
           chart.update({
-            price: parseFloat(item.p),
-            volume: parseFloat(item.v),
+            price: parseFloat(item.ask_price),
+            volume: parseFloat(item.ask_volume),
             [`datasets.${dataSetTxt}`]: [
-              item.t,
+              item.last_updated,
               dataSetTxt,
               filteredData.m ? 0 : 1,
-              parseFloat(item.v),
-              parseFloat(item.p)
+              parseFloat(item.ask_volume),
+              parseFloat(item.ask_price)
             ],
           })
         }
